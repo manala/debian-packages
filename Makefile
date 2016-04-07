@@ -69,7 +69,7 @@ build-package@debian-jessie:
 	wget ${PACKAGE_SOURCE} -O ~/package.zip
 	cd ~ && unzip package.zip -d ~/package/usr/bin/
 	chmod 755 ~/package/usr/bin/ngrok
-    # Fpm
+	# Fpm
 	cd ~/package && fpm \
         --verbose \
         -s dir \
