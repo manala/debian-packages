@@ -25,13 +25,8 @@ DOCKER = docker run \
     --volume `pwd`:/srv \
     --workdir /srv \
     --tty \
-    debian:${DEBIAN_DISTRIBUTION} \
-    sh -c '\
-        apt-get update && \
-        apt-get -y upgrade && \
-        apt-get -y install make && \
-        make build-package@debian-${DEBIAN_DISTRIBUTION} \
-    '
+    amezin/debian-build-essentials:${DEBIAN_DISTRIBUTION} \
+    make build-package@debian-${DEBIAN_DISTRIBUTION}
 
 ## Help
 help:
@@ -53,29 +48,49 @@ build: build@debian-wheezy build@debian-jessie
 
 build@debian-wheezy: DEBIAN_DISTRIBUTION = wheezy
 build@debian-wheezy:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
 build@debian-jessie: DEBIAN_DISTRIBUTION = jessie
 build@debian-jessie:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
 build-package@debian-wheezy:
+	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	echo "deb-src http://httpredir.debian.org/debian ${PACKAGE_DISTRIBUTION} main contrib non-free" > /etc/apt/sources.list.d/${PACKAGE_DISTRIBUTION}.list
 	echo "deb http://httpredir.debian.org/debian wheezy-backports main" > /etc/apt/sources.list.d/backports.list
 	apt-get update
-	apt-get -y install devscripts
+
+	printf "${COLOR_INFO}Prepare package...${COLOR_RESET}\n"
 	apt-get -y --only-source build-dep ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ && apt-get -y --only-source source ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} && DEBFULLNAME="${MAINTAINER_NAME}" DEBEMAIL="${MAINTAINER_EMAIL}" dch -v ${PACKAGE_VERSION}-${PACKAGE_REVISION}manala${PACKAGE_REVISION_MANALA}~wheezy${PACKAGE_REVISION_WHEEZY} "Backport"
+
+	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
 	cd ~ && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
+
+	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
+	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
+
+	printf "${COLOR_INFO}Move builded packages into build directory...${COLOR_RESET}\n"
 	mkdir -p /srv/build && mv ~/*.deb /srv/build
 
 build-package@debian-jessie:
+	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	echo "deb-src http://httpredir.debian.org/debian ${PACKAGE_DISTRIBUTION} main contrib non-free" > /etc/apt/sources.list.d/${PACKAGE_DISTRIBUTION}.list
 	apt-get update
-	apt-get -y install devscripts
+
+	printf "${COLOR_INFO}Prepare package...${COLOR_RESET}\n"
 	apt-get -y --only-source build-dep ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ && apt-get -y --only-source source ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} && DEBFULLNAME="${MAINTAINER_NAME}" DEBEMAIL="${MAINTAINER_EMAIL}" dch -v ${PACKAGE_VERSION}-${PACKAGE_REVISION}manala${PACKAGE_REVISION_MANALA}~jessie${PACKAGE_REVISION_JESSIE} "Backport"
+
+	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
 	cd ~ && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
+
+	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
+	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
+
+	printf "${COLOR_INFO}Move builded packages into build directory...${COLOR_RESET}\n"
 	mkdir -p /srv/build && mv ~/*.deb /srv/build
