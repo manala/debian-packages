@@ -8,7 +8,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME    = phpredisadmin
-PACKAGE_VERSION = 1.4.2
+PACKAGE_VERSION = 1.5.0
 PACKAGE_SOURCE  = https://github.com/erikdubbelboer/phpRedisAdmin/archive/v${PACKAGE_VERSION}.tar.gz
 
 ## Macros
