@@ -63,14 +63,8 @@ build-package@debian-jessie:
 	cp -a /srv/debian ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
 	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
 
-	printf "${COLOR_INFO}List builded packages...${COLOR_RESET}\n"
-	ls -lsah ~/*.deb
-
-	printf "${COLOR_INFO}Show builded packages informations...${COLOR_RESET}\n"
-	dpkg -I ~/*.deb
-
-	printf "${COLOR_INFO}Show builded packages files...${COLOR_RESET}\n"
-	dpkg -c ~/*.deb
+	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
+	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
 
 	printf "${COLOR_INFO}Move builded packages into build directory...${COLOR_RESET}\n"
 	mkdir -p /srv/build && mv ~/*.deb /srv/build
