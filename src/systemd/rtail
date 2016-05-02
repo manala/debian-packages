@@ -1,9 +1,0 @@
-[Unit]
-Description=Terminal output to the browser in seconds, using UNIX pipes
-After=syslog.target network.target
-
-[Service]
-ExecStart=/usr/bin/nodejs /usr/lib/nodejs/rtail/cli/rtail-server.js
-
-[Install]
-WantedBy=multi-user.target

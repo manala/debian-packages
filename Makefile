@@ -7,13 +7,8 @@ COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
 ## Package
-PACKAGE_NAME            = rtail
-PACKAGE_DESCRIPTION     = Terminal output to the browser in seconds, using UNIX pipes
-PACKAGE_VERSION         = 0.2.1
-PACKAGE_REVISION_MANALA = 1
-PACKAGE_REVISION_JESSIE = 1
-PACKAGE_LICENSE         = MIT
-PACKAGE_HOMEPAGE        = http://rtail.org/
+PACKAGE_NAME    = rtail
+PACKAGE_VERSION = 0.2.1
 
 ## Maintainer
 MAINTAINER_NAME  = Manala
@@ -25,13 +20,8 @@ DOCKER = docker run \
     --volume `pwd`:/srv \
     --workdir /srv \
     --tty \
-    debian:${DEBIAN_DISTRIBUTION} \
-    sh -c '\
-        apt-get update && \
-        apt-get -y upgrade && \
-        apt-get -y install make && \
-        make build-package@debian-${DEBIAN_DISTRIBUTION} \
-    '
+    manala/build-debian:${DEBIAN_DISTRIBUTION} \
+    make build-package@${DEBIAN_DISTRIBUTION}
 
 ## Help
 help:
@@ -49,42 +39,31 @@ help:
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
 ## Build
-build: build@debian-jessie
+build: build@jessie
 
-build@debian-jessie: DEBIAN_DISTRIBUTION = jessie
-build@debian-jessie:
+build@jessie: DEBIAN_DISTRIBUTION = jessie
+build@jessie:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
-build-package@debian-jessie:
-	# Fpm (prefer git version, as 1.4 don't support systemd options)
-	apt-get -y install git ruby ruby-dev gcc xz-utils
-	git clone https://github.com/jordansissel/fpm.git ~/fpm
-	cd ~/fpm && git checkout afbb266
-	cd ~/fpm && make install
-	# Dependencies
-	apt-get -y install curl
-	curl -sL https://deb.nodesource.com/setup_5.x | bash -
+build-package@jessie:
+	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
+	curl -sL https://deb.nodesource.com/setup_6.x | bash -
 	apt-get install -y nodejs
-    # Prepare package
-	mkdir -p ~/package/usr/lib
-	cd ~/package/usr/lib && npm install ${PACKAGE_NAME}@${PACKAGE_VERSION} --legacy-bundling --only=prod
-	rm -Rf ~/package/usr/lib/node_modules/.bin
-	mv ~/package/usr/lib/node_modules ~/package/usr/lib/nodejs
-	# Fpm
-	cd ~/package && fpm \
-	    --verbose \
-	    -s dir \
-	    -t deb \
-	    --deb-compression xz \
-	    -n node-${PACKAGE_NAME} \
-	    -v ${PACKAGE_VERSION} \
-	    --depends nodejs \
-	    --iteration manala${PACKAGE_REVISION_MANALA}~jessie${PACKAGE_REVISION_JESSIE} \
-	    -m "${MAINTAINER_NAME} <${MAINTAINER_EMAIL}>" \
-	    --description "${PACKAGE_DESCRIPTION}" \
-	    --license ${PACKAGE_LICENSE} \
-	    --url ${PACKAGE_HOMEPAGE} \
-	    --deb-systemd "/srv/src/systemd/${PACKAGE_NAME}" \
-	    --vendor "" \
-	    .
-	mkdir -p /srv/build && mv ~/package/*.deb /srv/build
+
+	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
+	mkdir -p ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+
+	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
+	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && npm install ${PACKAGE_NAME}@${PACKAGE_VERSION} --legacy-bundling --only=prod
+	tar zcvf ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~ ${PACKAGE_NAME}-${PACKAGE_VERSION}
+
+	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
+	cp -a /srv/debian ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
+
+	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
+	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
+
+	printf "${COLOR_INFO}Move builded packages into build directory...${COLOR_RESET}\n"
+	mkdir -p /srv/build && mv ~/*.deb /srv/build
