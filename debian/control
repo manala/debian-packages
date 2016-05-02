@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Manala <contact@manala.io>
 Build-Depends: libfontconfig, debhelper (>= 9.0.0)
 Standards-Version: 3.9.6
-Homepage: https://github.com/mailhog/MailHog
+Homepage: http://phantomjs.org/
 
 Package: phantomjs
 Architecture: amd64
