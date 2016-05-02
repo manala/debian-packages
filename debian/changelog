@@ -1,4 +1,4 @@
-rtail (0.2.1-manala2~jessie1) unstable; urgency=low
+node-rtail (0.2.1-manala2~jessie1) unstable; urgency=low
 
   * Remove systemd in favor of old school SysVInit script
 

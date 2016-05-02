@@ -1,4 +1,4 @@
-Source: rtail
+Source: node-rtail
 Section: utils
 Priority: extra
 Maintainer: Manala <contact@manala.io>
@@ -6,7 +6,7 @@ Build-Depends: nodejs, debhelper (>= 9.0.0)
 Standards-Version: 3.9.6
 Homepage: http://rtail.org/
 
-Package: rtail
+Package: node-rtail
 Architecture: all
 Depends: nodejs, ${misc:Depends}
 Description: Terminal output to the browser in seconds, using UNIX pipes

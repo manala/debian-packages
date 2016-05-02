@@ -7,8 +7,9 @@ COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
 ## Package
-PACKAGE_NAME    = rtail
-PACKAGE_VERSION = 0.2.1
+PACKAGE_UPSTREAM_NAME = rtail
+PACKAGE_NAME          = node-${PACKAGE_UPSTREAM_NAME}
+PACKAGE_VERSION       = 0.2.1
 
 ## Maintainer
 MAINTAINER_NAME  = Manala
@@ -55,7 +56,7 @@ build-package@jessie:
 	mkdir -p ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
 
 	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
-	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && npm install ${PACKAGE_NAME}@${PACKAGE_VERSION} --legacy-bundling --only=prod
+	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && npm install ${PACKAGE_UPSTREAM_NAME}@${PACKAGE_VERSION} --legacy-bundling --only=prod
 	tar zcvf ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~ ${PACKAGE_NAME}-${PACKAGE_VERSION}
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
