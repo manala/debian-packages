@@ -1,0 +1,13 @@
+Source: phantomjs
+Section: utils
+Priority: extra
+Maintainer: Manala <contact@manala.io>
+Build-Depends: libfontconfig, debhelper (>= 9.0.0)
+Standards-Version: 3.9.6
+Homepage: https://github.com/mailhog/MailHog
+
+Package: phantomjs
+Architecture: amd64
+Depends: libfontconfig, ${misc:Depends}
+Description: Scriptable Headless WebKit
+ PhantomJS is a headless WebKit scriptable with JavaScript

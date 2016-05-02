@@ -7,14 +7,9 @@ COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
 ## Package
-PACKAGE_NAME            = phantomjs
-PACKAGE_DESCRIPTION     = Full web stack, no browser required
-PACKAGE_VERSION         = 2.1.1
-PACKAGE_REVISION_MANALA = 1
-PACKAGE_REVISION_JESSIE = 1
-PACKAGE_LICENSE         = BSD
-PACKAGE_HOMEPAGE        = http://phantomjs.org/
-PACKAGE_SOURCE          = https://bitbucket.org/ariya/phantomjs/downloads
+PACKAGE_NAME    = phantomjs
+PACKAGE_VERSION = 2.1.1
+PACKAGE_SOURCE  = https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-${PACKAGE_VERSION}-linux-x86_64.tar.bz2
 
 ## Maintainer
 MAINTAINER_NAME  = Manala
@@ -26,13 +21,8 @@ DOCKER = docker run \
     --volume `pwd`:/srv \
     --workdir /srv \
     --tty \
-    debian:${DEBIAN_DISTRIBUTION} \
-    sh -c '\
-        apt-get update && \
-        apt-get -y upgrade && \
-        apt-get -y install make && \
-        make build-package@debian-${DEBIAN_DISTRIBUTION} \
-    '
+    manala/build-debian:${DEBIAN_DISTRIBUTION} \
+    make build-package@${DEBIAN_DISTRIBUTION}
 
 ## Help
 help:
@@ -50,43 +40,32 @@ help:
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
 ## Build
-build: build@debian-jessie
+build: build@jessie
 
-build@debian-jessie: DEBIAN_DISTRIBUTION = jessie
-build@debian-jessie:
+build@jessie: DEBIAN_DISTRIBUTION = jessie
+build@jessie:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
-build-package@debian-jessie:
-	# Fpm (prefer git version, as 1.4 don't support systemd options)
-	apt-get -y install git ruby ruby-dev gcc xz-utils
-	git clone https://github.com/jordansissel/fpm.git ~/fpm
-	cd ~/fpm && git checkout afbb266
-	cd ~/fpm && make install
-	# Dependencies
-	apt-get -y install curl bzip2
-	# Get origin package
-	curl -L ${PACKAGE_SOURCE}/phantomjs-${PACKAGE_VERSION}-linux-x86_64.tar.bz2 -o ~/origin.tar.bz2
-	mkdir -p ~/origin
-	tar xfv ~/origin.tar.bz2 -C ~/origin --strip-components=1
-	# Prepare package
-	mkdir -p ~/package/usr/bin
-	mv ~/origin/bin/phantomjs ~/package/usr/bin
-	chmod 755 ~/package/usr/bin/phantomjs
-	# Fpm
-	cd ~/package && fpm \
-	    --verbose \
-	    -s dir \
-	    -t deb \
-	    --deb-compression xz \
-	    -n ${PACKAGE_NAME} \
-	    -v ${PACKAGE_VERSION} \
-	    --depends libfontconfig \
-	    --iteration manala${PACKAGE_REVISION_MANALA}~jessie${PACKAGE_REVISION_JESSIE} \
-	    -m "${MAINTAINER_NAME} <${MAINTAINER_EMAIL}>" \
-	    --description "${PACKAGE_DESCRIPTION}" \
-	    --license ${PACKAGE_LICENSE} \
-	    --url ${PACKAGE_HOMEPAGE} \
-	    --deb-systemd "/srv/src/systemd/phantomjs" \
-	    --vendor "" \
-	    .
-	mkdir -p /srv/build && mv ~/package/*.deb /srv/build
+build-package@jessie:
+	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
+	apt-get update
+	apt-get -y install libfontconfig
+
+	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
+	mkdir -p ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+
+	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
+	curl -L ${PACKAGE_SOURCE} -o ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.bz2
+	bunzip2 -c < ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.bz2 | gzip -c > ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz
+	tar xfv ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~/${PACKAGE_NAME}-${PACKAGE_VERSION} --strip-components=1
+
+	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
+	cp -a /srv/debian ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
+
+	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
+	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
+
+	printf "${COLOR_INFO}Move builded packages into build directory...${COLOR_RESET}\n"
+	mkdir -p /srv/build && mv ~/*.deb /srv/build

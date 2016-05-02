@@ -1,0 +1,5 @@
+phantomjs (2.1.1-manala2~jessie1) unstable; urgency=low
+
+  * Remove systemd in favor of old school SysVInit script
+
+ -- Manala <contact@manala.io>  Mon, 02 May 2016 08:03:15 +0000
