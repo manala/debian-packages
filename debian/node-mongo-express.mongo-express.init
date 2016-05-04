@@ -23,3 +23,23 @@ DAEMON=/usr/bin/node
 DAEMON_ARGS="/usr/bin/mongo-express ${DAEMON_ARGS}"
 START_ARGS="--background --make-pidfile"
 PIDFILE=/var/run/mongo-express.pid
+
+#
+# Function that stops the daemon/service
+#
+
+# Return
+#   0 if daemon has been stopped
+#   1 if daemon was already stopped
+#   2 if daemon could not be stopped
+#   other if a failure occurred
+do_stop_cmd_override() {
+    start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 \
+        $STOP_ARGS \
+        ${PIDFILE:+--pidfile ${PIDFILE}} --name $NAME --exec $DAEMON
+    RETVAL="$?"
+    [ "$RETVAL" = 2 ] && return 2
+    # Many daemons don't delete their pidfiles when they exit.
+    rm -f $PIDFILE
+    return $RETVAL
+}
