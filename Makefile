@@ -11,10 +11,6 @@ PACKAGE_UPSTREAM_NAME = rtail
 PACKAGE_NAME          = node-${PACKAGE_UPSTREAM_NAME}
 PACKAGE_VERSION       = 0.2.1
 
-## Maintainer
-MAINTAINER_NAME  = Manala
-MAINTAINER_EMAIL = contact@manala.io
-
 ## Macros
 DOCKER = docker run \
     --rm \
