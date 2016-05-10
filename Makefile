@@ -11,10 +11,6 @@ PACKAGE_NAME    = mailhog
 PACKAGE_VERSION = 0.2.0
 PACKAGE_SOURCE  = https://github.com/mailhog/MailHog/releases/download/v${PACKAGE_VERSION}/MailHog_linux_amd64
 
-## Maintainer
-MAINTAINER_NAME  = Manala
-MAINTAINER_EMAIL = contact@manala.io
-
 ## Macros
 DOCKER = docker run \
     --rm \
