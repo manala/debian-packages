@@ -1,5 +1,4 @@
 README			usr/share/phpmyadmin
-LICENSE			usr/share/phpmyadmin
 RELEASE-DATE-*	usr/share/phpmyadmin
 robots.txt		usr/share/phpmyadmin
 *.php			usr/share/phpmyadmin
