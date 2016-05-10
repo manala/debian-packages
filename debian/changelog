@@ -1,3 +1,9 @@
+phpmyadmin (4.6.1-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Tue, 10 May 2016 09:17:02 +0200
+
 phpmyadmin (4.6.0-manala1~jessie1) unstable; urgency=low
 
   * Initial release
