@@ -11,10 +11,6 @@ PACKAGE_NAME    = phantomjs
 PACKAGE_VERSION = 2.1.1
 PACKAGE_SOURCE  = https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-${PACKAGE_VERSION}-linux-x86_64.tar.bz2
 
-## Maintainer
-MAINTAINER_NAME  = Manala
-MAINTAINER_EMAIL = contact@manala.io
-
 ## Macros
 DOCKER = docker run \
     --rm \
