@@ -7,18 +7,9 @@ COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
 ## Package
-PACKAGE_NAME            = ngrok
-PACKAGE_DESCRIPTION     = Secure tunnels to localhost
-PACKAGE_VERSION         = 2.0.25
-PACKAGE_REVISION_MANALA = 1
-PACKAGE_REVISION_JESSIE = 1
-PACKAGE_LICENSE         = MIT
-PACKAGE_HOMEPAGE        = https://ngrok.com/
-PACKAGE_SOURCE          = https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-
-## Maintainer
-MAINTAINER_NAME  = Manala
-MAINTAINER_EMAIL = contact@manala.io
+PACKAGE_NAME    = ngrok
+PACKAGE_VERSION = 2.0.25
+PACKAGE_SOURCE  = https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
 
 ## Macros
 DOCKER = docker run \
@@ -26,13 +17,8 @@ DOCKER = docker run \
     --volume `pwd`:/srv \
     --workdir /srv \
     --tty \
-    debian:${DEBIAN_DISTRIBUTION} \
-    sh -c '\
-        apt-get update && \
-        apt-get -y upgrade && \
-        apt-get -y install make && \
-        make build-package@debian-${DEBIAN_DISTRIBUTION} \
-    '
+    manala/build-debian:${DEBIAN_DISTRIBUTION} \
+    make build-package DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}
 
 ## Help
 help:
@@ -49,39 +35,41 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
-## Build
-build: build@debian-jessie
+#########
+# Build #
+#########
 
-build@debian-jessie: DEBIAN_DISTRIBUTION = jessie
-build@debian-jessie:
+## Build
+build: build@wheezy build@jessie
+
+build@jessie: DEBIAN_DISTRIBUTION = jessie
+build@jessie:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
-build-package@debian-jessie:
-	# Fpm (prefer git version, as 1.4 don't support systemd options)
-	apt-get -y install git ruby ruby-dev gcc xz-utils
-	git clone https://github.com/jordansissel/fpm.git ~/fpm
-	cd ~/fpm && git checkout 420a76b
-	cd ~/fpm && make install
-	# Dependencies
-	apt-get -y install wget unzip
-	# Get binary
-	mkdir -p ~/package/usr/bin
-	wget ${PACKAGE_SOURCE} -O ~/package.zip
-	cd ~ && unzip package.zip -d ~/package/usr/bin/
-	chmod 755 ~/package/usr/bin/ngrok
-	# Fpm
-	cd ~/package && fpm \
-        --verbose \
-        -s dir \
-        -t deb \
-        --deb-compression xz \
-        -n ${PACKAGE_NAME} \
-        -v ${PACKAGE_VERSION} \
-        --iteration manala${PACKAGE_REVISION_MANALA}~jessie${PACKAGE_REVISION_JESSIE} \
-        -m "${MAINTAINER_NAME} <${MAINTAINER_EMAIL}>" \
-        --description "${PACKAGE_DESCRIPTION}" \
-        --license ${PACKAGE_LICENSE} \
-        --url ${PACKAGE_HOMEPAGE} \
-        --vendor "" \
-        .
-	mkdir -p /srv/build && mv ~/package/*.deb /srv/build
+build@wheezy: DEBIAN_DISTRIBUTION = wheezy
+build@wheezy:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
+	$(DOCKER)
+
+build-package:
+	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
+
+	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
+	mkdir -p ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+
+	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
+	curl -L ${PACKAGE_SOURCE} -o ~/${PACKAGE_NAME}.zip
+	unzip ~/${PACKAGE_NAME}.zip -d ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+	chmod 755 ~/${PACKAGE_NAME}-${PACKAGE_VERSION}/${PACKAGE_NAME}
+	tar zcvf ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~ ${PACKAGE_NAME}-${PACKAGE_VERSION}
+
+	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
+	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}-${PACKAGE_VERSION}/debian
+	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
+
+	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
+	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
+
+	printf "${COLOR_INFO}Move builded packages into build directory...${COLOR_RESET}\n"
+	mkdir -p /srv/build && mv ~/*.deb /srv/build
