@@ -1,4 +1,4 @@
-mailhog (0.2.0-manala2~wheezy) unstable; urgency=low
+mailhog (0.2.0-manala2~wheezy1) unstable; urgency=low
 
   * Remove systemd in favor of old school SysVInit script
 
