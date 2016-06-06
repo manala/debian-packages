@@ -18,7 +18,7 @@ DOCKER = docker run \
     --workdir /srv \
     --tty \
     manala/build-debian:${DEBIAN_DISTRIBUTION} \
-    make build-package@${DEBIAN_DISTRIBUTION}
+    make build-package DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}
 
 ## Help
 help:
@@ -35,15 +35,24 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
+#########
+# Build #
+#########
+
 ## Build
-build: build@jessie
+build: build@wheezy build@jessie
 
 build@jessie: DEBIAN_DISTRIBUTION = jessie
 build@jessie:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
-build-package@jessie:
+build@wheezy: DEBIAN_DISTRIBUTION = wheezy
+build@wheezy:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
+	$(DOCKER)
+
+build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	apt-get update
 	apt-get -y install libfontconfig
@@ -57,7 +66,7 @@ build-package@jessie:
 	tar xfv ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~/${PACKAGE_NAME}-${PACKAGE_VERSION} --strip-components=1
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
-	cp -a /srv/debian ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}-${PACKAGE_VERSION}/debian
 	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
