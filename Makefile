@@ -8,7 +8,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME    = phpmyadmin
-PACKAGE_VERSION = 4.6.2
+PACKAGE_VERSION = 4.6.3
 PACKAGE_SOURCE  = https://files.phpmyadmin.net/phpMyAdmin/${PACKAGE_VERSION}/phpMyAdmin-${PACKAGE_VERSION}-all-languages.tar.gz
 
 ## Macros
@@ -42,13 +42,13 @@ help:
 ## Build
 build: build@wheezy build@jessie
 
-build@jessie: DEBIAN_DISTRIBUTION = jessie
-build@jessie:
+build@wheezy: DEBIAN_DISTRIBUTION = wheezy
+build@wheezy:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
-build@wheezy: DEBIAN_DISTRIBUTION = wheezy
-build@wheezy:
+build@jessie: DEBIAN_DISTRIBUTION = jessie
+build@jessie:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 

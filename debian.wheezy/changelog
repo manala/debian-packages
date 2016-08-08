@@ -1,3 +1,9 @@
+phpmyadmin (4.6.3-manala1~wheezy1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Mon, 08 Aug 2016 14:05:16 +0000
+
 phpmyadmin (4.6.2-manala1~wheezy1) unstable; urgency=low
 
   * Upstream update
