@@ -8,10 +8,10 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME                  = ansible
-PACKAGE_DISTRIBUTION          = unstable
-PACKAGE_VERSION               = 2.1.0.0
+PACKAGE_DISTRIBUTION          = testing
+PACKAGE_VERSION               = 2.1.1.0
 PACKAGE_REVISION              = 1
-PACKAGE_REVISION_MANALA       = 2
+PACKAGE_REVISION_MANALA       = 1
 PACKAGE_REVISION_DISTRIBUTION = 1
 
 ## Maintainer
@@ -82,3 +82,25 @@ build-package:
 
 	printf "${COLOR_INFO}Move builded packages into build directory...${COLOR_RESET}\n"
 	mkdir -p /srv/build && mv ~/*.deb /srv/build
+
+###########
+# Publish #
+###########
+
+## Publish
+publish: publish@wheezy publish@jessie
+
+publish@wheezy: DEBIAN_DISTRIBUTION = wheezy
+publish@wheezy: publish-package
+
+publish@jessie: DEBIAN_DISTRIBUTION = jessie
+publish@jessie: publish-package
+
+publish-package:
+	printf "${COLOR_INFO}Publish ${COLOR_RESET}${PACKAGE_NAME}_${PACKAGE_VERSION}*${DEBIAN_DISTRIBUTION}*.deb\n"
+	printf "${COLOR_INFO}Press enter to confirm...${COLOR_RESET}\n"
+	read
+	scp build/${PACKAGE_NAME}_${PACKAGE_VERSION}*${DEBIAN_DISTRIBUTION}*.deb manala.elao.local:/tmp
+	ssh manala.elao.local -- sudo -u aptly aptly repo add ${DEBIAN_DISTRIBUTION} /tmp/${PACKAGE_NAME}_${PACKAGE_VERSION}*${DEBIAN_DISTRIBUTION}*.deb
+	ssh manala.elao.local -- sudo -u aptly aptly publish update ${DEBIAN_DISTRIBUTION}
+	ssh manala.elao.local -- rm /tmp/${PACKAGE_NAME}_${PACKAGE_VERSION}*${DEBIAN_DISTRIBUTION}*.deb
