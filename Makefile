@@ -60,6 +60,11 @@ build-package:
 
 	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
 	curl -L ${PACKAGE_SOURCE} -o ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz
+	# Start tweak...
+	mkdir -p /tmp/package && tar xfv ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C /tmp/package
+	cd /tmp/package/* && mv oauth2_proxy oauth2-proxy
+	cd /tmp/package && tar zcvf ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz *
+	# ...Stop tweak
 	tar xfv ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~/${PACKAGE_NAME}-${PACKAGE_VERSION} --strip-components=1
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"

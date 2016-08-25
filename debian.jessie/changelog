@@ -1,8 +1,9 @@
 oauth2-proxy (2.1-manala2~jessie1) unstable; urgency=low
 
-  * Config
-  * Init script
-  * Logrotate
+  * Rename bin from oauth2_proxy to oauth2-proxy
+  * Introduce config file
+  * Introduce init script
+  * Introduce logrotate
 
  -- Manala <contact@manala.io>  Thu, 25 Aug 2016 10:58:13 +0000
 
