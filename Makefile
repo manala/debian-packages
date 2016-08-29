@@ -9,7 +9,14 @@ COLOR_COMMENT = \033[33m
 ## Package
 PACKAGE_NAME                  = pam-ssh-agent-auth
 PACKAGE_VERSION               = 0.10.2
-PACKAGE_SOURCE = http://heanet.dl.sourceforge.net/project/pamsshagentauth/pam_ssh_agent_auth/v0.10.2/pam_ssh_agent_auth-0.10.2.tar.bz2
+PACKAGE_REVISION              = 1
+PACKAGE_REVISION_MANALA       = 1
+PACKAGE_REVISION_DISTRIBUTION = 1
+PACKAGE_SOURCE                = http://heanet.dl.sourceforge.net/project/pamsshagentauth/pam_ssh_agent_auth/v0.10.2/pam_ssh_agent_auth-0.10.2.tar.bz2
+
+## Maintainer
+MAINTAINER_NAME  = Manala
+MAINTAINER_EMAIL = contact@manala.io
 
 ## Macros
 DOCKER = docker run \
@@ -40,7 +47,12 @@ help:
 #########
 
 ## Build
-build: build@jessie
+build: build@wheezy build@jessie
+
+build@wheezy: DEBIAN_DISTRIBUTION = wheezy
+build@wheezy:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
+	$(DOCKER)
 
 build@jessie: DEBIAN_DISTRIBUTION = jessie
 build@jessie:
@@ -58,6 +70,14 @@ build-package:
 	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
 	curl -L ${PACKAGE_SOURCE} -o ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.bz2
 	tar xfv ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.bz2 -C ~/${PACKAGE_NAME}-${PACKAGE_VERSION} --strip-components=1
+
+	printf "${COLOR_INFO}Prepare package...${COLOR_RESET}\n"
+	cd ~ \
+		&& cd ${PACKAGE_NAME}-${PACKAGE_VERSION} \
+		&& \
+			DEBFULLNAME="${MAINTAINER_NAME}" \
+		  DEBEMAIL="${MAINTAINER_EMAIL}" \
+			dch -v ${PACKAGE_VERSION}-${PACKAGE_REVISION}manala${PACKAGE_REVISION_MANALA}~${DEBIAN_DISTRIBUTION}${PACKAGE_REVISION_DISTRIBUTION} "Backport"
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
 	cd ~ && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -i -us -uc -b
