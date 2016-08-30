@@ -67,6 +67,9 @@ build-package:
 	printf "${COLOR_INFO}Prepare package...${COLOR_RESET}\n"
 	apt-get -y --only-source build-dep ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ && apt-get -y --only-source source ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
+	# Start Patch...
+	cp -r patches/* ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+	# ...Stop Patch
 	cd ~ \
 		&& cd ${PACKAGE_NAME}-${PACKAGE_VERSION} \
 		&& \
