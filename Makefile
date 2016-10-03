@@ -9,7 +9,7 @@ COLOR_COMMENT = \033[33m
 ## Package
 PACKAGE_UPSTREAM_NAME = mongo-express
 PACKAGE_NAME          = node-${PACKAGE_UPSTREAM_NAME}
-PACKAGE_VERSION       = 0.29.11
+PACKAGE_VERSION       = 0.31.4
 
 ## Macros
 DOCKER = docker run \
@@ -18,7 +18,7 @@ DOCKER = docker run \
     --workdir /srv \
     --tty \
     manala/build-debian:${DEBIAN_DISTRIBUTION} \
-    make build-package@${DEBIAN_DISTRIBUTION}
+    make build-package DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}
 
 ## Help
 help:
@@ -35,17 +35,27 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
+#########
+# Build #
+#########
+
 ## Build
-build: build@jessie
+build: build@wheezy build@jessie
+
+build@wheezy: DEBIAN_DISTRIBUTION = wheezy
+build@wheezy:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
+	$(DOCKER)
 
 build@jessie: DEBIAN_DISTRIBUTION = jessie
 build@jessie:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
-build-package@jessie:
+build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	curl -sL https://deb.nodesource.com/setup_6.x | bash -
+	echo "Package:      nodejs*\nPin:          origin deb.nodesource.com\nPin-Priority: 900" > /etc/apt/preferences.d/nodejs
 	apt-get install -y nodejs
 	#apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
 	#echo "deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.2 main" > /etc/apt/sources.list.d/mongodb.list
@@ -60,7 +70,7 @@ build-package@jessie:
 	tar zcvf ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~ ${PACKAGE_NAME}-${PACKAGE_VERSION}
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
-	cp -a /srv/debian ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}-${PACKAGE_VERSION}/debian
 	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
