@@ -8,7 +8,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME    = mailhog
-PACKAGE_VERSION = 0.2.0
+PACKAGE_VERSION = 0.2.1
 PACKAGE_SOURCE  = https://github.com/mailhog/MailHog/releases/download/v${PACKAGE_VERSION}/MailHog_linux_amd64
 
 ## Macros

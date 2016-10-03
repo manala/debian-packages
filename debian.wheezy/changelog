@@ -1,3 +1,9 @@
+mailhog (0.2.1-manala1~wheezy1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Mon, 03 Oct 2016 09:01:37 +0200
+
 mailhog (0.2.0-manala2~wheezy1) unstable; urgency=low
 
   * Remove systemd in favor of old school SysVInit script
