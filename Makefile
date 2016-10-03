@@ -8,7 +8,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME    = ngrok
-PACKAGE_VERSION = 2.1.3
+PACKAGE_VERSION = 2.1.14
 PACKAGE_SOURCE  = https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
 
 ## Macros
