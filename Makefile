@@ -9,9 +9,9 @@ COLOR_COMMENT = \033[33m
 ## Package
 PACKAGE_NAME                  = supervisor
 PACKAGE_DISTRIBUTION          = testing
-PACKAGE_VERSION               = 3.2.0
-PACKAGE_REVISION              = 2
-PACKAGE_REVISION_MANALA       = 2
+PACKAGE_VERSION               = 3.3.1
+PACKAGE_REVISION              = 1
+PACKAGE_REVISION_MANALA       = 1
 PACKAGE_REVISION_DISTRIBUTION = 1
 
 ## Maintainer
@@ -67,9 +67,6 @@ build-package:
 	printf "${COLOR_INFO}Prepare package...${COLOR_RESET}\n"
 	apt-get -y --only-source build-dep ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ && apt-get -y --only-source source ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
-	# Start Patch...
-	cp -r patches/* ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
-	# ...Stop Patch
 	cd ~ \
 		&& cd ${PACKAGE_NAME}-${PACKAGE_VERSION} \
 		&& \
