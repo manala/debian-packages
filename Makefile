@@ -10,7 +10,7 @@ COLOR_COMMENT = \033[33m
 PACKAGE_NAME                  = backup-manager
 PACKAGE_DISTRIBUTION          = testing
 PACKAGE_VERSION               = 0.7.12
-PACKAGE_REVISION              = 3
+PACKAGE_REVISION              = 4
 PACKAGE_REVISION_MANALA       = 1
 PACKAGE_REVISION_DISTRIBUTION = 1
 
