@@ -42,13 +42,13 @@ help:
 ## Build
 build: build@wheezy build@jessie
 
-build@jessie: DEBIAN_DISTRIBUTION = jessie
-build@jessie:
+build@wheezy: DEBIAN_DISTRIBUTION = wheezy
+build@wheezy:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
-build@wheezy: DEBIAN_DISTRIBUTION = wheezy
-build@wheezy:
+build@jessie: DEBIAN_DISTRIBUTION = jessie
+build@jessie:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
