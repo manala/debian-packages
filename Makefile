@@ -63,12 +63,13 @@ build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	echo "deb-src http://httpredir.debian.org/debian ${PACKAGE_DISTRIBUTION} main contrib non-free" > /etc/apt/sources.list.d/${PACKAGE_DISTRIBUTION}.list
 	apt-get update
+	apt-get -y install dh-python python python-meld3 python-mock python-pkg-resources python-setuptools python-sphinx
 
 	printf "${COLOR_INFO}Prepare package...${COLOR_RESET}\n"
-	apt-get -y --only-source build-dep ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ && apt-get -y --only-source source ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ \
 		&& cd ${PACKAGE_NAME}-${PACKAGE_VERSION} \
+		&& sed -i "s/python-all/python/g" debian/control \
 		&& \
 			DEBFULLNAME="${MAINTAINER_NAME}" \
 			DEBEMAIL="${MAINTAINER_EMAIL}" \
