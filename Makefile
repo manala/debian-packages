@@ -17,8 +17,9 @@ DOCKER = docker run \
     --volume `pwd`:/srv \
     --workdir /srv \
     --tty \
+		${DOCKER_OPTIONS} \
     manala/build-debian:${DEBIAN_DISTRIBUTION} \
-    make build-package DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}
+		${DOCKER_COMMAND}
 
 ## Help
 help:
@@ -35,6 +36,24 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
+#######
+# Dev #
+#######
+
+dev@wheezy: DEBIAN_DISTRIBUTION = wheezy
+dev@wheezy: DOCKER_OPTIONS      = --interactive
+dev@wheezy: DOCKER_COMMAND      = /bin/bash
+dev@wheezy:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
+	$(DOCKER)
+
+dev@jessie: DEBIAN_DISTRIBUTION = jessie
+dev@jessie: DOCKER_OPTIONS      = --interactive
+dev@jessie: DOCKER_COMMAND      = /bin/bash
+dev@jessie:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
+	$(DOCKER)
+
 #########
 # Build #
 #########
@@ -42,13 +61,15 @@ help:
 ## Build
 build: build@wheezy build@jessie
 
-build@jessie: DEBIAN_DISTRIBUTION = jessie
-build@jessie:
+build@wheezy: DEBIAN_DISTRIBUTION = wheezy
+build@wheezy: DOCKER_COMMAND      = make build-package DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}
+build@wheezy:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
-build@wheezy: DEBIAN_DISTRIBUTION = wheezy
-build@wheezy:
+build@jessie: DEBIAN_DISTRIBUTION = jessie
+build@jessie: DOCKER_COMMAND      = make build-package DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}
+build@jessie:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
