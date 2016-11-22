@@ -1,3 +1,9 @@
+node-mongo-express (0.32.0-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Tue, 22 Nov 2016 12:10:45 +0000
+
 node-mongo-express (0.31.4-manala1~jessie1) unstable; urgency=low
 
   * Upstream update
