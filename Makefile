@@ -25,9 +25,9 @@ DOCKER = docker run \
     --volume `pwd`:/srv \
     --workdir /srv \
     --tty \
-		${DOCKER_OPTIONS} \
+    ${DOCKER_OPTIONS} \
     manala/build-debian:${DEBIAN_DISTRIBUTION} \
-		${DOCKER_COMMAND}
+    ${DOCKER_COMMAND}
 
 ## Help
 help:
@@ -80,9 +80,9 @@ build-package:
 	cd ~ \
 		&& cd ${PACKAGE_NAME}-${PACKAGE_VERSION} \
 		&& \
-			DEBFULLNAME="${MAINTAINER_NAME}" \
+		  DEBFULLNAME="${MAINTAINER_NAME}" \
 		  DEBEMAIL="${MAINTAINER_EMAIL}" \
-			dch -v ${PACKAGE_EPOCH}:${PACKAGE_VERSION}-${PACKAGE_REVISION}manala${PACKAGE_REVISION_MANALA}~${DEBIAN_DISTRIBUTION}${PACKAGE_REVISION_DISTRIBUTION} "Backport"
+		  dch -v ${PACKAGE_EPOCH}:${PACKAGE_VERSION}-${PACKAGE_REVISION}manala${PACKAGE_REVISION_MANALA}~${DEBIAN_DISTRIBUTION}${PACKAGE_REVISION_DISTRIBUTION} "Backport"
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
 	cd ~ && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
