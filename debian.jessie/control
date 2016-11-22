@@ -3,7 +3,7 @@ Section: web
 Priority: extra
 Maintainer: Manala <contact@manala.io>
 Build-Depends: debhelper (>= 9.0.0), pkg-php-tools (>= 1.7~)
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Homepage: https://www.phpmyadmin.net/
 
 Package: phpmyadmin
