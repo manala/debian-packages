@@ -3,7 +3,7 @@ Section: utils
 Priority: extra
 Maintainer: Manala <contact@manala.io>
 Build-Depends: nodejs, debhelper (>= 9.0.0)
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Homepage: http://rtail.org/
 
 Package: node-rtail
