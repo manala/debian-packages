@@ -89,12 +89,12 @@ build-package:
 	printf "${COLOR_INFO}Prepare package...${COLOR_RESET}\n"
 	cd ~ && apt-get -y --only-source source ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ \
-		&& cd ${PACKAGE_NAME}-${PACKAGE_VERSION} \
-		&& sed -i "s/python-all/python/g" debian/control \
-		&& \
-		  DEBFULLNAME="${MAINTAINER_NAME}" \
-		  DEBEMAIL="${MAINTAINER_EMAIL}" \
-		  dch -v ${PACKAGE_VERSION}-${PACKAGE_REVISION}manala${PACKAGE_REVISION_MANALA}~${DEBIAN_DISTRIBUTION}${PACKAGE_REVISION_DISTRIBUTION} "Backport"
+	  && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} \
+	  && sed -i "s/python-all/python/g" debian/control \
+	  && \
+	    DEBFULLNAME="${MAINTAINER_NAME}" \
+	    DEBEMAIL="${MAINTAINER_EMAIL}" \
+	    dch -v ${PACKAGE_VERSION}-${PACKAGE_REVISION}manala${PACKAGE_REVISION_MANALA}~${DEBIAN_DISTRIBUTION}${PACKAGE_REVISION_DISTRIBUTION} "Backport"
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
 	cd ~ && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
