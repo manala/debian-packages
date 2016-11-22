@@ -17,9 +17,9 @@ DOCKER = docker run \
     --volume `pwd`:/srv \
     --workdir /srv \
     --tty \
-		${DOCKER_OPTIONS} \
+    ${DOCKER_OPTIONS} \
     manala/build-debian:${DEBIAN_DISTRIBUTION} \
-		${DOCKER_COMMAND}
+    ${DOCKER_COMMAND}
 
 ## Help
 help:
