@@ -75,7 +75,11 @@ build@jessie:
 
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
+ifeq (${DEBIAN_DISTRIBUTION},wheezy)
 	curl -sL https://deb.nodesource.com/setup_6.x | bash -
+else
+	curl -sL https://deb.nodesource.com/setup_7.x | bash -
+endif
 	echo "Package:      nodejs*\nPin:          origin deb.nodesource.com\nPin-Priority: 900" > /etc/apt/preferences.d/nodejs
 	apt-get install -y nodejs
 	#apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
