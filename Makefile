@@ -8,11 +8,11 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME                  = pam-ssh-agent-auth
-PACKAGE_VERSION               = 0.10.2
+PACKAGE_VERSION               = 0.10.3
 PACKAGE_REVISION              = 1
 PACKAGE_REVISION_MANALA       = 1
 PACKAGE_REVISION_DISTRIBUTION = 1
-PACKAGE_SOURCE                = http://heanet.dl.sourceforge.net/project/pamsshagentauth/pam_ssh_agent_auth/v0.10.2/pam_ssh_agent_auth-0.10.2.tar.bz2
+PACKAGE_SOURCE                = http://heanet.dl.sourceforge.net/project/pamsshagentauth/pam_ssh_agent_auth/v${PACKAGE_VERSION}/pam_ssh_agent_auth-${PACKAGE_VERSION}.tar.bz2
 
 ## Maintainer
 MAINTAINER_NAME  = Manala
