@@ -8,7 +8,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME    = alt-galaxy
-PACKAGE_VERSION = 1.1.0
+PACKAGE_VERSION = 1.2.0
 PACKAGE_SOURCE  = https://github.com/gantsign/alt-galaxy/releases/download/${PACKAGE_VERSION}/alt-galaxy_linux_amd64.tar.xz
 
 ## Macros

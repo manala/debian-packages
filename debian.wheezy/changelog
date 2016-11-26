@@ -1,3 +1,9 @@
+alt-galaxy (1.2.0-manala1~wheezy1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Sat, 26 Nov 2016 12:34:09 +0000
+
 alt-galaxy (1.1.0-manala1~wheezy1) unstable; urgency=low
 
   * Initial packaging
