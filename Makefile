@@ -8,7 +8,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME    = phpmyadmin
-PACKAGE_VERSION = 4.6.4
+PACKAGE_VERSION = 4.6.5.2
 PACKAGE_SOURCE  = https://files.phpmyadmin.net/phpMyAdmin/${PACKAGE_VERSION}/phpMyAdmin-${PACKAGE_VERSION}-all-languages.tar.gz
 
 ## Macros
@@ -92,3 +92,25 @@ build-package:
 
 	printf "${COLOR_INFO}Move builded packages into build directory...${COLOR_RESET}\n"
 	mkdir -p /srv/build && mv ~/*.deb /srv/build
+
+###########
+# Publish #
+###########
+
+## Publish
+publish: publish@wheezy publish@jessie
+
+publish@wheezy: DEBIAN_DISTRIBUTION = wheezy
+publish@wheezy: publish-package
+
+publish@jessie: DEBIAN_DISTRIBUTION = jessie
+publish@jessie: publish-package
+
+publish-package:
+	printf "${COLOR_INFO}Publish ${COLOR_RESET}${PACKAGE_NAME}_${PACKAGE_VERSION}*${DEBIAN_DISTRIBUTION}*.deb\n"
+	printf "${COLOR_INFO}Press enter to confirm...${COLOR_RESET}\n"
+	read
+	scp build/${PACKAGE_NAME}_${PACKAGE_VERSION}*${DEBIAN_DISTRIBUTION}*.deb manala.elao.local:/tmp
+	ssh manala.elao.local -- sudo -u aptly aptly repo add ${DEBIAN_DISTRIBUTION} /tmp/${PACKAGE_NAME}_${PACKAGE_VERSION}*${DEBIAN_DISTRIBUTION}*.deb
+	ssh manala.elao.local -- sudo -u aptly aptly publish update ${DEBIAN_DISTRIBUTION}
+	ssh manala.elao.local -- rm /tmp/${PACKAGE_NAME}_${PACKAGE_VERSION}*${DEBIAN_DISTRIBUTION}*.deb
