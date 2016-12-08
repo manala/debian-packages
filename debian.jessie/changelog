@@ -1,3 +1,10 @@
+vault (0.6.3-manala3~jessie1) unstable; urgency=low
+
+  * Remove vault group creation
+  * Run vault server as vault:nogroup
+
+ -- Manala <contact@manala.io>  Thu, 08 Dec 2016 14:31:40 +0000
+
 vault (0.6.3-manala2~jessie1) unstable; urgency=low
 
   * Add SysV init script

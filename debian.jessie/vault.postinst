@@ -3,7 +3,6 @@
 set -eu
 
 USER="vault"
-GROUP="$USER"
 
 case "${1}" in
     configure)
@@ -11,7 +10,6 @@ case "${1}" in
             --home /var/opt/vault \
             --quiet \
             --system \
-            --group \
             ${USER}
         ;;
 
