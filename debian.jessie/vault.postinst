@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -eu
+
+USER="vault"
+GROUP="$USER"
+
+case "${1}" in
+    configure)
+        adduser \
+            --home /var/opt/vault \
+            --quiet \
+            --system \
+            --group \
+            ${USER}
+        ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+
+    *)
+        echo "postinst called with unknown argument \`${1}'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0
