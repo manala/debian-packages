@@ -16,7 +16,11 @@ PACKAGE_VERSION_VCS_HASH      = fb8b89d
 PACKAGE_SOURCE                = github.com/splitsh/lite
 
 ## GO
+GO_VERSION = 1.7.4
 export GOPATH = ${HOME}/go
+
+## Path
+export PATH := ${PATH}:/usr/local/go/bin
 
 ## Macros
 DOCKER = docker run \
@@ -82,7 +86,9 @@ build@jessie:
 
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
-	apt-get install -y golang git cmake
+	apt-get install -y git cmake pkg-config libssh2-1-dev libssl-dev libcurl4-openssl-dev
+	curl -L https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz -o ~/go.tar.gz
+	tar -C /usr/local -xzf ~/go.tar.gz
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
 	mkdir -p ~/${PACKAGE_NAME}
