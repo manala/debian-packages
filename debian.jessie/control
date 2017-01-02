@@ -1,0 +1,17 @@
+Source: gitsplit
+Section: vcs
+Priority: extra
+Maintainer: Manala <contact@manala.io>
+Build-Depends: debhelper (>= 9.0.0),
+               dh-python
+Standards-Version: 3.9.8
+Homepage: https://github.com/jderusse/docker-gitsplit
+
+Package: gitsplit
+Architecture: all
+Depends: ${misc:Depends},
+         ${python:Depends},
+         git,
+         splitsh-lite
+Description: Gitsplit
+ Gitsplit
