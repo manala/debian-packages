@@ -7,13 +7,9 @@ COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
 ## Package
-PACKAGE_NAME                  = splitsh-lite
-PACKAGE_VERSION               = 0.0
-PACKAGE_VERSION_VCS           = git
-PACKAGE_VERSION_DATE          = 20161115
-PACKAGE_VERSION_DATE_SNAPSHOT = 0
-PACKAGE_VERSION_VCS_HASH      = fb8b89d
-PACKAGE_SOURCE                = github.com/splitsh/lite
+PACKAGE_NAME             = splitsh-lite
+PACKAGE_VERSION_VCS_HASH = fb8b89d
+PACKAGE_SOURCE           = github.com/splitsh/lite
 
 ## GO
 GO_VERSION = 1.7.4
@@ -104,9 +100,8 @@ build-package:
 		git checkout ${PACKAGE_VERSION_VCS_HASH}
 	go build -o ~/${PACKAGE_NAME}/${PACKAGE_NAME} ${PACKAGE_SOURCE}
 	chmod 755 ~/${PACKAGE_NAME}/${PACKAGE_NAME}
-	tar zcvf ~/${PACKAGE_NAME}_${PACKAGE_VERSION}~${PACKAGE_VERSION_VCS}${PACKAGE_VERSION_DATE}.${PACKAGE_VERSION_DATE_SNAPSHOT}.${PACKAGE_VERSION_VCS_HASH}.orig.tar.gz -C ~ ${PACKAGE_NAME}
 	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}/debian
-	cd ~/${PACKAGE_NAME} && debuild -us -uc
+	cd ~/${PACKAGE_NAME} && debuild --no-tgz-check -us -uc -b
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
 	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
