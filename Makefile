@@ -7,9 +7,9 @@ COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
 ## Package
-PACKAGE_NAME             = splitsh-lite
-PACKAGE_VERSION_VCS_HASH = fb8b89d
-PACKAGE_SOURCE           = github.com/splitsh/lite
+PACKAGE_NAME    = splitsh-lite
+PACKAGE_VERSION = 1.0.0
+PACKAGE_SOURCE  = github.com/splitsh/lite
 
 ## GO
 GO_VERSION = 1.7.4
@@ -97,7 +97,7 @@ build-package:
 		make install
 	go get ${PACKAGE_SOURCE}
 	cd ${GOPATH}/src/${PACKAGE_SOURCE} && \
-		git checkout ${PACKAGE_VERSION_VCS_HASH}
+		git checkout v${PACKAGE_VERSION}
 	go build -o ~/${PACKAGE_NAME}/${PACKAGE_NAME} ${PACKAGE_SOURCE}
 	chmod 755 ~/${PACKAGE_NAME}/${PACKAGE_NAME}
 	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}/debian
