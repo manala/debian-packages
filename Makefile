@@ -7,9 +7,10 @@ COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
 ## Package
-PACKAGE_NAME    = oauth2-proxy
-PACKAGE_VERSION = 2.1
-PACKAGE_SOURCE  = https://github.com/bitly/oauth2_proxy/releases/download/v${PACKAGE_VERSION}/oauth2_proxy-${PACKAGE_VERSION}.linux-amd64.go1.6.tar.gz
+PACKAGE_NAME       = oauth2-proxy
+PACKAGE_VERSION    = 2.1
+PACKAGE_GO_VERSION = 1.6
+PACKAGE_SOURCE     = https://github.com/bitly/oauth2_proxy/releases/download/v${PACKAGE_VERSION}/oauth2_proxy-${PACKAGE_VERSION}.linux-amd64.go${PACKAGE_GO_VERSION}.tar.gz
 
 ## Macros
 DOCKER = docker run \
@@ -77,20 +78,19 @@ build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
-	mkdir -p ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+	mkdir -p ~/${PACKAGE_NAME}
 
 	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
-	curl -L ${PACKAGE_SOURCE} -o ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz
+	curl -L ${PACKAGE_SOURCE} \
+		| tar zxfv - -C ~/${PACKAGE_NAME} --strip-components=1
 	# Start tweak...
-	mkdir -p /tmp/package && tar xfv ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C /tmp/package
-	cd /tmp/package/* && mv oauth2_proxy oauth2-proxy
-	cd /tmp/package && tar zcvf ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz *
+	mv ~/${PACKAGE_NAME}/oauth2_proxy ~/${PACKAGE_NAME}/${PACKAGE_NAME}
 	# ...Stop tweak
-	tar xfv ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~/${PACKAGE_NAME}-${PACKAGE_VERSION} --strip-components=1
+	chmod 755 ~/${PACKAGE_NAME}/${PACKAGE_NAME}
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
-	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}-${PACKAGE_VERSION}/debian
-	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
+	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}/debian
+	cd ~/${PACKAGE_NAME} && debuild --no-tgz-check -us -uc -b
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
 	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
