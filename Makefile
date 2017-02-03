@@ -8,7 +8,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME             = gitsplit
-PACKAGE_VERSION_VCS_HASH = bc7eb7a
+PACKAGE_VERSION_VCS_HASH = d8ef8a8
 PACKAGE_SOURCE           = https://github.com/jderusse/docker-gitsplit/archive/${PACKAGE_VERSION_VCS_HASH}.tar.gz
 
 ## Macros
@@ -75,6 +75,7 @@ build@jessie:
 
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
+	apt-get update
 	apt-get install -y dh-python python
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
@@ -84,7 +85,7 @@ build-package:
 	curl -L ${PACKAGE_SOURCE} \
 		| tar zxfv - -C ~/${PACKAGE_NAME} --strip-components=1
 	chmod 755 ~/${PACKAGE_NAME}/${PACKAGE_NAME}
-	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}/debian
+	cp -R /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}/debian
 	cd ~/${PACKAGE_NAME} && debuild --no-tgz-check -us -uc -b
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
