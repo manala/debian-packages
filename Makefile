@@ -75,7 +75,7 @@ build@jessie:
 
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
-ifeq (${DEBIAN_DISTRIBUTION},wheezy)
+ifeq (${DEBIAN_DISTRIBUTION}, wheezy)
 	curl -sL https://deb.nodesource.com/setup_6.x | bash -
 else
 	curl -sL https://deb.nodesource.com/setup_7.x | bash -
@@ -88,15 +88,14 @@ endif
 	#apt-get install -y mongodb-org
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
-	mkdir -p ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+	mkdir -p ~/${PACKAGE_NAME}
 
 	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
-	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && npm install ${PACKAGE_UPSTREAM_NAME}@${PACKAGE_VERSION} --legacy-bundling --only=prod
-	tar zcvf ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~ ${PACKAGE_NAME}-${PACKAGE_VERSION}
+	cd ~/${PACKAGE_NAME} && npm install ${PACKAGE_UPSTREAM_NAME}@${PACKAGE_VERSION} --legacy-bundling --only=prod
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
-	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}-${PACKAGE_VERSION}/debian
-	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
+	cp -R /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}/debian
+	cd ~/${PACKAGE_NAME} && debuild --no-tgz-check -us -uc -b
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
 	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
