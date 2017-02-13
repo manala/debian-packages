@@ -1,0 +1,5 @@
+cgroupfs-mount (1.0.0-manala1~wheezy1) unstable; urgency=low
+
+  * Created cgroupfs-mount based on proxmox cgroup hierarchy
+
+ -- Manala <contact@manala.io>  Mon, 13 Feb 2017 14:42:00 +0000
