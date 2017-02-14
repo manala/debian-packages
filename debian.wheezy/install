@@ -1,4 +1,3 @@
-LICENSE		usr/share/opcache-dashboard
 README.md	usr/share/opcache-dashboard
 *.php		usr/share/opcache-dashboard
 *.png		usr/share/opcache-dashboard

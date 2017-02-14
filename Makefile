@@ -7,9 +7,10 @@ COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
 ## Package
-PACKAGE_NAME    = opcache-dashboard
-PACKAGE_VERSION = 1.0.0
-PACKAGE_SOURCE  = https://github.com/carlosbuenosvinos/opcache-dashboard/archive/${PACKAGE_VERSION}.tar.gz
+PACKAGE_NAME         = opcache-dashboard
+PACKAGE_VERSION      = 1.0.0
+PACKAGE_VERSION_HASH = cceeb8e
+PACKAGE_SOURCE       = https://github.com/carlosbuenosvinos/opcache-dashboard/archive/${PACKAGE_VERSION_HASH}.tar.gz
 
 ## Macros
 DOCKER = docker run \
@@ -77,15 +78,15 @@ build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
-	mkdir -p ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+	mkdir -p ~/${PACKAGE_NAME}
 
 	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
-	curl -L ${PACKAGE_SOURCE} -o ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz
-	tar xfv ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~/${PACKAGE_NAME}-${PACKAGE_VERSION} --strip-components=1
+	curl -L ${PACKAGE_SOURCE} \
+		| tar zxfv - -C ~/${PACKAGE_NAME} --strip-components=1
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
-	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}-${PACKAGE_VERSION}/debian
-	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
+	cp -R /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}/debian
+	cd ~/${PACKAGE_NAME} && debuild --no-tgz-check -us -uc -b
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
 	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done

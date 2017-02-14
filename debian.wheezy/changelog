@@ -1,3 +1,11 @@
+opcache-dashboard (1.0.0-manala2~wheezy1) unstable; urgency=low
+
+  * Fix package dependencies
+  * Fix copyright inclusion
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Tue, 14 Feb 2017 08:06:19 +0000
+
 opcache-dashboard (1.0.0-manala1~wheezy1) unstable; urgency=low
 
   * Initial release
