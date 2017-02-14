@@ -23,3 +23,7 @@ Based on https://github.com/tianon/cgroupfs-mount
 ```
 $ make build
 ```
+
+## Update
+
+* Add an entry to debian.*/changelog (use "date --rfc-2822" command to specify date)
