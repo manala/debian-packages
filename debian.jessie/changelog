@@ -1,3 +1,9 @@
+phpmyadmin (4.6.6-manala1~jessie2) unstable; urgency=low
+
+  * Fix package dependencies
+
+ -- Manala <contact@manala.io>  Tue, 14 Feb 2017 08:06:19 +0000
+
 phpmyadmin (4.6.6-manala1~jessie1) unstable; urgency=low
 
   * Upstream update
