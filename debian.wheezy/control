@@ -8,6 +8,6 @@ Homepage: http://phppgadmin.sourceforge.net/doku.php
 
 Package: phppgadmin
 Architecture: all
-Depends: libapache2-mod-php7.0 | php7.0-cgi | php7.0-fpm | php7.0 | libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5,
+Depends: libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5,
     ${misc:Depends}
 Description: ${phpcomposer:description}
