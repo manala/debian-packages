@@ -1,5 +1,5 @@
 .SILENT:
-.PHONY: help
+.PHONY: help build
 
 ## Colors
 COLOR_RESET   = \033[0m
@@ -16,8 +16,9 @@ DOCKER = docker run \
     --volume `pwd`:/srv \
     --workdir /srv \
     --tty \
+		${DOCKER_OPTIONS} \
     manala/build-debian:${DEBIAN_DISTRIBUTION} \
-    make build-package DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}
+    ${DOCKER_COMMAND}
 
 ## Help
 help:
@@ -34,6 +35,17 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
+#######
+# Dev #
+#######
+
+dev@wheezy: DEBIAN_DISTRIBUTION = wheezy
+dev@wheezy: DOCKER_OPTIONS      = --interactive
+dev@wheezy: DOCKER_COMMAND      = /bin/bash
+dev@wheezy:
+	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
+	$(DOCKER)
+
 #########
 # Build #
 #########
@@ -42,6 +54,7 @@ help:
 build: build@wheezy
 
 build@wheezy: DEBIAN_DISTRIBUTION = wheezy
+build@wheezy: DOCKER_COMMAND      = make build-package DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}
 build@wheezy:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
@@ -50,13 +63,12 @@ build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
-	mkdir -p ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
+	mkdir -p ~/${PACKAGE_NAME}
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
-	cp -a /srv/* ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
-	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}-${PACKAGE_VERSION}/debian
-	ls -alsh ~/${PACKAGE_NAME}-${PACKAGE_VERSION}
-	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
+	cp -R /srv/src/* ~/${PACKAGE_NAME}
+	cp -R /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}/debian
+	cd ~/${PACKAGE_NAME} && debuild --no-tgz-check -us -uc -b
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
 	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
