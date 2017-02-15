@@ -28,12 +28,6 @@ if [ -f /etc/default/$BASE ]; then
     . /etc/default/$BASE
 fi
 
-# see also init_is_upstart in /lib/lsb/init-functions (which isn't available in Ubuntu 12.04, or we'd use it)
-if [ -x /sbin/initctl ] && /sbin/initctl version 2>/dev/null | /bin/grep -q upstart; then
-    log_failure_msg "$BASE is managed via upstart, try using service $BASE $1"
-    exit 1
-fi
-
 case "$1" in
     start)
         test -x /usr/bin/cgroupfs-mount || exit 0
