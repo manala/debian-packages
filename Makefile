@@ -12,7 +12,7 @@ PACKAGE_VERSION = 1.0.0
 PACKAGE_SOURCE  = github.com/splitsh/lite
 
 ## GO
-GO_VERSION = 1.7.4
+GO_VERSION = 1.8
 export GOPATH = ${HOME}/go
 
 ## Path
