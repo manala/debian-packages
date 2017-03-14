@@ -82,6 +82,7 @@ build@jessie:
 
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
+	apt-get update
 	apt-get install -y git cmake pkg-config libssh2-1-dev libssl-dev libcurl4-openssl-dev
 	curl -L https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz -o ~/go.tar.gz
 	tar -C /usr/local -xzf ~/go.tar.gz
@@ -100,7 +101,7 @@ build-package:
 		git checkout v${PACKAGE_VERSION}
 	go build -o ~/${PACKAGE_NAME}/${PACKAGE_NAME} ${PACKAGE_SOURCE}
 	chmod 755 ~/${PACKAGE_NAME}/${PACKAGE_NAME}
-	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}/debian
+	cp -R /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}/debian
 	cd ~/${PACKAGE_NAME} && debuild --no-tgz-check -us -uc -b
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
