@@ -8,7 +8,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME    = splitsh-lite
-PACKAGE_VERSION = 1.0.0
+PACKAGE_VERSION = 1.0.1
 PACKAGE_SOURCE  = github.com/splitsh/lite
 
 ## GO
