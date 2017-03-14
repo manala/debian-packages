@@ -9,7 +9,7 @@ COLOR_COMMENT = \033[33m
 ## Package
 PACKAGE_UPSTREAM_NAME = mongo-express
 PACKAGE_NAME          = node-${PACKAGE_UPSTREAM_NAME}
-PACKAGE_VERSION       = 0.35.0
+PACKAGE_VERSION       = 0.38.0
 
 ## Macros
 DOCKER = docker run \
