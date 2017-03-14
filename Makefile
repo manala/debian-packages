@@ -8,7 +8,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME             = gitsplit
-PACKAGE_VERSION_VCS_HASH = d8ef8a8
+PACKAGE_VERSION_VCS_HASH = 63c00e6
 PACKAGE_SOURCE           = https://github.com/jderusse/docker-gitsplit/archive/${PACKAGE_VERSION_VCS_HASH}.tar.gz
 
 ## Macros
