@@ -8,7 +8,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME    = vault
-PACKAGE_VERSION = 0.6.3
+PACKAGE_VERSION = 0.7.0
 PACKAGE_SOURCE  = https://releases.hashicorp.com/vault/${PACKAGE_VERSION}/vault_${PACKAGE_VERSION}_linux_amd64.zip
 
 ## Macros
