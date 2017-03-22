@@ -1,4 +1,4 @@
-# OAuth2 Proxy
+# HashiCorp Vault
 
 ## Build
 
