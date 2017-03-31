@@ -10,6 +10,6 @@ Package: phpmyadmin
 Architecture: all
 Depends: libapache2-mod-php | php-cgi | php-fpm | php | libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5,
     ${misc:Depends}
-Description: ${phpcomposer:description}
+Description: MySQL web administration tool
  phpMyAdmin is a free software tool written in PHP, intended to handle the
  administration of MySQL over the Web.
