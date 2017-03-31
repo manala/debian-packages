@@ -1,0 +1,8 @@
+# List of splits.
+splits:
+  - prefix: phpmyadmin
+    target: git@github.com:manala/debian-package-phpmyadmin.git
+
+# List of references to split (defined as regexp)
+origins:
+  - ^master$
