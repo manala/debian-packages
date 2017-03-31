@@ -1,4 +1,6 @@
-# PhpMyAdmin
+# Debian Package - PhpMyAdmin
+
+:exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
 
 ## Build
 
