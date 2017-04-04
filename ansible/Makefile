@@ -8,8 +8,8 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME                  = ansible
-PACKAGE_DISTRIBUTION          = unstable
-PACKAGE_VERSION               = 2.2.0.0
+PACKAGE_DISTRIBUTION          = testing
+PACKAGE_VERSION               = 2.2.1.0
 PACKAGE_REVISION              = 1
 PACKAGE_REVISION_MANALA       = 1
 PACKAGE_REVISION_DISTRIBUTION = 1
