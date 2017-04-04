@@ -1,0 +1,3 @@
+oauth2-proxy	usr/bin
+
+debian/conf/*	etc/oauth2-proxy
