@@ -1,0 +1,10 @@
+README.markdown	usr/share/phpredisadmin
+*.php			usr/share/phpredisadmin
+
+css			usr/share/phpredisadmin
+images		usr/share/phpredisadmin
+includes	usr/share/phpredisadmin
+js			usr/share/phpredisadmin
+vendor		usr/share/phpredisadmin
+
+debian/conf/*	etc/phpredisadmin

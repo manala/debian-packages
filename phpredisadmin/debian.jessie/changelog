@@ -1,0 +1,24 @@
+phpredisadmin (1.6.0-manala2~jessie1) unstable; urgency=low
+
+  * Fix package dependencies
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Tue, 14 Feb 2017 08:06:19 +0000
+
+phpredisadmin (1.6.0-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Tue, 26 Apr 2016 14:48:32 +0000
+
+phpredisadmin (1.5.0-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Tue, 26 Apr 2016 14:32:15 +0000
+
+phpredisadmin (1.4.2-manala1~jessie1) unstable; urgency=low
+
+  * Initial release
+
+ -- Manala <contact@manala.io>  Fri, 01 Apr 2016 11:35:58 +0000

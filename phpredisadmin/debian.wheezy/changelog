@@ -1,0 +1,12 @@
+phpredisadmin (1.6.0-manala2~wheezy1) unstable; urgency=low
+
+  * Fix package dependencies
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Tue, 14 Feb 2017 08:06:19 +0000
+
+phpredisadmin (1.6.0-manala1~wheezy1) unstable; urgency=low
+
+  * Initial release
+
+ -- Manala <contact@manala.io>  Tue, 23 Aug 2016 08:34:15 +0000
