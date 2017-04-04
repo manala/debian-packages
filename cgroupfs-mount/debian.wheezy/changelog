@@ -1,0 +1,17 @@
+cgroupfs-mount (1.0.1-manala1~wheezy1) unstable; urgency=low
+
+  * Support wheezy+upstart
+
+ -- Manala <contact@manala.io>  Wed, 15 Feb 2017 10:21:56 +0000
+
+cgroupfs-mount (1.0.0-manala2~wheezy1) unstable; urgency=low
+
+  * Fix packaging
+
+ -- Manala <contact@manala.io>  Tue, 14 Feb 2017 14:43:16 +0000
+
+cgroupfs-mount (1.0.0-manala1~wheezy1) unstable; urgency=low
+
+  * Created cgroupfs-mount based on proxmox cgroup hierarchy
+
+ -- Manala <contact@manala.io>  Mon, 13 Feb 2017 14:42:00 +0000
