@@ -1,0 +1,17 @@
+gitsplit (0.0~git20170307.0.63c00e6-manala1~jessie1) unstable; urgency=medium
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Tue, 14 Mar 2017 08:30:21 +0000
+
+gitsplit (0.0~git20170130.0.d8ef8a8-manala1~jessie1) unstable; urgency=medium
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Fri, 03 Feb 2017 08:04:08 +0000
+
+gitsplit (0.0~git20160724.0.bc7eb7a-manala1~jessie1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Manala <contact@manala.io>  Mon, 02 Jan 2017 08:10:59 +0000
