@@ -86,7 +86,7 @@ build-package:
 	tar zcvf ~/${PACKAGE_NAME}_${PACKAGE_VERSION}.orig.tar.gz -C ~ ${PACKAGE_NAME}-${PACKAGE_VERSION}
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
-	cp -a /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}-${PACKAGE_VERSION}/debian
+	cp -R /srv/debian.${DEBIAN_DISTRIBUTION} ~/${PACKAGE_NAME}-${PACKAGE_VERSION}/debian
 	cd ~/${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
