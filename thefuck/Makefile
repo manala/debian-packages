@@ -1,5 +1,5 @@
 .SILENT:
-.PHONY: help
+.PHONY: help build
 
 ## Colors
 COLOR_RESET   = \033[0m
