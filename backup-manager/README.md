@@ -1,4 +1,10 @@
-# Backup Manager
+# Debian Package - Backup Manager
+
+:exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
+
+## Introduction
+
+Provides PhpMyAdmin debian package.
 
 ## Build
 
