@@ -1,0 +1,15 @@
+Source: alt-galaxy
+Section: utils
+Priority: extra
+Maintainer: Manala <contact@manala.io>
+Build-Depends: debhelper (>= 9.0.0)
+Standards-Version: 3.9.8
+Homepage: https://github.com/gantsign/alt-galaxy
+
+Package: alt-galaxy
+Architecture: amd64
+Depends: ${misc:Depends}
+Description: Alternate implementation of ansible-galaxy tool
+ On projects with many roles ansible-galaxy sufferers from intermittent HTTP
+ failures when installing them. This project implements a limited subset of the
+ ansible-galaxy features to allow you to install roles more reliably.
