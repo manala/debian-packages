@@ -9,7 +9,7 @@ COLOR_COMMENT = \033[33m
 ## Package
 PACKAGE_NAME                  = keepalived
 PACKAGE_DISTRIBUTION          = testing
-PACKAGE_VERSION               = 1.2.24
+PACKAGE_VERSION               = 1.3.2
 PACKAGE_EPOCH                 = 1
 PACKAGE_REVISION              = 1
 PACKAGE_REVISION_MANALA       = 1
