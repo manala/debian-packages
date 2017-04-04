@@ -1,0 +1,3 @@
+bin/phantomjs	usr/bin
+
+debian/conf/*   etc/phantomjs
