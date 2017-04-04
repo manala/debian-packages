@@ -1,0 +1,5 @@
+node-rtail (0.2.1-manala3~wheezy1) unstable; urgency=low
+
+  * Fix init script
+
+ -- Manala <contact@manala.io>  Wed, 04 May 2016 10:26:52 +0000
