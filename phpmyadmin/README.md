@@ -18,6 +18,7 @@ Build for specific distributions
 
 ```
 $ make build@jessie
+$ make build@wheezy
 ```
 
 ## Update
