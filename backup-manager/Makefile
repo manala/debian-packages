@@ -1,5 +1,6 @@
 .SILENT:
-.PHONY: help build
+.PHONY: help dev build
+.DEFAULT_GOAL := help
 
 ## Colors
 COLOR_RESET   = \033[0m
@@ -18,15 +19,14 @@ PACKAGE_REVISION_DISTRIBUTION = 1
 MAINTAINER_NAME  = Manala
 MAINTAINER_EMAIL = contact@manala.io
 
-## Macros
-DOCKER = docker run \
-    --rm \
-    --volume `pwd`:/srv \
-    --workdir /srv \
-    --tty \
-    ${DOCKER_OPTIONS} \
-    manala/build-debian:${DEBIAN_DISTRIBUTION} \
-    ${DOCKER_COMMAND}
+# Docker
+DOCKER_IMAGE = manala/build-debian
+DOCKER_TAG  ?=
+
+# Debian
+DEBIAN_DISTRIBUTION ?= wheezy jessie
+
+-include Makefile.local
 
 ## Help
 help:
@@ -41,52 +41,66 @@ help:
 			printf " ${COLOR_INFO}%-16s${COLOR_RESET} %s\n", helpCommand, helpMessage; \
 		} \
 	} \
-	{ lastLine = $$0 }' $(MAKEFILE_LIST)
+	{ lastLine = $$0 }' ${MAKEFILE_LIST}
 
 #######
 # Dev #
 #######
 
-dev@wheezy: DEBIAN_DISTRIBUTION = wheezy
-dev@wheezy: DOCKER_OPTIONS      = --interactive
-dev@wheezy: DOCKER_COMMAND      = /bin/bash
-dev@wheezy:
-	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
-	$(DOCKER)
+## Dev
+dev:
+	docker run \
+		--rm \
+		--volume `pwd`:/srv \
+		--tty --interactive \
+		--env USER_ID=`id -u` \
+		--env GROUP_ID=`id -g` \
+		${DOCKER_IMAGE}:$(if ${DOCKER_TAG},${DOCKER_TAG}-)$(lastword ${DEBIAN_DISTRIBUTION})
 
+## Dev - Wheezy
+dev@wheezy: DEBIAN_DISTRIBUTION = wheezy
+dev@wheezy: dev
+
+## Dev - Jessie
 dev@jessie: DEBIAN_DISTRIBUTION = jessie
-dev@jessie: DOCKER_OPTIONS      = --interactive
-dev@jessie: DOCKER_COMMAND      = /bin/bash
-dev@jessie:
-	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
-	$(DOCKER)
+dev@jessie: dev
 
 #########
 # Build #
 #########
 
 ## Build
-build: build@wheezy build@jessie
+build:
+	EXIT=0 ; ${foreach \
+		distribution,\
+		${DEBIAN_DISTRIBUTION},\
+		printf "\n${COLOR_INFO}Build ${COLOR_COMMENT}${distribution}${COLOR_RESET}\n\n" && \
+			docker run \
+			    --rm \
+			    --volume `pwd`:/srv \
+			    --tty \
+					--env USER_ID=`id -u` \
+					--env GROUP_ID=`id -g` \
+			    ${DOCKER_IMAGE}:$(if ${DOCKER_TAG},${DOCKER_TAG}-)${distribution} \
+			    make build-package DEBIAN_DISTRIBUTION=${distribution} \
+		|| EXIT=$$? ;\
+	} exit $$EXIT
 
+## Build - Wheezy
 build@wheezy: DEBIAN_DISTRIBUTION = wheezy
-build@wheezy: DOCKER_COMMAND      = make build-package DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}
-build@wheezy:
-	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
-	$(DOCKER)
+build@wheezy: build
 
+## Build - Jessie
 build@jessie: DEBIAN_DISTRIBUTION = jessie
-build@jessie: DOCKER_COMMAND      = make build-package DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}
-build@jessie:
-	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
-	$(DOCKER)
+build@jessie: build
 
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
-	echo "deb-src http://httpredir.debian.org/debian ${PACKAGE_DISTRIBUTION} main contrib non-free" > /etc/apt/sources.list.d/${PACKAGE_DISTRIBUTION}.list
-	apt-get update
+	echo "deb-src http://httpredir.debian.org/debian ${PACKAGE_DISTRIBUTION} main contrib non-free" | sudo tee /etc/apt/sources.list.d/${PACKAGE_DISTRIBUTION}.list
+	sudo apt-get update
 
 	printf "${COLOR_INFO}Prepare package...${COLOR_RESET}\n"
-	apt-get -y --only-source build-dep ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
+	sudo apt-get -y --only-source build-dep ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ && apt-get -y --only-source source ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ \
 	  && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} \
