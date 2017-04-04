@@ -84,20 +84,19 @@ build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	echo "deb-src http://httpredir.debian.org/debian ${PACKAGE_DISTRIBUTION} main contrib non-free" > /etc/apt/sources.list.d/${PACKAGE_DISTRIBUTION}.list
 	apt-get update
-	apt-get -y install dh-python python python-meld3 python-mock python-pkg-resources python-setuptools python-sphinx
 
 	printf "${COLOR_INFO}Prepare package...${COLOR_RESET}\n"
+	apt-get -y --only-source build-dep ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ && apt-get -y --only-source source ${PACKAGE_NAME}/${PACKAGE_DISTRIBUTION}
 	cd ~ \
 	  && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} \
-	  && sed -i "s/python-all/python/g" debian/control \
-	  && \
+		  && \
 	    DEBFULLNAME="${MAINTAINER_NAME}" \
 	    DEBEMAIL="${MAINTAINER_EMAIL}" \
 	    dch -v ${PACKAGE_VERSION}-${PACKAGE_REVISION}manala${PACKAGE_REVISION_MANALA}~${DEBIAN_DISTRIBUTION}${PACKAGE_REVISION_DISTRIBUTION} "Backport"
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
-	cd ~ && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild -us -uc
+	cd ~ && cd ${PACKAGE_NAME}-${PACKAGE_VERSION} && debuild --no-tgz-check -us -uc -b
 
 	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
 	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
