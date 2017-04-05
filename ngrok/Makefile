@@ -97,7 +97,7 @@ build-package:
 
 	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
 	curl -L ${PACKAGE_SOURCE} \
-		| bsdtar xfv - -C ~/${PACKAGE_NAME}
+		| bsdtar -xvf - -C ~/${PACKAGE_NAME}
 	chmod 755 ~/${PACKAGE_NAME}/${PACKAGE_NAME}
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"

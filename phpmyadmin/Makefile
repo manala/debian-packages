@@ -89,13 +89,15 @@ build@jessie: build
 
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
+	sudo apt-get update
+	sudo apt-get install -y bsdtar
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
 	mkdir -p ~/${PACKAGE_NAME}
 
 	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
 	curl -L ${PACKAGE_SOURCE} \
-		| tar zxfv - -C ~/${PACKAGE_NAME} --strip-components=1
+		| bsdtar -xvf - -C ~/${PACKAGE_NAME} --strip-components=1
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
 	cp -R /srv/debian.$(lastword ${DEBIAN_DISTRIBUTION}) ~/${PACKAGE_NAME}/debian

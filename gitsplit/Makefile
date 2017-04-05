@@ -90,14 +90,14 @@ build@jessie: build
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	sudo apt-get update
-	sudo apt-get install -y dh-python python
+	sudo apt-get install -y bsdtar dh-python python
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
 	mkdir -p ~/${PACKAGE_NAME}
 
 	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
 	curl -L ${PACKAGE_SOURCE} \
-		| tar zxfv - -C ~/${PACKAGE_NAME} --strip-components=1
+		| bsdtar -xvf - -C ~/${PACKAGE_NAME} --strip-components=1
 	chmod 755 ~/${PACKAGE_NAME}/${PACKAGE_NAME}
 	cp -R /srv/debian.$(lastword ${DEBIAN_DISTRIBUTION}) ~/${PACKAGE_NAME}/debian
 	cd ~/${PACKAGE_NAME} && debuild --no-tgz-check -us -uc -b
