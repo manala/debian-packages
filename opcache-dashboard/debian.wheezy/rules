@@ -5,5 +5,4 @@
 DH_VERBOSE = 1
 
 %:
-	dh $@ --with phpcomposer
-
+	dh $@
