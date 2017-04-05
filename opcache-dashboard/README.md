@@ -1,4 +1,10 @@
-# OPcache Dashboard
+# Debian Package - OPcache Dashboard
+
+:exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
+
+## Introduction
+
+Provides [OPcache Dashboard](https://github.com/carlosbuenosvinos/opcache-dashboard) debian package.
 
 ## Build
 
@@ -12,6 +18,7 @@ Build for specific distributions
 
 ```
 $ make build@jessie
+$ make build@wheezy
 ```
 
 ## Update
