@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Provides PhpMyAdmin debian package.
+Provides [Ansible](https://www.ansible.com/) debian package.
 
 ## Build
 

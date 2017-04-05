@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Provides PhpMyAdmin debian package.
+Provides [Backup Manager](https://github.com/sukria/Backup-Manager) debian package.
 
 ## Build
 

@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Provides PhpMyAdmin debian package.
+Provides [PhpMyAdmin](https://www.phpmyadmin.net/) debian package.
 
 ## Build
 

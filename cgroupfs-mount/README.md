@@ -1,4 +1,8 @@
-# Cgroupfs mount
+# Debian Package - Cgroupfs Mount
+
+:exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
+
+## Introduction
 
 Package to set up cgroupfs mounts on debian wheezy and specific to proxmox cgroup hierarchy :
 ```
@@ -20,8 +24,16 @@ Based on https://github.com/tianon/cgroupfs-mount
 
 ## Build
 
+Build for all distributions
+
 ```
 $ make build
+```
+
+Build for specific distributions
+
+```
+$ make build@wheezy
 ```
 
 ## Update

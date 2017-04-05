@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Provides PhpMyAdmin debian package.
+Provides [Alt Galaxy](https://github.com/gantsign/alt-galaxy) debian package.
 
 ## Build
 
