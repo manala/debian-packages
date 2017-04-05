@@ -1,4 +1,10 @@
-# OAuth2 Proxy
+# Debian Package - OAuth2 Proxy
+
+:exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
+
+## Introduction
+
+Provides [OAuth2 Proxy](https://github.com/bitly/oauth2_proxy) debian package.
 
 ## Build
 
