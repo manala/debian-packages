@@ -10,7 +10,7 @@ COLOR_COMMENT = \033[33m
 ## Package
 PACKAGE_UPSTREAM_NAME = mongo-express
 PACKAGE_NAME          = node-${PACKAGE_UPSTREAM_NAME}
-PACKAGE_VERSION       = 0.38.0
+PACKAGE_VERSION       = 0.39.1
 
 # Docker
 DOCKER_IMAGE = manala/build-debian
