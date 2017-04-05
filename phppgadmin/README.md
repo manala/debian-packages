@@ -1,4 +1,10 @@
-# phpPgAdmin
+# Debian Package - PhpPgAdmin
+
+:exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
+
+## Introduction
+
+Provides [PhpPgAdmin](http://phppgadmin.sourceforge.net/doku.php) debian package.
 
 ## Build
 
@@ -12,6 +18,7 @@ Build for specific distributions
 
 ```
 $ make build@jessie
+$ make build@wheezy
 ```
 
 ## Update
