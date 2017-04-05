@@ -5,7 +5,7 @@
 DH_VERBOSE = 1
 
 %:
-	dh $@ --with phpcomposer
+	dh $@
 
 override_dh_install:
 	/usr/bin/composer install
