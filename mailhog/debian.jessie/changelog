@@ -1,3 +1,9 @@
+mailhog (1.0.0-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Tue, 18 Apr 2017 08:36:56 +0000
+
 mailhog (0.2.1-manala1~jessie1) unstable; urgency=low
 
   * Upstream update
