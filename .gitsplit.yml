@@ -13,6 +13,8 @@ splits:
     target: git@github.com:manala/debian-package-cgroupfs-mount.git
   - prefix: gitsplit
     target: git@github.com:manala/debian-package-gitsplit.git
+  - prefix: httpie
+    target: git@github.com:manala/debian-package-httpie.git
   - prefix: hugo
     target: git@github.com:manala/debian-package-hugo.git
   - prefix: keepalived
