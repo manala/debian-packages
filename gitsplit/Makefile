@@ -90,7 +90,7 @@ build@jessie: build
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	sudo apt-get update
-	sudo apt-get install -y dh-python python
+	sudo apt-get install -y --no-install-recommends dh-python python
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
 	mkdir -p ~/${PACKAGE_NAME}

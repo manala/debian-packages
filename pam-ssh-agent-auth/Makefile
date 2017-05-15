@@ -97,7 +97,7 @@ build@jessie: build
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	sudo apt-get update
-	sudo apt-get -y install autotools-dev libssl-dev libpam0g-dev
+	sudo apt-get install -y --no-install-recommends autotools-dev libssl-dev libpam0g-dev
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
 	mkdir -p ~/${PACKAGE_NAME}

@@ -97,7 +97,7 @@ build@jessie: build
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	sudo apt-get update
-	sudo apt-get install -y git cmake pkg-config libssh2-1-dev libssl-dev libcurl4-openssl-dev
+	sudo apt-get install -y --no-install-recommends git cmake pkg-config libssh2-1-dev libssl-dev libcurl4-openssl-dev
 	curl -L https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz \
 		| sudo bsdtar -xvf - -C /usr/local
 

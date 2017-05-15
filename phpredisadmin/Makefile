@@ -91,7 +91,7 @@ build@jessie: build
 build-package:
 	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
 	sudo apt-get update
-	sudo apt-get install -y php5-cli
+	sudo apt-get install -y --no-install-recommends php5-cli
 
 	printf "${COLOR_INFO}Install composer...${COLOR_RESET}\n"
 	curl -L https://getcomposer.org/installer \

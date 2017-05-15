@@ -95,7 +95,7 @@ else
 	curl -sL https://deb.nodesource.com/setup_7.x | sudo bash -
 endif
 	echo "Package:      nodejs*\nPin:          origin deb.nodesource.com\nPin-Priority: 900" | sudo tee /etc/apt/preferences.d/nodejs
-	sudo apt-get install -y nodejs
+	sudo apt-get install -y --no-install-recommends nodejs
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
 	mkdir -p ~/${PACKAGE_NAME}
