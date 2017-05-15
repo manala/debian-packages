@@ -8,10 +8,9 @@ COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
 ## Package
-PACKAGE_NAME         = phpredisadmin
-PACKAGE_VERSION      = 1.6.0
-PACKAGE_VERSION_HASH = 099b96d
-PACKAGE_SOURCE       = https://github.com/erikdubbelboer/phpRedisAdmin/archive/${PACKAGE_VERSION_HASH}.tar.gz
+PACKAGE_NAME    = phpredisadmin
+PACKAGE_VERSION = 1.7.0
+PACKAGE_SOURCE  = https://github.com/erikdubbelboer/phpRedisAdmin/archive/v1.7.0.tar.gz
 
 # Docker
 DOCKER_IMAGE = manala/build-debian
