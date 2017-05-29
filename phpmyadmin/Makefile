@@ -9,7 +9,7 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME    = phpmyadmin
-PACKAGE_VERSION = 4.7.0
+PACKAGE_VERSION = 4.7.1
 PACKAGE_SOURCE  = https://files.phpmyadmin.net/phpMyAdmin/${PACKAGE_VERSION}/phpMyAdmin-${PACKAGE_VERSION}-all-languages.tar.gz
 
 # Docker
