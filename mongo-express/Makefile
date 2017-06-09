@@ -10,7 +10,7 @@ COLOR_COMMENT = \033[33m
 ## Package
 PACKAGE_UPSTREAM_NAME = mongo-express
 PACKAGE_NAME          = node-${PACKAGE_UPSTREAM_NAME}
-PACKAGE_VERSION       = 0.39.1
+PACKAGE_VERSION       = 0.40.0
 
 # Docker
 DOCKER_IMAGE = manala/build-debian
@@ -96,6 +96,10 @@ else
 endif
 	echo "Package:      nodejs*\nPin:          origin deb.nodesource.com\nPin-Priority: 900" | sudo tee /etc/apt/preferences.d/nodejs
 	sudo apt-get install -y --no-install-recommends nodejs
+	#apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+	#echo "deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.2 main" > /etc/apt/sources.list.d/mongodb.list
+	#apt-get update
+	#apt-get install -y --no-install-recommends mongodb-org
 
 	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
 	mkdir -p ~/${PACKAGE_NAME}

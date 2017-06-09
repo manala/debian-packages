@@ -1,3 +1,10 @@
+node-mongo-express (0.40.0-manala1~wheezy1) unstable; urgency=low
+
+  * Upstream update
+  * Fix init script
+
+ -- Manala <contact@manala.io>  Fri, 09 Jun 2017 13:54:25 +0000
+
 node-mongo-express (0.39.1-manala1~wheezy1) unstable; urgency=low
 
   * Upstream update
