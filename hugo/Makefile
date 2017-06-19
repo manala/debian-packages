@@ -9,8 +9,8 @@ COLOR_COMMENT = \033[33m
 
 ## Package
 PACKAGE_NAME    = hugo
-PACKAGE_VERSION = 0.21
-PACKAGE_SOURCE  = https://github.com/spf13/hugo/releases/download/v${PACKAGE_VERSION}/hugo_${PACKAGE_VERSION}_Linux-64bit.tar.gz
+PACKAGE_VERSION = 0.23
+PACKAGE_SOURCE  = https://github.com/gohugoio/hugo/releases/download/v${PACKAGE_VERSION}/hugo_${PACKAGE_VERSION}_Linux-64bit.tar.gz
 # Docker
 DOCKER_IMAGE = manala/build-debian
 DOCKER_TAG  ?=
