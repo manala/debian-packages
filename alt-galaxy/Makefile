@@ -6,7 +6,7 @@ PACKAGE_SOURCE  = https://github.com/gantsign/alt-galaxy/releases/download/$(PAC
 # Debian
 DEBIAN_DISTRIBUTION ?= wheezy jessie stretch
 
-include manala/Makefile
+include manala/make/Makefile
 
 #########
 # Build #

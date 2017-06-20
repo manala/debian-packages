@@ -13,8 +13,6 @@ MANALA_COLOR_COMMENT = \033[36m
 DOCKER_IMAGE = manala/build-debian
 DOCKER_TAG  ?=
 
--include Makefile.local
-
 ########
 # Help #
 ########
@@ -39,7 +37,6 @@ help:
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 	@printf "\n"
 
-
 #######
 # Log #
 #######
@@ -47,6 +44,14 @@ help:
 define log
     printf "\n[$(MANALA_COLOR_COMMENT)$(shell date +"%T")$(MANALA_COLOR_RESET)][$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n"
 endef
+
+###########
+# Confirm #
+###########
+
+confirm:
+	@printf "\n$(MANALA_COLOR_INFO) ༼ つ ◕_◕ ༽つ $(MANALA_COLOR_WARNING)$(if $(CONFIRM_MESSAGE),$(CONFIRM_MESSAGE),Please confirm) (y/N)$(MANALA_COLOR_RESET): "
+	@read CONFIRM ; if [ "$$CONFIRM" != "y" ]; then exit 1; fi
 
 #######
 # Dev #
@@ -134,3 +139,9 @@ build@stretch: build
 endif
 
 MANALA_HELP += \n
+
+#########
+# Local #
+#########
+
+-include Makefile.local
