@@ -113,9 +113,18 @@ build:
 					--env USER_ID=`id -u` \
 					--env GROUP_ID=`id -g` \
 			    $(DOCKER_IMAGE):$(if $(DOCKER_TAG),$(DOCKER_TAG)-)$(distribution) \
-			    make build-package DEBIAN_DISTRIBUTION=$(distribution) \
+			    make do-build-package DEBIAN_DISTRIBUTION=$(distribution) \
 		|| EXIT=$$? ;\
 	) exit $$EXIT
+
+do-build-package: build-package build-package-post
+
+build-package-post:
+	$(call log,Show packages informations)
+	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
+
+	$(call log,Move builded packages into build directory)
+	mkdir -p /srv/build && mv ~/*.deb /srv/build
 
 ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTION)),)
 MANALA_HELP += \

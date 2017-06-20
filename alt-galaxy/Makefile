@@ -13,8 +13,6 @@ include manala/make/Makefile
 #########
 
 build-package:
-	$(call log,Install build dependencies)
-
 	$(call log,Create build workspace)
 	mkdir -p ~/$(PACKAGE_NAME)
 
@@ -25,9 +23,3 @@ build-package:
 	$(call log,Build package)
 	cp -R /srv/debian.$(lastword $(DEBIAN_DISTRIBUTION)) ~/$(PACKAGE_NAME)/debian
 	cd ~/$(PACKAGE_NAME) && debuild --no-tgz-check -us -uc -b
-
-	$(call log,Show packages informations)
-	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
-
-	$(call log,Move builded packages into build directory)
-	mkdir -p /srv/build && mv ~/*.deb /srv/build
