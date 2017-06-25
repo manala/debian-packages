@@ -1,156 +1,121 @@
-.SILENT:
-.DEFAULT_GOAL := help
-.PHONY: help dev build
+.PHONY: build
 
-# Colors
-MANALA_COLOR_RESET   = \033[0m
-MANALA_COLOR_ERROR   = \033[31m
-MANALA_COLOR_INFO    = \033[32m
-MANALA_COLOR_WARNING = \033[33m
-MANALA_COLOR_COMMENT = \033[36m
+##########
+# Debian #
+##########
 
-# Docker
-DOCKER_IMAGE = manala/build-debian
-DOCKER_TAG  ?=
+export DEBFULLNAME = Manala
+export DEBEMAIL = contact@manala.io
 
-########
-# Help #
-########
+%.wheezy: DEBIAN_DISTRIBUTION = wheezy
+%.jessie: DEBIAN_DISTRIBUTION = jessie
+%.stretch: DEBIAN_DISTRIBUTION = stretch
 
-MANALA_HELP = \
-	$(MANALA_COLOR_COMMENT)Usage:$(MANALA_COLOR_RESET)\
-	\n  make [target]\n\
-	\n$(MANALA_COLOR_COMMENT)Help:$(MANALA_COLOR_RESET)\
-	\n  $(MANALA_COLOR_INFO)help:$(MANALA_COLOR_RESET) This help\
-	\n
-
-help:
-	@printf "$(MANALA_HELP)"
-	@awk '/^[a-zA-Z\-\_0-9\.@%]+:/ { \
-		helpMessage = match(lastLine, /^## (.*)/); \
-		if (helpMessage) { \
-			helpCommand = substr($$1, 0, index($$1, ":")); \
-			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
-			printf "  $(MANALA_COLOR_INFO)%-20s$(MANALA_COLOR_RESET) %s\n", helpCommand, helpMessage; \
-		} \
-	} \
-	{ lastLine = $$0 }' $(MAKEFILE_LIST)
-	@printf "\n"
-
-#######
-# Log #
-#######
-
-define log
-    printf "\n[$(MANALA_COLOR_COMMENT)$(shell date +"%T")$(MANALA_COLOR_RESET)][$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n"
+define package_debian_version
+$(PACKAGE_VERSION)-$(PACKAGE_REVISION)
 endef
 
-###########
-# Confirm #
-###########
+define package_manala_version
+$(call package_debian_version)manala$(PACKAGE_REVISION_MANALA)~$(1)$(PACKAGE_REVISION_MANALA_DISTRIBUTION)
+endef
 
-confirm:
-	@printf "\n$(MANALA_COLOR_INFO) ༼ つ ◕_◕ ༽つ $(MANALA_COLOR_WARNING)$(if $(CONFIRM_MESSAGE),$(CONFIRM_MESSAGE),Please confirm) (y/N)$(MANALA_COLOR_RESET): "
-	@read CONFIRM ; if [ "$$CONFIRM" != "y" ]; then exit 1; fi
+##########
+# Docker #
+##########
 
-#######
-# Dev #
-#######
+MANALA_DOCKER_IMAGE       = manala/build-debian
+MANALA_DOCKER_TAG         = $(if $(DOCKER_TAG),$(DOCKER_TAG)-)$(DEBIAN_DISTRIBUTION)
+MANALA_DOCKER_DIR         = /srv
+MANALA_DOCKER_HOST        = $(PACKAGE).$(DEBIAN_DISTRIBUTION).build
+MANALA_DOCKER_RUN_OPTIONS = \
+	--env MANALA_ENV=build \
+	--env DEBIAN_DISTRIBUTION=$(DEBIAN_DISTRIBUTION)
 
-MANALA_HELP += \
-	\n$(MANALA_COLOR_COMMENT)Dev:$(MANALA_COLOR_RESET)\
-	\n  $(MANALA_COLOR_INFO)dev:$(MANALA_COLOR_RESET)         Dev
+##########
+# Manala #
+##########
 
-dev:
-	docker run \
-		--rm \
-		--volume `pwd`:/srv \
-		--tty --interactive \
-		--env USER_ID=`id -u` \
-		--env GROUP_ID=`id -g` \
-		$(DOCKER_IMAGE):$(if $(DOCKER_TAG),$(DOCKER_TAG)-)$(lastword $(DEBIAN_DISTRIBUTION))
+MANALA_DIR = $(abspath $(patsubst %/make/Makefile,%,$(firstword $(filter %manala/make/Makefile,$(MAKEFILE_LIST)))))
 
-ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTION)),)
-MANALA_HELP += \
-	\n  $(MANALA_COLOR_INFO)dev@wheezy:$(MANALA_COLOR_RESET)  Dev - Wheezy
-dev@wheezy: DEBIAN_DISTRIBUTION = wheezy
-dev@wheezy: dev
+include $(MANALA_DIR)/make/Makefile.manala
+include $(MANALA_DIR)/make/Makefile.docker
+include $(MANALA_DIR)/make/Makefile.environment
+
+-include $(MANALA_DIR)/../Makefile.local
+
+###############
+# Environment #
+###############
+
+ifeq ($(MANALA_ENV),local)
+
+ifneq ($(filter wheezy,$(PACKAGE_DISTRIBUTIONS)),)
+sh.wheezy:
+	@$(MANALA_DOCKER_RUN)
+update.wheezy:
+	@$(MANALA_DOCKER_PULL)
 endif
 
-ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTION)),)
-MANALA_HELP += \
-	\n  $(MANALA_COLOR_INFO)dev@jessie:$(MANALA_COLOR_RESET)  Dev - Jessie
-dev@jessie: DEBIAN_DISTRIBUTION = jessie
-dev@jessie: dev
+ifneq ($(filter jessie,$(PACKAGE_DISTRIBUTIONS)),)
+sh.jessie:
+	@$(MANALA_DOCKER_RUN)
+update.jessie:
+	@$(MANALA_DOCKER_PULL)
 endif
 
-ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTION)),)
-MANALA_HELP += \
-	\n  $(MANALA_COLOR_INFO)dev@stretch:$(MANALA_COLOR_RESET) Dev - Stretch
-dev@stretch: DEBIAN_DISTRIBUTION = stretch
-dev@stretch: dev
+ifneq ($(filter stretch,$(PACKAGE_DISTRIBUTIONS)),)
+sh.stretch:
+	@$(MANALA_DOCKER_RUN)
+update.stretch:
+	@$(MANALA_DOCKER_PULL)
 endif
 
-MANALA_HELP += \n
+endif
+
+#########
+# Proxy #
+#########
+
+%@proxy:
+	@$(MANALA_DOCKER_RUN) sh -c "make --silent --directory=$(MANALA_DOCKER_DIR) $(*)"
 
 #########
 # Build #
 #########
 
-MANALA_HELP += \
-	\n$(MANALA_COLOR_COMMENT)Build:$(MANALA_COLOR_RESET)\
-	\n  $(MANALA_COLOR_INFO)build:$(MANALA_COLOR_RESET)         Build
+ifeq ($(MANALA_ENV),local)
 
-build:
+ifneq ($(filter wheezy,$(PACKAGE_DISTRIBUTIONS)),)
+build.wheezy: $(call proxy,build)
+endif
+
+ifneq ($(filter jessie,$(PACKAGE_DISTRIBUTIONS)),)
+build.jessie: $(call proxy,build)
+endif
+
+ifneq ($(filter stretch,$(PACKAGE_DISTRIBUTIONS)),)
+build.stretch: $(call proxy,build)
+endif
+
+build-all:
 	EXIT=0 ; $(foreach \
-		distribution,\
-		$(DEBIAN_DISTRIBUTION),\
-		printf "\n$(MANALA_COLOR_INFO)Build $(MANALA_COLOR_COMMENT)$(distribution)$(MANALA_COLOR_RESET)\n\n" && \
-			docker run \
-			    --rm \
-			    --volume `pwd`:/srv \
-			    --tty \
-					--env USER_ID=`id -u` \
-					--env GROUP_ID=`id -g` \
-			    $(DOCKER_IMAGE):$(if $(DOCKER_TAG),$(DOCKER_TAG)-)$(distribution) \
-			    make do-build-package DEBIAN_DISTRIBUTION=$(distribution) \
+		PACKAGE_DISTRIBUTION,\
+		$(PACKAGE_DISTRIBUTIONS),\
+		$(call log,Build $(PACKAGE_DISTRIBUTION)) \
+			&& $(MAKE) build.$(PACKAGE_DISTRIBUTION) \
 		|| EXIT=$$? ;\
 	) exit $$EXIT
 
-do-build-package: build-package build-package-post
+endif
 
-build-package-post:
-	$(call log,Show packages informations)
+build: !@build $(call proxy,build)
+
+build@build: build-package@build build-info@build build-move@build
+
+build-info@build:
+	$(call log,Packages informations)
 	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
 
+build-move@build:
 	$(call log,Move builded packages into build directory)
 	mkdir -p /srv/build && mv ~/*.deb /srv/build
-
-ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTION)),)
-MANALA_HELP += \
-	\n  $(MANALA_COLOR_INFO)build@wheezy:$(MANALA_COLOR_RESET)  Build - Wheezy
-build@wheezy: DEBIAN_DISTRIBUTION = wheezy
-build@wheezy: build
-endif
-
-ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTION)),)
-MANALA_HELP += \
-	\n  $(MANALA_COLOR_INFO)build@jessie:$(MANALA_COLOR_RESET)  Build - Jessie
-build@jessie: DEBIAN_DISTRIBUTION = jessie
-build@jessie: build
-endif
-
-ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTION)),)
-MANALA_HELP += \
-	\n  $(MANALA_COLOR_INFO)build@stretch:$(MANALA_COLOR_RESET) Build - Stretch
-build@stretch: DEBIAN_DISTRIBUTION = stretch
-build@stretch: build
-endif
-
-MANALA_HELP += \n
-
-#########
-# Local #
-#########
-
--include Makefile.local
