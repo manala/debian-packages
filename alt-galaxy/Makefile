@@ -20,12 +20,13 @@ include manala/make/Makefile
 #########
 
 build-package@build:
-	$(call log,Create build workspace)
-	mkdir -p ~/$(PACKAGE)
 
-	$(call log,Prepare package)
+	$(call log,Checkout)
+	mkdir -p ~/$(PACKAGE)
 	curl -L $(PACKAGE_SOURCE) \
 		| bsdtar -xvf - -C ~/$(PACKAGE)
+
+	$(call log,Prepare package)
 	cp -R /srv/debian/$(DEBIAN_DISTRIBUTION) ~/$(PACKAGE)/debian
 
 	$(call log,Build package)

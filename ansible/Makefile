@@ -23,14 +23,20 @@ include manala/make/Makefile
 
 build-package@build:
 
-	$(call log,Prepare package)
+	$(call log,Checkout)
 	git clone \
 		--branch debian/$(call package_debian_version) \
 		git://anonscm.debian.org/collab-maint/$(PACKAGE).git ~/$(PACKAGE)
+
+	$(call log,Install dependencies)
+	sudo apt-get update
 	cd ~/$(PACKAGE) \
-		&& sudo mk-build-deps \
-			--install --build-dep --remove --tool "apt-get --no-install-recommends -y" \
+		&& mk-build-deps \
+			--install --build-dep --remove --root-cmd sudo \
+			--tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" \
 			debian/control
+
+	$(call log,Prepare package)
 	cd ~/$(PACKAGE) \
 		&& dch --newversion $(call package_manala_version,$(DEBIAN_DISTRIBUTION)) "Backport" \
 		&& dch --release ""
