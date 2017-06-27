@@ -4,12 +4,14 @@
 # Debian #
 ##########
 
-export DEBFULLNAME = Manala
-export DEBEMAIL = contact@manala.io
+DEBIAN_DISTRIBUTIONS = $(PACKAGE_DISTRIBUTIONS)
 
 %.wheezy: DEBIAN_DISTRIBUTION = wheezy
 %.jessie: DEBIAN_DISTRIBUTION = jessie
 %.stretch: DEBIAN_DISTRIBUTION = stretch
+
+export DEBFULLNAME = Manala
+export DEBEMAIL = contact@manala.io
 
 define package_debian_version
 $(PACKAGE_VERSION)-$(PACKAGE_REVISION)
@@ -24,7 +26,7 @@ endef
 ##########
 
 MANALA_DOCKER_IMAGE       = manala/build-debian
-MANALA_DOCKER_TAG         = $(if $(DOCKER_TAG),$(DOCKER_TAG)-)$(DEBIAN_DISTRIBUTION)
+MANALA_DOCKER_IMAGE_TAG   = $(if $(DOCKER_IMAGE_TAG),$(DOCKER_IMAGE_TAG)-)$(DEBIAN_DISTRIBUTION)
 MANALA_DOCKER_DIR         = /srv
 MANALA_DOCKER_HOST        = $(PACKAGE).$(DEBIAN_DISTRIBUTION).build
 MANALA_DOCKER_RUN_OPTIONS = \
@@ -52,19 +54,19 @@ ifeq ($(MANALA_ENV),local)
 
 MANALA_HELP += $(call help_section,Environment)
 
-ifneq ($(filter wheezy,$(PACKAGE_DISTRIBUTIONS)),)
+ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,sh.wheezy,     Shell to environment - Wheezy)
 sh.wheezy:
 	@$(MANALA_DOCKER_RUN)
 endif
 
-ifneq ($(filter jessie,$(PACKAGE_DISTRIBUTIONS)),)
+ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,sh.jessie,     Shell to environment - Jessie)
 sh.jessie:
 	@$(MANALA_DOCKER_RUN)
 endif
 
-ifneq ($(filter stretch,$(PACKAGE_DISTRIBUTIONS)),)
+ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,sh.stretch,    Shell to environment - Stretch)
 sh.stretch:
 	@$(MANALA_DOCKER_RUN)
@@ -74,26 +76,26 @@ MANALA_HELP += $(call help,update-all,    Update all environments)
 
 update-all:
 	EXIT=0 ; $(foreach \
-		PACKAGE_DISTRIBUTION,\
-		$(PACKAGE_DISTRIBUTIONS),\
-		$(call log,Update $(PACKAGE_DISTRIBUTION)) \
-			&& $(MAKE) update.$(PACKAGE_DISTRIBUTION) \
+		DEBIAN_DISTRIBUTION,\
+		$(DEBIAN_DISTRIBUTIONS),\
+		$(call log,Update $(DEBIAN_DISTRIBUTION)) \
+			&& $(MAKE) update.$(DEBIAN_DISTRIBUTION) \
 		|| EXIT=$$? ;\
 	) exit $$EXIT
 
-ifneq ($(filter wheezy,$(PACKAGE_DISTRIBUTIONS)),)
+ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,update.wheezy, Update environment - Wheezy)
 update.wheezy:
 	@$(MANALA_DOCKER_PULL)
 endif
 
-ifneq ($(filter jessie,$(PACKAGE_DISTRIBUTIONS)),)
+ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,update.jessie, Update environment - Jessie)
 update.jessie:
 	@$(MANALA_DOCKER_PULL)
 endif
 
-ifneq ($(filter stretch,$(PACKAGE_DISTRIBUTIONS)),)
+ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,update.stretch,Update environment - Jessie)
 update.stretch:
 	@$(MANALA_DOCKER_PULL)
@@ -116,30 +118,34 @@ endif
 
 MANALA_HELP += $(call help_section,Package)
 
+###################
+# Package - Build #
+###################
+
 ifeq ($(MANALA_ENV),local)
 
 MANALA_HELP += $(call help,build-all,    Build all packages)
 
 build-all:
 	EXIT=0 ; $(foreach \
-		PACKAGE_DISTRIBUTION,\
-		$(PACKAGE_DISTRIBUTIONS),\
-		$(call log,Build $(PACKAGE_DISTRIBUTION)) \
-			&& $(MAKE) build.$(PACKAGE_DISTRIBUTION) \
+		DEBIAN_DISTRIBUTION,\
+		$(DEBIAN_DISTRIBUTIONS),\
+		$(call log,Build $(DEBIAN_DISTRIBUTION)) \
+			&& $(MAKE) build.$(DEBIAN_DISTRIBUTION) \
 		|| EXIT=$$? ;\
 	) exit $$EXIT
 
-ifneq ($(filter wheezy,$(PACKAGE_DISTRIBUTIONS)),)
+ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,build.wheezy, Build package - Wheezy)
 build.wheezy: $(call proxy,build)
 endif
 
-ifneq ($(filter jessie,$(PACKAGE_DISTRIBUTIONS)),)
+ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,build.jessie, Build package - Jessie)
 build.jessie: $(call proxy,build)
 endif
 
-ifneq ($(filter stretch,$(PACKAGE_DISTRIBUTIONS)),)
+ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,build.stretch,Build package - Stretch)
 build.stretch: $(call proxy,build)
 endif
