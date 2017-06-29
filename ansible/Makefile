@@ -24,15 +24,14 @@ include manala/make/Makefile
 build-package@build:
 
 	$(call log,Checkout)
-	git clone \
-		--branch debian/$(call package_debian_version) \
-		git://anonscm.debian.org/collab-maint/$(PACKAGE).git ~/$(PACKAGE)
+	debsnap --force --verbose --destdir ~ $(PACKAGE) $(call package_debian_version)
+	dpkg-source -x ~/$(PACKAGE)_$(call package_debian_version).dsc ~/$(PACKAGE)
 
 	$(call log,Install dependencies)
 	sudo apt-get update
 	cd ~/$(PACKAGE) \
 		&& mk-build-deps \
-			--install --build-dep --remove --root-cmd sudo \
+			--install --remove --root-cmd sudo \
 			--tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" \
 			debian/control
 
@@ -43,4 +42,4 @@ build-package@build:
 
 	$(call log,Build package)
 	cd ~/$(PACKAGE) \
-		&& debuild --no-tgz-check -us -uc -b
+		&& debuild -us -uc

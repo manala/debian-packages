@@ -31,4 +31,4 @@ build-package@build:
 
 	$(call log,Build package)
 	cd ~/$(PACKAGE) \
-		&& debuild --no-tgz-check -us -uc -b
+		&& debuild -us -uc -b
