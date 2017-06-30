@@ -26,9 +26,9 @@ build-package@build:
 	curl -L $(PACKAGE_SOURCE) \
 		| bsdtar -xvf - -C ~/$(PACKAGE)
 
-	$(call log,Prepare package)
+	$(call log,Prepare)
 	cp -R /srv/debian/$(DEBIAN_DISTRIBUTION) ~/$(PACKAGE)/debian
 
-	$(call log,Build package)
+	$(call log,Build)
 	cd ~/$(PACKAGE) \
 		&& debuild -us -uc -b
