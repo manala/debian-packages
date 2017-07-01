@@ -5,8 +5,8 @@
 ###########
 
 PACKAGE               = gitsplit
-PACKAGE_VERSION_VCS   = 63c00e6
-PACKAGE_SOURCE        = https://github.com/jderusse/docker-gitsplit/archive/$(PACKAGE_VERSION_VCS).tar.gz
+PACKAGE_VERSION       = 63c00e6
+PACKAGE_SOURCE        = https://github.com/jderusse/docker-gitsplit/archive/$(PACKAGE_VERSION).tar.gz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
 ##########
