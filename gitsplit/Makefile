@@ -25,9 +25,9 @@ build-package@build:
 	mkdir -p ~/$(PACKAGE)
 	curl -L $(PACKAGE_SOURCE) \
 		| bsdtar -xvf - -C ~/$(PACKAGE) --strip-components=1
-	chmod 755 ~/$(PACKAGE)/$(PACKAGE)
 
 	$(call log,Prepare)
+	chmod 755 ~/$(PACKAGE)/$(PACKAGE)
 	cp -R /srv/debian/$(DEBIAN_DISTRIBUTION) ~/$(PACKAGE)/debian
 
 	$(call log,Dependencies)
