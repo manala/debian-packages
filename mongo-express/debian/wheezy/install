@@ -1,0 +1,3 @@
+node_modules/mongo-express	usr/lib/nodejs
+
+debian/conf/*	etc/mongo-express
