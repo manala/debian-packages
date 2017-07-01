@@ -25,7 +25,7 @@ build-package@build:
 
 	$(call log,Checkout)
 	debsnap --force --verbose --destdir ~ $(PACKAGE) $(call package_debian_version)
-	dpkg-source -x ~/$(PACKAGE)_$(call package_debian_version).dsc ~/$(PACKAGE)
+	dpkg-source -x ~/$(PACKAGE)_$(call package_debian_file).dsc ~/$(PACKAGE)
 
 	$(call log,Prepare)
 	cd ~/$(PACKAGE) \

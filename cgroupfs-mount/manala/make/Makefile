@@ -14,6 +14,10 @@ export DEBFULLNAME = Manala
 export DEBEMAIL = contact@manala.io
 
 define package_debian_version
+$(if $(PACKAGE_EPOCH),$(PACKAGE_EPOCH):)$(PACKAGE_VERSION)-$(PACKAGE_REVISION)
+endef
+
+define package_debian_file
 $(PACKAGE_VERSION)-$(PACKAGE_REVISION)
 endef
 
