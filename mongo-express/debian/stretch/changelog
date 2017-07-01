@@ -1,4 +1,4 @@
-node-mongo-express (0.40.0-manala1~stretch1) unstable; urgency=medium
+node-mongo-express (0.40.0-manala1~stretch1) unstable; urgency=low
 
   * Initial release
 

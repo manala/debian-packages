@@ -8,7 +8,7 @@ Homepage: https://github.com/gantsign/alt-galaxy
 
 Package: alt-galaxy
 Architecture: amd64
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${misc:Depends}
 Description: Alternate implementation of ansible-galaxy tool
  On projects with many roles ansible-galaxy sufferers from intermittent HTTP
  failures when installing them. This project implements a limited subset of the

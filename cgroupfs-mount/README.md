@@ -38,4 +38,4 @@ $ make build@wheezy
 
 ## Update
 
-* Add an entry to debian.*/changelog (use "date --rfc-2822" command to specify date)
+* Add an entry to debian.*/changelog (use "date --rfc-2822 -u" command to specify date)

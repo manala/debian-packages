@@ -22,6 +22,9 @@ include manala/make/Makefile
 
 build-package@build:
 
+	sudo apt-get update
+	sudo apt-get install -y --no-install-recommends gnupg
+
 	$(call log,Node)
 ifeq ($(DEBIAN_DISTRIBUTION), wheezy)
 	curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -
