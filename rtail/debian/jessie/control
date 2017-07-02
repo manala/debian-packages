@@ -1,14 +1,16 @@
 Source: node-rtail
 Section: utils
-Priority: extra
+Priority: optional
 Maintainer: Manala <contact@manala.io>
-Build-Depends: nodejs, debhelper (>= 9.0.0)
+Build-Depends: debhelper (>= 9),
+               nodejs
 Standards-Version: 3.9.8
 Homepage: http://rtail.org/
 
 Package: node-rtail
 Architecture: all
-Depends: nodejs, ${misc:Depends}
+Depends: ${misc:Depends},
+         nodejs
 Description: Terminal output to the browser in seconds, using UNIX pipes
  rtail is a command line utility that grabs every line in stdin and broadcasts
  it over UDP. That's it. Nothing fancy. Nothing complicated. Tail log files,

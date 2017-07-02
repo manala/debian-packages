@@ -25,4 +25,4 @@ $ make build@wheezy
 
 * Check new version on https://www.npmjs.com/package/rteil
 * Update "PACKAGE_*" variables accordingly in Makefile
-* Add an entry to debian.*/changelog (use "date --rfc-2822" command to specify date)
+* Add an entry to debian.*/changelog (use "date --rfc-2822 -u" command to specify date)
