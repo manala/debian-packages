@@ -1,0 +1,24 @@
+BUGS		usr/share/phppgadmin
+CREDITS		usr/share/phppgadmin
+DEVELOPERS	usr/share/phppgadmin
+FAQ			usr/share/phppgadmin
+HISTORY		usr/share/phppgadmin
+INSTALL		usr/share/phppgadmin
+TODO		usr/share/phppgadmin
+TRANSLATORS	usr/share/phppgadmin
+robots.txt	usr/share/phppgadmin
+*.php		usr/share/phppgadmin
+*.js		usr/share/phppgadmin
+
+classes		usr/share/phppgadmin
+conf 		usr/share/phppgadmin
+help 		usr/share/phppgadmin
+images 		usr/share/phppgadmin
+js 			usr/share/phppgadmin
+lang 		usr/share/phppgadmin
+libraries	usr/share/phppgadmin
+plugins 	usr/share/phppgadmin
+themes 		usr/share/phppgadmin
+xloadtree 	usr/share/phppgadmin
+
+debian/conf/*	etc/phppgadmin
