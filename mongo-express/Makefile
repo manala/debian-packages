@@ -5,7 +5,6 @@
 ###########
 
 PACKAGE               = node-mongo-express
-PACKAGE_PREFIX        = node
 PACKAGE_VERSION       = 0.40.0
 PACKAGE_SOURCE        = mongo-express@$(PACKAGE_VERSION)
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
