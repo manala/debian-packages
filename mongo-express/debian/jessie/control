@@ -9,6 +9,7 @@ Homepage: https://github.com/mongo-express/mongo-express
 
 Package: node-mongo-express
 Architecture: all
-Depends: nodejs, ${misc:Depends}
+Depends: ${misc:Depends},
+         nodejs
 Description: Web-based MongoDB admin interface, written with Node.js and express
  Web-based MongoDB admin interface, written with Node.js and express
