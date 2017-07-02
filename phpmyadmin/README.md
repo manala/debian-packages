@@ -24,5 +24,5 @@ $ make build@wheezy
 ## Update
 
 * Update "PACKAGE_VERSION" in Makefile
-* Add an entry to debian.*/changelog (use "date --rfc-2822" command to specify date)
+* Add an entry to debian.*/changelog (use "date --rfc-2822 -u" command to specify date)
 * Check that debian.*/install is still relevant
