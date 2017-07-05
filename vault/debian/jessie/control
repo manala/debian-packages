@@ -1,6 +1,6 @@
 Source: vault
 Section: utils
-Priority: extra
+Priority: optional
 Maintainer: Manala <contact@manala.io>
 Build-Depends: debhelper (>= 9), dh-systemd (>= 1.5)
 Standards-Version: 3.9.8

@@ -1,0 +1,3 @@
+vault	usr/bin
+
+debian/conf/*	etc/vault
