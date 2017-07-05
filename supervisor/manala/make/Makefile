@@ -169,7 +169,7 @@ build.stretch: $(call proxy,build) ;
 endif
 
 build.%:
-	$(call log_warning,bbbDebian distribution \"$(*)\" is not enabled.)
+	$(call log_warning,Debian distribution \"$(*)\" is not enabled.)
 
 endif
 
