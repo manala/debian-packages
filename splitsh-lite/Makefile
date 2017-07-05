@@ -19,18 +19,18 @@ include manala/make/Makefile
 # Build #
 #########
 
-build-package@build: export GOPATH = $(HOME)/go
+build-package@build: export GOPATH = $(PACKAGE_BUILD_DIR)/go
 build-package@build: export PATH  := $(PATH):/usr/local/go/bin
 build-package@build:
 
 	$(call log,Go)
-	curl -L https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz \
+	curl -L https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz \
 		| sudo bsdtar -xvf - -C /usr/local
 
 	$(call log,Git2go)
 	sudo apt-get update
 	sudo apt-get install -y --no-install-recommends cmake pkg-config libssh2-1-dev libssl-dev libcurl4-openssl-dev
-	go get -d github.com/libgit2/git2go
+	go get -v -d github.com/libgit2/git2go
 	cd $(GOPATH)/src/github.com/libgit2/git2go \
 		&& git checkout next \
 		&& git submodule update --init \
@@ -40,13 +40,13 @@ build-package@build:
 	go get $(PACKAGE_SOURCE)
 	cd $(GOPATH)/src/$(PACKAGE_SOURCE) \
 		&& git checkout v$(PACKAGE_VERSION)
-	mkdir -p ~/$(PACKAGE)
-	go build -o ~/$(PACKAGE)/$(PACKAGE) $(PACKAGE_SOURCE)
+	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	go build -o $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE) $(PACKAGE_SOURCE)
 
 	$(call log,Prepare)
-	chmod 755 ~/$(PACKAGE)/$(PACKAGE)
-	cp -R /srv/debian/$(DEBIAN_DISTRIBUTION) ~/$(PACKAGE)/debian
+	chmod 755 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
+	cp -R $(PACKAGE_DIR)/debian/$(DEBIAN_DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 	$(call log,Build)
-	cd ~/$(PACKAGE) \
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc -b

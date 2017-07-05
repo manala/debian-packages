@@ -32,24 +32,3 @@ build-package@build:
 	$(call log,Build)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc -b
-
-
-___build-package:
-	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
-
-	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
-	mkdir -p ~/${PACKAGE_NAME}
-
-	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
-	curl -L ${PACKAGE_SOURCE} \
-		| bsdtar -xvf - -C ~/${PACKAGE_NAME}
-
-	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
-	cp -R /srv/debian.$(lastword ${DEBIAN_DISTRIBUTION}) ~/${PACKAGE_NAME}/debian
-	cd ~/${PACKAGE_NAME} && debuild --no-tgz-check -us -uc -b
-
-	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
-	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
-
-	printf "${COLOR_INFO}Move builded packages into build directory...${COLOR_RESET}\n"
-	mkdir -p /srv/build && mv ~/*.deb /srv/build

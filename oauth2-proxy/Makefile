@@ -22,15 +22,15 @@ include manala/make/Makefile
 build-package@build:
 
 	$(call log,Checkout)
-	mkdir -p ~/$(PACKAGE)
+	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 	curl -L $(PACKAGE_SOURCE) \
-		| bsdtar -xvf - -C ~/$(PACKAGE) --strip-components=1
+		| bsdtar -xvf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
 
 	$(call log,Prepare)
-	mv ~/$(PACKAGE)/oauth2_proxy ~/$(PACKAGE)/$(PACKAGE)
-	chmod 755 ~/$(PACKAGE)/$(PACKAGE)
-	cp -R /srv/debian/$(DEBIAN_DISTRIBUTION) ~/$(PACKAGE)/debian
+	mv $(PACKAGE_BUILD_DIR)/$(PACKAGE)/oauth2_proxy $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
+	chmod 755 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
+	cp -R $(PACKAGE_DIR)/debian/$(DEBIAN_DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 	$(call log,Build)
-	cd ~/$(PACKAGE) \
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc -b

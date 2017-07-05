@@ -20,12 +20,12 @@ include manala/make/Makefile
 build-package@build:
 
 	$(call log,Checkout)
-	mkdir -p ~/$(PACKAGE)
-	cp -R /srv/src/* ~/$(PACKAGE)
+	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	cp -R $(PACKAGE_DIR)/src/* $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 
 	$(call log,Prepare)
-	cp -R /srv/debian/$(DEBIAN_DISTRIBUTION) ~/$(PACKAGE)/debian
+	cp -R $(PACKAGE_DIR)/debian/$(DEBIAN_DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 	$(call log,Build)
-	cd ~/$(PACKAGE) \
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc -b

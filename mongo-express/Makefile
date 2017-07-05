@@ -31,14 +31,14 @@ endif
 	sudo apt-get install -y --no-install-recommends nodejs
 
 	$(call log,Checkout)
-	mkdir -p ~/$(PACKAGE)
-	cd ~/$(PACKAGE) \
+	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& npm install --legacy-bundling --only=prod \
 			$(PACKAGE_SOURCE)
 
 	$(call log,Prepare)
-	cp -R /srv/debian/$(DEBIAN_DISTRIBUTION) ~/$(PACKAGE)/debian
+	cp -R $(PACKAGE_DIR)/debian/$(DEBIAN_DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 	$(call log,Build)
-	cd ~/$(PACKAGE) \
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc -b

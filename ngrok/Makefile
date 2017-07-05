@@ -22,14 +22,14 @@ include manala/make/Makefile
 build-package@build:
 
 	$(call log,Checkout)
-	mkdir -p ~/$(PACKAGE)
+	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 	curl -L $(PACKAGE_SOURCE) \
-		| bsdtar -xvf - -C ~/$(PACKAGE)
+		| bsdtar -xvf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 
 	$(call log,Prepare)
-	chmod 755 ~/$(PACKAGE)/$(PACKAGE)
-	cp -R /srv/debian/$(DEBIAN_DISTRIBUTION) ~/$(PACKAGE)/debian
+	chmod 755 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
+	cp -R $(PACKAGE_DIR)/debian/$(DEBIAN_DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 	$(call log,Build)
-	cd ~/$(PACKAGE) \
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc -b

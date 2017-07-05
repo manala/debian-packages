@@ -22,21 +22,21 @@ include manala/make/Makefile
 build-package@build:
 
 	$(call log,Checkout)
-	mkdir -p ~/$(PACKAGE)
+	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 	curl -L $(PACKAGE_SOURCE) \
-		| bsdtar -xvf - -C ~/$(PACKAGE) --strip-components=1
+		| bsdtar -xvf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
 
 	$(call log,Prepare)
-	cp -R /srv/debian/$(DEBIAN_DISTRIBUTION) ~/$(PACKAGE)/debian
+	cp -R $(PACKAGE_DIR)/debian/$(DEBIAN_DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 	$(call log,Dependencies)
 	sudo apt-get update
-	cd ~/$(PACKAGE) \
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& mk-build-deps \
 			--install --remove --root-cmd sudo \
 			--tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" \
 			debian/control
 
 	$(call log,Build)
-	cd ~/$(PACKAGE) \
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc -b

@@ -25,25 +25,25 @@ include manala/make/Makefile
 build-package@build:
 
 	$(call log,Checkout)
-	mkdir -p ~/$(PACKAGE)
+	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 	curl -L $(PACKAGE_SOURCE) \
-		| bsdtar -xvf - -C ~/$(PACKAGE) --strip-components=1
+		| bsdtar -xvf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
 
 	$(call log,Prepare)
 	#echo "\noverride_dh_auto_configure:\n\tdh_auto_configure -- --without-openssl-header-check\n" \
-	#	>> ~/$(PACKAGE)/debian/rules
-	cd ~/$(PACKAGE) \
+	#	>> $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian/rules
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& dch --newversion $(call package_manala_version,$(DEBIAN_DISTRIBUTION)) "Backport" \
 		&& dch --release ""
 
 	$(call log,Dependencies)
 	sudo apt-get update
-	cd ~/$(PACKAGE) \
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& mk-build-deps \
 			--install --remove --root-cmd sudo \
 			--tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" \
 			debian/control
 
 	$(call log,Build)
-	cd ~/$(PACKAGE) \
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc
