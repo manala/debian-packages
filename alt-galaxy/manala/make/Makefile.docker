@@ -3,9 +3,16 @@ MANALA_DOCKER_RUN = docker run \
 	--volume $(MANALA_CURRENT_DIR):$(MANALA_DOCKER_DIR) \
 	--workdir $(MANALA_DOCKER_DIR) \
 	$(if $(MANALA_INTERACTIVE),--tty --interactive) \
+	$(if $(MANALA_DOCKER_HOST),--hostname $(MANALA_DOCKER_HOST)) \
 	--env USER_ID=$(shell id -u) \
 	--env GROUP_ID=$(shell id -g) \
-	--hostname $(MANALA_DOCKER_HOST) \
+	$(if $(MANALA_DOCKER_ENV), \
+		$(foreach \
+			ENV,\
+			$(MANALA_DOCKER_ENV),\
+			--env $(ENV) \
+		) \
+	) \
 	$(MANALA_DOCKER_OPTIONS) \
 	$(MANALA_DOCKER_RUN_OPTIONS) \
 	$(MANALA_DOCKER_IMAGE):$(if $(MANALA_DOCKER_IMAGE_TAG),$(MANALA_DOCKER_IMAGE_TAG),latest)

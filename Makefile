@@ -57,6 +57,8 @@ endif
 	printf "\n"
 	for PACKAGE in */; do \
 		echo $$PACKAGE; \
+		cp $$FROM/.gitignore $$PACKAGE; \
+		cp -r $$FROM/manala $$PACKAGE; \
 	done
 
 

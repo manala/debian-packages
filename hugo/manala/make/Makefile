@@ -1,5 +1,13 @@
 .PHONY: build
 
+###########
+# Package #
+###########
+
+PACKAGE_DIR       = /srv/package
+PACKAGE_BUILD_DIR = $(PACKAGE_DIR)/build
+PACKAGE_DIST_DIR  = $(PACKAGE_DIR)/dist
+
 ##########
 # Debian #
 ##########
@@ -29,13 +37,13 @@ endef
 # Docker #
 ##########
 
-MANALA_DOCKER_IMAGE       = manala/build-debian
-MANALA_DOCKER_IMAGE_TAG   = $(if $(DOCKER_IMAGE_TAG),$(DOCKER_IMAGE_TAG)-)$(DEBIAN_DISTRIBUTION)
-MANALA_DOCKER_DIR         = /srv
-MANALA_DOCKER_HOST        = $(PACKAGE).$(DEBIAN_DISTRIBUTION).build
-MANALA_DOCKER_RUN_OPTIONS = \
-	--env MANALA_ENV=build \
-	--env DEBIAN_DISTRIBUTION=$(DEBIAN_DISTRIBUTION)
+MANALA_DOCKER_IMAGE     = manala/build-debian
+MANALA_DOCKER_IMAGE_TAG = $(if $(DOCKER_IMAGE_TAG),$(DOCKER_IMAGE_TAG)-)$(DEBIAN_DISTRIBUTION)
+MANALA_DOCKER_DIR       = $(PACKAGE_DIR)
+MANALA_DOCKER_HOST      = $(PACKAGE).$(DEBIAN_DISTRIBUTION).build
+MANALA_DOCKER_ENV       = \
+	MANALA_ENV=build \
+	DEBIAN_DISTRIBUTION=$(DEBIAN_DISTRIBUTION)
 
 ##########
 # Manala #
@@ -76,6 +84,9 @@ sh.stretch:
 	@$(MANALA_DOCKER_RUN)
 endif
 
+sh.%:
+	$(call log_warning,Debian distribution \"$(*)\" is not enabled.)
+
 MANALA_HELP += $(call help,update-all,    Update all environments)
 
 update-all:
@@ -104,6 +115,9 @@ MANALA_HELP += $(call help,update.stretch,Update environment - Jessie)
 update.stretch:
 	@$(MANALA_DOCKER_PULL)
 endif
+
+update.%:
+	$(call log_warning,Debian distribution \"$(*)\" is not enabled.)
 
 MANALA_HELP += \n
 
@@ -141,18 +155,21 @@ build-all:
 
 ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,build.wheezy, Build package - Wheezy)
-build.wheezy: $(call proxy,build)
+build.wheezy: $(call proxy,build) ;
 endif
 
 ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,build.jessie, Build package - Jessie)
-build.jessie: $(call proxy,build)
+build.jessie: $(call proxy,build) ;
 endif
 
 ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,build.stretch,Build package - Stretch)
-build.stretch: $(call proxy,build)
+build.stretch: $(call proxy,build) ;
 endif
+
+build.%:
+	$(call log_warning,Debian distribution \"$(*)\" is not enabled.)
 
 endif
 
@@ -163,12 +180,16 @@ build: $(call proxy,build)
 
 endif
 
-build@build: build-package@build build-info@build build-move@build
+build@build: build-clean@build build-package@build build-dist@build
 
-build-info@build:
-	$(call log,Packages informations)
-	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
+build-clean@build:
+	rm -Rf $(PACKAGE_BUILD_DIR)/*
 
-build-move@build:
-	$(call log,Move builded packages into build directory)
-	mkdir -p /srv/build && mv ~/*.deb /srv/build
+build-dist@build:
+	$(call log,Dist)
+	for DEB in $(PACKAGE_BUILD_DIR)/*.deb; do \
+		basename $$DEB; printf "\n"; \
+		dpkg -I $$DEB; printf "\n"; \
+		dpkg -c $$DEB; printf "\n"; \
+		mv $$DEB $(PACKAGE_DIST_DIR); \
+	done
