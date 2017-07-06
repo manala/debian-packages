@@ -1,0 +1,17 @@
+Source: oauth2-proxy
+Section: utils
+Priority: optional
+Maintainer: Manala <contact@manala.io>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.8
+Homepage: https://github.com/bitly/oauth2_proxy
+
+Package: oauth2-proxy
+Architecture: amd64
+Depends: ${misc:Depends},
+         lsb-base (>= 3.0-6),
+         adduser
+Description: Reverse proxy that provides authentication with OAuth2 providers
+ A reverse proxy and static file server that provides authentication using
+ providers (Google, Github, and others) to validate accounts by email,
+ domain or group.

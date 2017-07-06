@@ -1,28 +1,27 @@
-# Debian Package - Supervisor
+# Debian Package - Supervisor [![Build Status](https://travis-ci.org/manala/debian-package-supervisor.svg?branch=master)](https://travis-ci.org/manala/debian-package-supervisor)
 
 :exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
-
-## Introduction
 
 Provides [Supervisor](http://supervisord.org/) debian package.
 
 ## Build
 
-Build for all distributions
+Build for all enabled debian distributions
 
 ```
-$ make build
+$ make build-all
 ```
 
-Build for specific distributions
+Build for a specific enabled debian distribution
 
 ```
-$ make build@jessie
-$ make build@wheezy
+$ make build.wheezy
+$ make build.jessie
+$ make build.stretch
+…
 ```
 
 ## Update
 
-* Check new version for debian "testing" on https://packages.debian.org/stretch/supervisor, or debian "unstable" on https://packages.debian.org/sid/supervisor
+* Check for new versions on http://snapshot.debian.org/package/supervisor/
 * Update "PACKAGE_*" variables accordingly in Makefile
-* Build :)

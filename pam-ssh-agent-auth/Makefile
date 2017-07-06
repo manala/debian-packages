@@ -1,124 +1,49 @@
 .SILENT:
-.PHONY: help dev build
-.DEFAULT_GOAL := help
 
-## Colors
-COLOR_RESET   = \033[0m
-COLOR_INFO    = \033[32m
-COLOR_COMMENT = \033[33m
+###########
+# Package #
+###########
 
-## Package
-PACKAGE_NAME                  = pam-ssh-agent-auth
-PACKAGE_VERSION               = 0.10.3
-PACKAGE_REVISION              = 1
-PACKAGE_REVISION_MANALA       = 1
-PACKAGE_REVISION_DISTRIBUTION = 1
-PACKAGE_SOURCE                = https://downloads.sourceforge.net/project/pamsshagentauth/pam_ssh_agent_auth/v${PACKAGE_VERSION}/pam_ssh_agent_auth-${PACKAGE_VERSION}.tar.bz2
+PACKAGE                              = pam-ssh-agent-auth
+PACKAGE_VERSION                      = 0.10.3
+PACKAGE_REVISION                     = 1
+PACKAGE_REVISION_MANALA              = 1
+PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
+PACKAGE_SOURCE                       = https://downloads.sourceforge.net/project/pamsshagentauth/pam_ssh_agent_auth/v$(PACKAGE_VERSION)/pam_ssh_agent_auth-$(PACKAGE_VERSION).tar.bz2
+PACKAGE_DISTRIBUTIONS                = wheezy jessie stretch
 
-## Maintainer
-MAINTAINER_NAME  = Manala
-MAINTAINER_EMAIL = contact@manala.io
+##########
+# Manala #
+##########
 
-# Docker
-DOCKER_IMAGE = manala/build-debian
-DOCKER_TAG  ?=
-
-# Debian
-DEBIAN_DISTRIBUTION ?= wheezy jessie
-
--include Makefile.local
-
-## Help
-help:
-	printf "${COLOR_COMMENT}Usage:${COLOR_RESET}\n"
-	printf " make [target]\n\n"
-	printf "${COLOR_COMMENT}Available targets:${COLOR_RESET}\n"
-	awk '/^[a-zA-Z\-\_0-9\.@]+:/ { \
-		helpMessage = match(lastLine, /^## (.*)/); \
-		if (helpMessage) { \
-			helpCommand = substr($$1, 0, index($$1, ":")); \
-			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
-			printf " ${COLOR_INFO}%-16s${COLOR_RESET} %s\n", helpCommand, helpMessage; \
-		} \
-	} \
-	{ lastLine = $$0 }' ${MAKEFILE_LIST}
-
-#######
-# Dev #
-#######
-
-## Dev
-dev:
-	docker run \
-		--rm \
-		--volume `pwd`:/srv \
-		--tty --interactive \
-		--env USER_ID=`id -u` \
-		--env GROUP_ID=`id -g` \
-		${DOCKER_IMAGE}:$(if ${DOCKER_TAG},${DOCKER_TAG}-)$(lastword ${DEBIAN_DISTRIBUTION})
-
-## Dev - Wheezy
-dev@wheezy: DEBIAN_DISTRIBUTION = wheezy
-dev@wheezy: dev
-
-## Dev - Jessie
-dev@jessie: DEBIAN_DISTRIBUTION = jessie
-dev@jessie: dev
+include manala/make/Makefile
 
 #########
 # Build #
 #########
 
-## Build
-build:
-	EXIT=0 ; ${foreach \
-		distribution,\
-		${DEBIAN_DISTRIBUTION},\
-		printf "\n${COLOR_INFO}Build ${COLOR_COMMENT}${distribution}${COLOR_RESET}\n\n" && \
-			docker run \
-			    --rm \
-			    --volume `pwd`:/srv \
-			    --tty \
-					--env USER_ID=`id -u` \
-					--env GROUP_ID=`id -g` \
-			    ${DOCKER_IMAGE}:$(if ${DOCKER_TAG},${DOCKER_TAG}-)${distribution} \
-			    make build-package DEBIAN_DISTRIBUTION=${distribution} \
-		|| EXIT=$$? ;\
-	} exit $$EXIT
+build-package@build:
 
-## Build - Wheezy
-build@wheezy: DEBIAN_DISTRIBUTION = wheezy
-build@wheezy: build
+	$(call log,Checkout)
+	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	curl -L $(PACKAGE_SOURCE) \
+		| bsdtar -xvf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
 
-## Build - Jessie
-build@jessie: DEBIAN_DISTRIBUTION = jessie
-build@jessie: build
+	$(call log,Prepare)
+	#echo "\noverride_dh_auto_configure:\n\tdh_auto_configure -- --without-openssl-header-check\n" \
+	#	>> $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian/rules
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
+		&& dch --newversion $(call package_manala_version,$(DEBIAN_DISTRIBUTION)) "Backport" \
+		&& dch --release ""
 
-build-package:
-	printf "${COLOR_INFO}Install build dependencies...${COLOR_RESET}\n"
+	$(call log,Dependencies)
 	sudo apt-get update
-	sudo apt-get install -y --no-install-recommends autotools-dev libssl-dev libpam0g-dev
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
+		&& mk-build-deps \
+			--install --remove --root-cmd sudo \
+			--tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" \
+			debian/control
 
-	printf "${COLOR_INFO}Create build workspace...${COLOR_RESET}\n"
-	mkdir -p ~/${PACKAGE_NAME}
-
-	printf "${COLOR_INFO}Download upstream package...${COLOR_RESET}\n"
-	curl -L ${PACKAGE_SOURCE} \
-		| bsdtar -xvf - -C ~/${PACKAGE_NAME} --strip-components=1
-
-	printf "${COLOR_INFO}Prepare package...${COLOR_RESET}\n"
-	cd ~ \
-	  && cd ${PACKAGE_NAME} \
-	  && \
-	    DEBFULLNAME="${MAINTAINER_NAME}" \
-	    DEBEMAIL="${MAINTAINER_EMAIL}" \
-	    dch -v ${PACKAGE_VERSION}-${PACKAGE_REVISION}manala${PACKAGE_REVISION_MANALA}~${DEBIAN_DISTRIBUTION}${PACKAGE_REVISION_DISTRIBUTION} "Backport"
-
-	printf "${COLOR_INFO}Build package...${COLOR_RESET}\n"
-	cd ~ && cd ${PACKAGE_NAME} && debuild --no-tgz-check -us -uc -b
-
-	printf "${COLOR_INFO}Show packages informations...${COLOR_RESET}\n"
-	for i in ~/*.deb; do ls -lsah $$i; dpkg -I $$i; dpkg -c $$i; done
-
-	printf "${COLOR_INFO}Move builded packages into build directory...${COLOR_RESET}\n"
-	mkdir -p /srv/build && mv ~/*.deb /srv/build
+	$(call log,Build)
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
+		&& debuild -us -uc

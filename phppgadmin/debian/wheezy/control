@@ -1,0 +1,13 @@
+Source: phppgadmin
+Section: web
+Priority: optional
+Maintainer: Manala <contact@manala.io>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.8
+Homepage: http://phppgadmin.sourceforge.net/doku.php
+
+Package: phppgadmin
+Architecture: all
+Depends: ${misc:Depends},
+         libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5
+Description: phpPgAdmin is a web-based administration tool for PostgreSQL. It is perfect for PostgreSQL DBAs, newbies, and hosting services.

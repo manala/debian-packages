@@ -1,0 +1,15 @@
+Source: phpmyadmin
+Section: web
+Priority: optional
+Maintainer: Manala <contact@manala.io>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.8
+Homepage: https://www.phpmyadmin.net/
+
+Package: phpmyadmin
+Architecture: all
+Depends: ${misc:Depends},
+         libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5
+Description: MySQL web administration tool
+ phpMyAdmin is a free software tool written in PHP, intended to handle the
+ administration of MySQL over the Web.

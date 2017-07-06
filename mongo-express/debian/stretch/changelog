@@ -1,0 +1,5 @@
+node-mongo-express (0.40.0-manala1~stretch1) unstable; urgency=low
+
+  * Initial release
+
+ -- Manala <contact@manala.io>  Sat, 01 Jul 2017 12:54:31 +0000

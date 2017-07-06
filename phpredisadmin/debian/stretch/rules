@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+
+# output every command that modifies files on the build system.
+export DH_VERBOSE = 1
+
+%:
+	dh $@
+
+override_dh_install:
+	/usr/bin/composer install
+	dh_install

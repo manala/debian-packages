@@ -1,0 +1,15 @@
+Source: node-mongo-express
+Section: utils
+Priority: optional
+Maintainer: Manala <contact@manala.io>
+Build-Depends: debhelper (>= 9),
+               nodejs
+Standards-Version: 3.9.8
+Homepage: https://github.com/mongo-express/mongo-express
+
+Package: node-mongo-express
+Architecture: all
+Depends: ${misc:Depends},
+         nodejs
+Description: Web-based MongoDB admin interface, written with Node.js and express
+ Web-based MongoDB admin interface, written with Node.js and express

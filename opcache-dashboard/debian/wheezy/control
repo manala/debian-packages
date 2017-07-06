@@ -1,0 +1,13 @@
+Source: opcache-dashboard
+Section: web
+Priority: optional
+Maintainer: Manala <contact@manala.io>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.8
+Homepage: https://github.com/carlosbuenosvinos/opcache-dashboard
+
+Package: opcache-dashboard
+Architecture: all
+Depends: ${misc:Depends},
+         libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5
+Description: Set up properly and monitor your Zend OPcache with this dashboard that will help you checking memory, hits and status, configuring for optimal performance (warning you when cache full, validation, etc.) and reseting one or all scripts with one click.

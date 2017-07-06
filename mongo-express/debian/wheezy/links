@@ -1,0 +1,3 @@
+usr/lib/nodejs/mongo-express/app.js	usr/bin/mongo-express
+
+etc/mongo-express/config.js	usr/lib/nodejs/mongo-express/config.js
