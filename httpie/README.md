@@ -1,28 +1,27 @@
-# Debian Package - HTTPie
+# Debian Package - HTTPie [![Build Status](https://travis-ci.org/manala/debian-package-httpie.svg?branch=master)](https://travis-ci.org/manala/debian-package-httpie)
 
 :exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
-
-## Introduction
 
 Provides [HTTPie](https://httpie.org/) debian package.
 
 ## Build
 
-Build for all distributions
+Build for all enabled debian distributions
 
 ```
-$ make build
+$ make build-all
 ```
 
-Build for specific distributions
+Build for a specific enabled debian distribution
 
 ```
-$ make build@jessie
-$ make build@wheezy
+$ make build.wheezy
+$ make build.jessie
+$ make build.stretch
+…
 ```
 
 ## Update
 
-* Check new version for debian "testing" on hhttps://packages.debian.org/stretch/httpie, or debian "unstable" on https://packages.debian.org/sid/httpie
+* Check for new versions on http://snapshot.debian.org/package/httpie/
 * Update "PACKAGE_*" variables accordingly in Makefile
-* Build :)

@@ -1,27 +1,27 @@
-# Debian Package - Keepalived
+# Debian Package - Keepalived [![Build Status](https://travis-ci.org/manala/debian-package-keepalived.svg?branch=master)](https://travis-ci.org/manala/debian-package-keepalived)
 
 :exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
-
-## Introduction
 
 Provides [Keepalived](http://www.keepalived.org/) debian package.
 
 ## Build
 
-Build for all distributions
+Build for all enabled debian distributions
 
 ```
-$ make build
+$ make build-all
 ```
 
-Build for specific distributions
+Build for a specific enabled debian distribution
 
 ```
-$ make build@jessie
+$ make build.wheezy
+$ make build.jessie
+$ make build.stretch
+…
 ```
 
 ## Update
 
-* Check new version for [debian "testing"](https://packages.debian.org/testing/keepalived) or [debian "unstable"](https://packages.debian.org/sid/keepalived)
+* Check for new versions on http://snapshot.debian.org/package/keepalived/
 * Update "PACKAGE_*" variables accordingly in Makefile
-* `make build`
