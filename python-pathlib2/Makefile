@@ -24,7 +24,7 @@ include manala/make/Makefile
 build-package@build:
 
 	$(call log,Checkout)
-	debsnap --force --verbose --destdir ~ $(PACKAGE) $(call package_debian_version)
+	debsnap --force --verbose --destdir $(PACKAGE_BUILD_DIR) $(PACKAGE) $(call package_debian_version)
 	dpkg-source -x $(PACKAGE_BUILD_DIR)/$(PACKAGE)_$(call package_debian_file).dsc $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 
 	$(call log,Prepare)
