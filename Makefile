@@ -35,12 +35,28 @@ help:
 # Build #
 #########
 
-## Build all packages
-build-all:
+## Build - Wheezy
+build.wheezy:
 	EXIT=0 ; ${foreach \
 		PACKAGE,\
 		$(PACKAGES),\
-		printf "\n$(COLOR_INFO)Build $(COLOR_COMMENT)$(PACKAGE)$(COLOR_RESET)\n\n" && $(MAKE) --directory=$(PACKAGE) build-all || EXIT=$$? ;\
+		printf "\n$(COLOR_INFO)Build $(COLOR_COMMENT)$(PACKAGE)$(COLOR_RESET)\n\n" && $(MAKE) --directory=$(PACKAGE) build.wheezy || EXIT=$$? ;\
+	} exit $$EXIT
+
+## Build - Jessie
+build.jessie:
+	EXIT=0 ; ${foreach \
+		PACKAGE,\
+		$(PACKAGES),\
+		printf "\n$(COLOR_INFO)Build $(COLOR_COMMENT)$(PACKAGE)$(COLOR_RESET)\n\n" && $(MAKE) --directory=$(PACKAGE) build.jessie || EXIT=$$? ;\
+	} exit $$EXIT
+
+## Build - Stretch
+build.stretch:
+	EXIT=0 ; ${foreach \
+		PACKAGE,\
+		$(PACKAGES),\
+		printf "\n$(COLOR_INFO)Build $(COLOR_COMMENT)$(PACKAGE)$(COLOR_RESET)\n\n" && $(MAKE) --directory=$(PACKAGE) build.stretch || EXIT=$$? ;\
 	} exit $$EXIT
 
 ########
@@ -58,6 +74,7 @@ endif
 	for PACKAGE in */; do \
 		echo $$PACKAGE; \
 		cp $$FROM/.gitignore $$PACKAGE; \
+		cp $$FROM/.travis.yml $$PACKAGE; \
 		cp -r $$FROM/manala $$PACKAGE; \
 	done
 
