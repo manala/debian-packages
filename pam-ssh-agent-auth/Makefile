@@ -22,7 +22,9 @@ include manala/make/Makefile
 # Build #
 #########
 
-build-package@build:
+build:
+
+	$(call build_clean)
 
 	$(call log,Checkout)
 	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
@@ -47,3 +49,5 @@ build-package@build:
 	$(call log,Build)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc
+
+	$(call build_dist)

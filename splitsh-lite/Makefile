@@ -19,9 +19,11 @@ include manala/make/Makefile
 # Build #
 #########
 
-build-package@build: export GOPATH = $(PACKAGE_BUILD_DIR)/go
-build-package@build: export PATH  := $(PATH):/usr/local/go/bin
-build-package@build:
+build: export GOPATH = $(PACKAGE_BUILD_DIR)/go
+build: export PATH  := $(PATH):/usr/local/go/bin
+build:
+
+	$(call build_clean)
 
 	$(call log,Go)
 	curl -L https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz \
@@ -50,3 +52,5 @@ build-package@build:
 	$(call log,Build)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc -b
+
+	$(call build_dist)

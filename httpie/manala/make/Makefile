@@ -14,12 +14,12 @@ PACKAGE_DIST_DIR  = $(PACKAGE_DIR)/dist
 
 DEBIAN_DISTRIBUTIONS = $(PACKAGE_DISTRIBUTIONS)
 
-%.wheezy: DEBIAN_DISTRIBUTION = wheezy
-%.jessie: DEBIAN_DISTRIBUTION = jessie
+%.wheezy:  DEBIAN_DISTRIBUTION = wheezy
+%.jessie:  DEBIAN_DISTRIBUTION = jessie
 %.stretch: DEBIAN_DISTRIBUTION = stretch
 
 export DEBFULLNAME = Manala
-export DEBEMAIL = contact@manala.io
+export DEBEMAIL    = contact@manala.io
 
 define package_debian_version
 $(if $(PACKAGE_EPOCH),$(PACKAGE_EPOCH):)$(PACKAGE_VERSION)-$(PACKAGE_REVISION)
@@ -56,41 +56,67 @@ include \
 	$(MANALA_DIR)/make/Makefile.docker \
 	$(MANALA_DIR)/make/Makefile.environment
 
--include $(MANALA_DIR)/../Makefile.local
+-include \
+	../Makefile.local \
+	Makefile.local
 
 ###############
 # Environment #
 ###############
 
-ifeq ($(MANALA_ENV),local)
+ifndef MANALA_ENV
 
 MANALA_HELP += $(call help_section,Environment)
 
 ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,sh.wheezy,     Shell to environment - Wheezy)
-sh.wheezy:
-	@$(MANALA_DOCKER_RUN)
+MANALA_HELP += $(call help,sh.wheezy,     Shell to build environment - Wheezy)
 endif
-
 ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,sh.jessie,     Shell to environment - Jessie)
-sh.jessie:
-	@$(MANALA_DOCKER_RUN)
+MANALA_HELP += $(call help,sh.jessie,     Shell to build environment - Jessie)
 endif
-
 ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,sh.stretch,    Shell to environment - Stretch)
-sh.stretch:
-	@$(MANALA_DOCKER_RUN)
+MANALA_HELP += $(call help,sh.stretch,    Shell to build environment - Stretch)
 endif
 
-sh.%:
-	$(call log_warning,Debian distribution \"$(*)\" is not enabled.)
+MANALA_HELP += $(call help,update-all,    Update all build environments)
 
-MANALA_HELP += $(call help,update-all,    Update all environments)
+ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
+MANALA_HELP += $(call help,update.wheezy, Update build environment - Wheezy)
+endif
+ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
+MANALA_HELP += $(call help,update.jessie, Update build environment - Jessie)
+endif
+ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
+MANALA_HELP += $(call help,update.stretch,Update build environment - Jessie)
+endif
 
-update-all:
-	EXIT=0 ; $(foreach \
+MANALA_HELP += \n
+
+endif
+
+sh.wheezy: @@local
+ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
+	@$(call docker_shell)
+else
+	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
+endif
+
+sh.jessie: @@local
+ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
+	@$(call docker_shell)
+else
+	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
+endif
+
+sh.stretch: @@local
+ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
+	@$(call docker_shell)
+else
+	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
+endif
+
+update-all: @@local
+	@EXIT=0 ; $(foreach \
 		DEBIAN_DISTRIBUTION,\
 		$(DEBIAN_DISTRIBUTIONS),\
 		$(call log,Update $(DEBIAN_DISTRIBUTION)) \
@@ -98,98 +124,116 @@ update-all:
 		|| EXIT=$$? ;\
 	) exit $$EXIT
 
+update.wheezy: @@local
 ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,update.wheezy, Update environment - Wheezy)
-update.wheezy:
-	@$(MANALA_DOCKER_PULL)
+	@$(call docker_pull)
+else
+	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
 endif
 
+update.jessie: @@local
 ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,update.jessie, Update environment - Jessie)
-update.jessie:
-	@$(MANALA_DOCKER_PULL)
+	@$(call docker_pull)
+else
+	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
 endif
 
+update.stretch: @@local
 ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,update.stretch,Update environment - Jessie)
-update.stretch:
-	@$(MANALA_DOCKER_PULL)
-endif
-
-update.%:
-	$(call log_warning,Debian distribution \"$(*)\" is not enabled.)
-
-MANALA_HELP += \n
-
+	@$(call docker_pull)
+else
+	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
 endif
 
 #########
 # Proxy #
 #########
 
-%@proxy:
-	@$(MANALA_DOCKER_RUN) sh -c "make --silent --directory=$(MANALA_DOCKER_DIR) $(*)"
+ifeq ($(MANALA_ENV),build)
+@@build: ;
+%@@build: % ;
+else
+@@build:
+	@$(call log_error,Must be run in \"build\" environment)
+	@exit 1
+%@@build:
+	$(call docker_proxy,$(*))
+endif
 
-###########
-# Package #
-###########
+#########
+# Build #
+#########
 
-MANALA_HELP += $(call help_section,Package)
+MANALA_HELP += $(call help_section,Build)
 
-###################
-# Package - Build #
-###################
-
-ifeq ($(MANALA_ENV),local)
+ifndef MANALA_ENV
 
 MANALA_HELP += $(call help,build-all,    Build all packages)
 
-build-all:
-	EXIT=0 ; $(foreach \
-		DEBIAN_DISTRIBUTION,\
-		$(DEBIAN_DISTRIBUTIONS),\
-		$(call log,Build $(DEBIAN_DISTRIBUTION)) \
-			&& $(MAKE) build.$(DEBIAN_DISTRIBUTION) \
-		|| EXIT=$$? ;\
-	) exit $$EXIT
-
 ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,build.wheezy, Build package - Wheezy)
-build.wheezy: $(call proxy,build) ;
 endif
-
 ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,build.jessie, Build package - Jessie)
-build.jessie: $(call proxy,build) ;
 endif
-
 ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
 MANALA_HELP += $(call help,build.stretch,Build package - Stretch)
-build.stretch: $(call proxy,build) ;
 endif
 
-build.%:
-	$(call log_warning,Debian distribution \"$(*)\" is not enabled.)
+endif
 
+build-all: @@local
+	@EXIT=0 ; $(foreach \
+	DEBIAN_DISTRIBUTION,\
+	$(DEBIAN_DISTRIBUTIONS),\
+	$(call log,Build $(DEBIAN_DISTRIBUTION)) \
+	&& $(MAKE) build.$(DEBIAN_DISTRIBUTION) \
+	|| EXIT=$$? ;\
+	) exit $$EXIT
+
+build.wheezy: @@local
+ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
+build.wheezy: build@@build
+else
+	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
+endif
+
+build.jessie: @@local
+ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
+build.jessie: build@@build
+else
+	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
+endif
+
+build.stretch: @@local
+ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
+build.stretch: build@@build
+else
+	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
 endif
 
 ifeq ($(MANALA_ENV),build)
 
 MANALA_HELP += $(call help,build,Build package)
-build: $(call proxy,build)
 
 endif
 
-build@build: build-clean@build build-package@build build-dist@build
+MANALA_HELP += \n
 
-build-clean@build:
-	rm -Rf $(PACKAGE_BUILD_DIR)/*
+define build_clean
+	@$(call log,Clean)
+	@rm -Rf $(PACKAGE_BUILD_DIR)/*
+	@rm -Rf $(PACKAGE_DIST_DIR)/*~$(DEBIAN_DISTRIBUTION)*.deb
+endef
 
-build-dist@build:
-	$(call log,Dist)
-	for DEB in $(PACKAGE_BUILD_DIR)/*.deb; do \
+define build_dist
+	@$(call log,Dist)
+	@for DEB in $(PACKAGE_BUILD_DIR)/*.deb; do \
 		basename $$DEB; printf "\n"; \
 		dpkg -I $$DEB; printf "\n"; \
 		dpkg -c $$DEB; printf "\n"; \
 		mv $$DEB $(PACKAGE_DIST_DIR); \
 	done
+endef
+
+build: @@build

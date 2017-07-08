@@ -19,7 +19,9 @@ include manala/make/Makefile
 # Build #
 #########
 
-build-package@build:
+build:
+
+	$(call build_clean)
 
 	$(call log,Composer)
 	sudo apt-get update
@@ -42,3 +44,5 @@ endif
 	$(call log,Build)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc -b
+
+	$(call build_dist)
