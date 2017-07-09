@@ -9,7 +9,6 @@ PACKAGE_VERSION                      = 0.10.3
 PACKAGE_REVISION                     = 1
 PACKAGE_REVISION_MANALA              = 1
 PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
-PACKAGE_SOURCE                       = https://downloads.sourceforge.net/project/pamsshagentauth/pam_ssh_agent_auth/v$(PACKAGE_VERSION)/pam_ssh_agent_auth-$(PACKAGE_VERSION).tar.bz2
 PACKAGE_DISTRIBUTIONS                = wheezy jessie stretch
 
 ##########
@@ -27,13 +26,10 @@ build:
 	$(call build_clean)
 
 	$(call log,Checkout)
-	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
-	curl -L $(PACKAGE_SOURCE) \
-		| bsdtar -xvf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
+	debsnap --force --verbose --destdir $(PACKAGE_BUILD_DIR) $(PACKAGE) $(call package_debian_version)
+	dpkg-source -x $(PACKAGE_BUILD_DIR)/$(PACKAGE)_$(call package_debian_file).dsc $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 
 	$(call log,Prepare)
-	#echo "\noverride_dh_auto_configure:\n\tdh_auto_configure -- --without-openssl-header-check\n" \
-	#	>> $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian/rules
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& dch --newversion $(call package_manala_version,$(DEBIAN_DISTRIBUTION)) "Backport" \
 		&& dch --release ""
