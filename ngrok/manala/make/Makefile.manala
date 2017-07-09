@@ -69,7 +69,7 @@ MANALA_INTERACTIVE := $(shell [ -t 0 ] && echo 1)
 #######
 
 define log
-    printf "\n[$(MANALA_COLOR_COMMENT)$(shell date -u +"%T")$(MANALA_COLOR_RESET)][$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n"
+    printf "\n[$(MANALA_COLOR_COMMENT)`date -u +"%T"`$(MANALA_COLOR_RESET)][$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n"
 endef
 
 # Warning
@@ -86,10 +86,11 @@ endef
 # Confirm #
 ###########
 
-confirm:
-	@printf "\n$(MANALA_COLOR_INFO) ༼ つ ◕_◕ ༽つ $(MANALA_COLOR_WARNING)$(if $(CONFIRM_MESSAGE),$(CONFIRM_MESSAGE),Please confirm) (y/N)$(MANALA_COLOR_RESET): "
-	@read CONFIRM ; if [ "$$CONFIRM" != "y" ]; then printf "\n"; exit 1; fi
-	@printf "\n"
+define confirm
+		printf "\n$(MANALA_COLOR_INFO) ༼ つ ◕_◕ ༽つ $(MANALA_COLOR_WARNING)$(1) (y/N)$(MANALA_COLOR_RESET): "; \
+		read CONFIRM ; if [ "$$CONFIRM" != "y" ]; then printf "\n"; exit 1; fi; \
+		printf "\n"
+endef
 
 ##########
 # Manala #

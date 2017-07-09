@@ -21,7 +21,9 @@ include manala/make/Makefile
 # Build #
 #########
 
-build-package@build:
+build:
+
+	$(call build_clean)
 
 	$(call log,Checkout)
 	debsnap --force --verbose --destdir $(PACKAGE_BUILD_DIR) $(PACKAGE) $(call package_debian_version)
@@ -43,3 +45,5 @@ build-package@build:
 	$(call log,Build)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& debuild -us -uc
+
+	$(call build_dist)
