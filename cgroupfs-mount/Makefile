@@ -11,7 +11,7 @@ PACKAGE_DISTRIBUTIONS = wheezy
 # Manala #
 ##########
 
-include manala/make/Makefile
+include .manala/make/Makefile
 
 #########
 # Build #

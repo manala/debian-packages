@@ -13,7 +13,7 @@ PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 # Manala #
 ##########
 
-include manala/make/Makefile
+include .manala/make/Makefile
 
 #########
 # Build #
