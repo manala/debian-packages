@@ -78,7 +78,6 @@ endif
 		cp -r $$FROM/manala $$PACKAGE; \
 	done
 
-
 #########
 # Split #
 #########
