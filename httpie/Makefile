@@ -15,7 +15,7 @@ PACKAGE_DISTRIBUTIONS                = jessie stretch
 # Manala #
 ##########
 
-include manala/make/Makefile
+include .manala/make/Makefile
 
 #########
 # Build #
