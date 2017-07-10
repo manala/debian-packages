@@ -116,13 +116,10 @@ else
 endif
 
 update-all: @@local
-	@EXIT=0 ; $(foreach \
-		DEBIAN_DISTRIBUTION,\
-		$(DEBIAN_DISTRIBUTIONS),\
-		$(call log,Update $(DEBIAN_DISTRIBUTION)) \
-			&& $(MAKE) update.$(DEBIAN_DISTRIBUTION) \
-		|| EXIT=$$? ;\
-	) exit $$EXIT
+	$(call loop,$(DEBIAN_DISTRIBUTIONS), \
+		$(MAKE) update.$$(ITEM), \
+		Update debian distribution \"$$(ITEM)\" \
+	)
 
 update.wheezy: @@local
 ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
@@ -183,13 +180,10 @@ endif
 endif
 
 build-all: @@local
-	@EXIT=0 ; $(foreach \
-	DEBIAN_DISTRIBUTION,\
-	$(DEBIAN_DISTRIBUTIONS),\
-	$(call log,Build $(DEBIAN_DISTRIBUTION)) \
-	&& $(MAKE) build.$(DEBIAN_DISTRIBUTION) \
-	|| EXIT=$$? ;\
-	) exit $$EXIT
+	$(call loop,$(DEBIAN_DISTRIBUTIONS), \
+		$(MAKE) build.$$(ITEM), \
+		Build debian distribution \"$$(ITEM)\" \
+	)
 
 build.wheezy: @@local
 ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
