@@ -22,6 +22,8 @@ include manala/make/Makefile
 # Build #
 #########
 
+export DEB_BUILD_OPTIONS = noddebs
+
 build:
 
 	$(call build_clean)

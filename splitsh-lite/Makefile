@@ -19,6 +19,8 @@ include manala/make/Makefile
 # Build #
 #########
 
+export DEB_BUILD_OPTIONS = noddebs
+
 build: export GOPATH = $(PACKAGE_BUILD_DIR)/go
 build: export PATH  := $(PATH):/usr/local/go/bin
 build:
