@@ -1,4 +1,4 @@
-# Debian Package - Jinja2 [![Build Status](https://travis-ci.org/manala/debian-package-python-jinja2.svg?branch=master)](https://travis-ci.org/manala/debian-package-python-jinja2)
+# Debian Package - Jinja2 [![Build Status](https://travis-ci.org/manala/debian-package-jinja2.svg?branch=master)](https://travis-ci.org/manala/debian-package-jinja2)
 
 :exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
 
