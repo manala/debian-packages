@@ -1,63 +1,51 @@
 .SILENT:
-.PHONY: help build sync split
-
-## Colors
-COLOR_RESET   = \033[0m
-COLOR_ERROR   = \033[31m
-COLOR_INFO    = \033[32m
-COLOR_COMMENT = \033[33m
+.PHONY: build-all build-diff sync split
 
 ############
 # Packages #
 ############
 
-PACKAGES = $(shell git diff --name-only | grep "/" | cut -d "/" -f1 | sort -u | tr "\n" " ")
-ifeq ($(PACKAGES),)
-PACKAGES = $(wildcard */)
-endif
+PACKAGES_ALL  = $(sort $(subst /,,$(wildcard */)))
+PACKAGES_DIFF = $(shell git diff --name-only | grep "/" | cut -d "/" -f1 | sort -u | tr "\n" " ")
 
-# Help
-help:
-	printf "$(COLOR_COMMENT)Usage:$(COLOR_RESET)\n"
-	printf " make [target]\n\n"
-	printf "$(COLOR_COMMENT)Available targets:$(COLOR_RESET)\n"
-	awk '/^[a-zA-Z\-\_0-9\.@]+:/ { \
-		helpMessage = match(lastLine, /^## (.*)/); \
-		if (helpMessage) { \
-			helpCommand = substr($$1, 0, index($$1, ":")); \
-			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
-			printf " $(COLOR_INFO)%-16s$(COLOR_RESET) %s\n", helpCommand, helpMessage; \
-		} \
-	} \
-	{ lastLine = $$0 }' $(MAKEFILE_LIST)
+##########
+# Manala #
+##########
+
+include .manala/make/Makefile
 
 #########
 # Build #
 #########
 
-## Build - Wheezy
-build.wheezy:
-	EXIT=0 ; ${foreach \
-		PACKAGE,\
-		$(PACKAGES),\
-		printf "\n$(COLOR_INFO)Build $(COLOR_COMMENT)$(PACKAGE)$(COLOR_RESET)\n\n" && $(MAKE) --directory=$(PACKAGE) build.wheezy || EXIT=$$? ;\
-	} exit $$EXIT
+## Build all
+build-all:
+	$(call loop,$(PACKAGES_ALL), \
+		$(MAKE) --directory=$$(ITEM) build$(if $(DEBIAN_DISTRIBUTION),.$(DEBIAN_DISTRIBUTION),-all), \
+		Build package \"$$(ITEM)\"$(if $(DEBIAN_DISTRIBUTION), on \"$(DEBIAN_DISTRIBUTION)\") \
+	)
 
-## Build - Jessie
-build.jessie:
-	EXIT=0 ; ${foreach \
-		PACKAGE,\
-		$(PACKAGES),\
-		printf "\n$(COLOR_INFO)Build $(COLOR_COMMENT)$(PACKAGE)$(COLOR_RESET)\n\n" && $(MAKE) --directory=$(PACKAGE) build.jessie || EXIT=$$? ;\
-	} exit $$EXIT
+## Build all - Wheezy
+build-all.wheezy: build-all
 
-## Build - Stretch
-build.stretch:
-	EXIT=0 ; ${foreach \
-		PACKAGE,\
-		$(PACKAGES),\
-		printf "\n$(COLOR_INFO)Build $(COLOR_COMMENT)$(PACKAGE)$(COLOR_RESET)\n\n" && $(MAKE) --directory=$(PACKAGE) build.stretch || EXIT=$$? ;\
-	} exit $$EXIT
+## Build all - Jessie
+build-all.jessie: build-all
+
+## Build all - Stretch
+build-all.stretch: build-all
+
+## Build diff
+build-diff: PACKAGES_ALL = $(PACKAGES_DIFF)
+build-diff: build-all
+
+## Build all - Wheezy
+build-diff.wheezy: build-diff
+
+## Build all - Jessie
+build-diff.jessie: build-diff
+
+## Build all - Stretch
+build-diff.stretch: build-diff
 
 ########
 # Sync #
