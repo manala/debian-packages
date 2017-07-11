@@ -63,7 +63,7 @@ endif
 		echo $$PACKAGE; \
 		cp $$FROM/.gitignore $$PACKAGE; \
 		cp $$FROM/.travis.yml $$PACKAGE; \
-		cp -r $$FROM/manala $$PACKAGE; \
+		cp -r $$FROM/.manala $$PACKAGE; \
 	done
 
 #########

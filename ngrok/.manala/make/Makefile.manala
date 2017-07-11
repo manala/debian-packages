@@ -92,6 +92,20 @@ define confirm
 		printf "\n"
 endef
 
+########
+# Loop #
+########
+
+define loop
+	EXIT=0 ; $(foreach \
+		ITEM,\
+		$(1),\
+			$(eval MANALA_LOOP_LOG = $(3)) printf "\n[$(MANALA_COLOR_COMMENT)loop$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(if $(MANALA_LOOP_LOG),$(MANALA_LOOP_LOG),$(ITEM))$(MANALA_COLOR_RESET)\n\n" && \
+			$(eval MANALA_LOOP_CALLBACK = $(2)) $(MANALA_LOOP_CALLBACK) \
+			|| EXIT=$$? ;\
+	) exit $$EXIT
+endef
+
 ##########
 # Manala #
 ##########
