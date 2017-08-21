@@ -9,7 +9,7 @@ Provides [PhpPgAdmin](http://phppgadmin.sourceforge.net/doku.php) debian package
 Build for all enabled debian distributions
 
 ```
-$ make build-all
+$ make build
 ```
 
 Build for a specific enabled debian distribution

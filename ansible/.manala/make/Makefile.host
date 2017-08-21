@@ -1,0 +1,19 @@
+########
+# Host #
+########
+
+MANALA_HOST ?= local
+
+# Usage:
+#   target: .host(local)
+#   	# Do something on local host...
+
+.host(%):
+	$(call eq,$(*),$(MANALA_HOST),,$(call message_error,Must be run on \"$(*)\" host); exit 1)
+
+# Usage:
+#   $(call host,local,Yes,No) = Yes
+
+define host
+$(call eq,$(1),$(MANALA_HOST),$(2),$(3))
+endef

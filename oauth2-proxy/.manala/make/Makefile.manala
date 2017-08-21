@@ -10,9 +10,11 @@
 
 # MANALA_CURRENT_DIR [String]  Current directory
 # MANALA_DIR         [String]  Manala base directory
-# MANALA_ENV         [String]  Environment
 # MANALA_HELP        [String]  Help content
 # MANALA_INTERACTIVE [Empty]|1 Run in interactive mode
+
+MANALA_CONTACT_NAME = Manala
+MANALA_CONTACT_MAIL = contact@manala.io
 
 # Current dir
 MANALA_CURRENT_DIR = $(CURDIR)
@@ -37,8 +39,7 @@ define help
 endef
 
 MANALA_HELP = \
-	$(call help_section,Usage)\
-	\n  make [target]\n\
+	\nUsage: make [$(MANALA_COLOR_INFO)target$(MANALA_COLOR_RESET)]\n\
 	$(call help_section,Help)\
 	$(call help,help,This help)\
 	\n
@@ -64,46 +65,149 @@ endif
 
 MANALA_INTERACTIVE := $(shell [ -t 0 ] && echo 1)
 
-#######
-# Log #
-#######
+###############
+# Date / Time #
+###############
+
+# Usage:
+#   $(call time)      = 11:06:20
+#   $(call date_nano) = 1504443855143518510
+
+define time
+`date -u +%T`
+endef
+
+define date_nano
+`date -u +%s%N`
+endef
+
+#################
+# Message / Log #
+#################
+
+# Usage:
+#   $(call message,Foo bar)         = Foo bar
+#   $(call message_warning,Foo bar) = ¯\_(ツ)_/¯ Foo bar
+#   $(call message_error,Foo bar)   = (╯°□°)╯︵ ┻━┻ Foo bar
+#   $(call log,Foo bar)             = [11:06:20] [target] Foo bar
+#   $(call log_warning,Foo bar)     = [11:06:20] [target] ¯\_(ツ)_/¯ Foo bar
+#   $(call log_error,Foo bar)       = [11:06:20] [target] (╯°□°)╯︵ ┻━┻ Foo bar
+
+define message
+	printf "$(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n"
+endef
+
+define message_warning
+	printf "$(MANALA_COLOR_WARNING)¯\_(ツ)_/¯ $(1)$(MANALA_COLOR_RESET)\n\n"
+endef
+
+define message_error
+	printf "$(MANALA_COLOR_ERROR)(╯°□°)╯︵ ┻━┻  $(1)$(MANALA_COLOR_RESET)\n\n"
+endef
 
 define log
-    printf "\n[$(MANALA_COLOR_COMMENT)`date -u +"%T"`$(MANALA_COLOR_RESET)][$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n"
+	printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n"
 endef
 
-# Warning
 define log_warning
-    printf "\n[$(MANALA_COLOR_COMMENT)¯\_(ツ)_/¯$(MANALA_COLOR_RESET)] $(MANALA_COLOR_WARNING)$(1)$(MANALA_COLOR_RESET)\n\n"
+	printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_WARNING)¯\_(ツ)_/¯ $(1)$(MANALA_COLOR_RESET)\n\n"
 endef
 
-# Error
 define log_error
-    printf "\n[$(MANALA_COLOR_COMMENT)(╯°□°)╯︵ ┻━┻$(MANALA_COLOR_RESET)] $(MANALA_COLOR_ERROR)$(1)$(MANALA_COLOR_RESET)\n\n"
+	printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_ERROR)(╯°□°)╯︵ ┻━┻  $(1)$(MANALA_COLOR_RESET)\n\n"
 endef
+
+######
+# If #
+######
+
+# Usage:
+#   target: .if(FOO BAR)
+#   	# Do something with $(FOO) and $(BAR)...
+
+.if(%):
+	$(if $($(*)),,$(call message_error,\"$(*)\" is empty or not set); exit 1)
 
 ###########
 # Confirm #
 ###########
 
 define confirm
-		printf "\n$(MANALA_COLOR_INFO) ༼ つ ◕_◕ ༽つ $(MANALA_COLOR_WARNING)$(1) (y/N)$(MANALA_COLOR_RESET): "; \
-		read CONFIRM ; if [ "$$CONFIRM" != "y" ]; then printf "\n"; exit 1; fi; \
-		printf "\n"
+	printf "\n$(MANALA_COLOR_INFO) ༼ つ ◕_◕ ༽つ $(MANALA_COLOR_WARNING)$(1) (y/N)$(MANALA_COLOR_RESET): "; \
+	read CONFIRM ; if [ "$$CONFIRM" != "y" ]; then printf "\n"; exit 1; fi; \
+	printf "\n"
+endef
+
+#######
+# For #
+#######
+
+# Usage:
+#   $(call for,ITEM,foo bar baz,echo $$(ITEM)) = foo\nbar\nbaz\n
+
+MANALA_FOR_ITEM_START_HOOK =
+MANALA_FOR_ITEM_END_HOOK =
+
+define for
+	MANALA_FOR_EXIT=0 ; \
+	$(foreach \
+		$(1),\
+		$(2),\
+		  MANALA_FOR_ITEM=$($(1)) ; \
+		  $(eval MANALA_FOR = $(MANALA_FOR_ITEM_START_HOOK)) $(MANALA_FOR) \
+			$(eval MANALA_FOR = $(3)) $(MANALA_FOR) ; \
+			MANALA_FOR_ITEM_EXIT=$$? ; MANALA_FOR_EXIT=$$(($$MANALA_FOR_EXIT || $$MANALA_FOR_ITEM_EXIT)); \
+			$(eval MANALA_FOR = $(MANALA_FOR_ITEM_END_HOOK)) $(MANALA_FOR) \
+	) \
+	exit $$MANALA_FOR_EXIT
+endef
+
+######
+# In #
+######
+
+# Usage:
+#   $(call in,foo,foo bar baz,Yes,No) = Yes
+#   $(call in,qux,foo bar baz,Yes,No) = No
+
+define in
+$(if $(filter $(1),$(2)),$(3),$(4))
 endef
 
 ########
-# Loop #
+# Uniq #
 ########
 
-define loop
-	EXIT=0 ; $(foreach \
-		ITEM,\
-		$(1),\
-			$(eval MANALA_LOOP_LOG = $(3)) printf "\n[$(MANALA_COLOR_COMMENT)loop$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(if $(MANALA_LOOP_LOG),$(MANALA_LOOP_LOG),$(ITEM))$(MANALA_COLOR_RESET)\n\n" && \
-			$(eval MANALA_LOOP_CALLBACK = $(2)) $(MANALA_LOOP_CALLBACK) \
-			|| EXIT=$$? ;\
-	) exit $$EXIT
+# Usage:
+#   $(call uniq,foo bar bar baz) = foo bar baz
+
+define uniq
+$(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
+endef
+
+######
+# Eq #
+######
+
+# Usage:
+#   $(call eq,foo,foo,Yes,No) = Yes
+#   $(call eq,foo,bar,Yes,No) = No
+
+define eq
+$(if $(if $(or $(1),$(2)),$(and $(findstring $(1),$(2)),$(findstring $(2),$(1))),1),$(3),$(4))
+endef
+
+########
+# Rand #
+########
+
+# Usage:
+#   $(call rand) = 51088
+#   $(call rand) = 49478
+#   ...
+
+define rand
+`od -An -N2 -i /dev/random | tr -d ' '`
 endef
 
 ##########

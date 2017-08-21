@@ -9,7 +9,7 @@ Provides [Pam_Ssh_Agent_Auth](http://pamsshagentauth.sourceforge.net/) debian pa
 Build for all enabled debian distributions
 
 ```
-$ make build-all
+$ make build
 ```
 
 Build for a specific enabled debian distribution

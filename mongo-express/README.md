@@ -9,7 +9,7 @@ Provides [Mongo Express](https://github.com/mongo-express/mongo-express) debian 
 Build for all enabled debian distributions
 
 ```
-$ make build-all
+$ make build
 ```
 
 Build for a specific enabled debian distribution

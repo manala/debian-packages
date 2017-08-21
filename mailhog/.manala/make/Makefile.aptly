@@ -1,0 +1,15 @@
+#############
+# Variables #
+#############
+
+# MANALA_APTLY_HOST:       Aptly host
+# MANALA_APTLY_USER:       Aptly user
+# MANALA_APTLY_PACKAGES:   Aptly packages
+# MANALA_APTLY_REPOSITORY: Aptly repository
+
+define aptly_deploy
+  scp $(MANALA_APTLY_PACKAGES) $(MANALA_APTLY_HOST):/tmp
+  ssh $(MANALA_APTLY_HOST) -- sudo -u $(MANALA_APTLY_USER) aptly repo add $(MANALA_APTLY_REPOSITORY) /tmp/$(notdir $(1))
+  ssh $(MANALA_APTLY_HOST) -- sudo -u $(MANALA_APTLY_USER) aptly publish update $(MANALA_APTLY_REPOSITORY)
+  ssh $(MANALA_APTLY_HOST) -- rm /tmp/$(notdir $(MANALA_APTLY_PACKAGES))
+endef

@@ -1,25 +1,32 @@
 .PHONY: build
 
+##########
+# Manala #
+##########
+
+MANALA_DIR = $(abspath $(patsubst %/make/Makefile,%,$(firstword $(filter %manala/make/Makefile,$(MAKEFILE_LIST)))))
+
+include \
+	$(MANALA_DIR)/make/Makefile.manala \
+	$(MANALA_DIR)/make/Makefile.docker \
+	$(MANALA_DIR)/make/Makefile.host \
+	$(MANALA_DIR)/make/Makefile.aptly
+
+-include \
+	$(MANALA_CURRENT_DIR)/../.env \
+	$(MANALA_CURRENT_DIR)/.env
+
 ###########
 # Package #
 ###########
 
-PACKAGE_DIR       = /srv/package
+PACKAGE_DIR       = $(MANALA_CURRENT_DIR)
 PACKAGE_BUILD_DIR = $(PACKAGE_DIR)/build
 PACKAGE_DIST_DIR  = $(PACKAGE_DIR)/dist
 
 ##########
 # Debian #
 ##########
-
-DEBIAN_DISTRIBUTIONS = $(PACKAGE_DISTRIBUTIONS)
-
-%.wheezy:  DEBIAN_DISTRIBUTION = wheezy
-%.jessie:  DEBIAN_DISTRIBUTION = jessie
-%.stretch: DEBIAN_DISTRIBUTION = stretch
-
-export DEBFULLNAME = Manala
-export DEBEMAIL    = contact@manala.io
 
 define package_debian_version
 $(if $(PACKAGE_EPOCH),$(PACKAGE_EPOCH):)$(PACKAGE_VERSION)-$(PACKAGE_REVISION)
@@ -37,197 +44,209 @@ endef
 # Docker #
 ##########
 
+# Note: "DEB_BUILD_OPTIONS=noddebs" to get rid of dbgsym packages
+
 MANALA_DOCKER_IMAGE     = manala/build-debian
-MANALA_DOCKER_IMAGE_TAG = $(if $(DOCKER_IMAGE_TAG),$(DOCKER_IMAGE_TAG)-)$(DEBIAN_DISTRIBUTION)
-MANALA_DOCKER_DIR       = $(PACKAGE_DIR)
-MANALA_DOCKER_HOST      = $(PACKAGE).$(DEBIAN_DISTRIBUTION).build
+MANALA_DOCKER_IMAGE_TAG = $(if $(DOCKER_TAG),$(DOCKER_TAG)-)$(DISTRIBUTION)
+MANALA_DOCKER_DIR       = /srv/package
+MANALA_DOCKER_HOST      = $(PACKAGE).$(DISTRIBUTION).build
 MANALA_DOCKER_ENV       = \
-	MANALA_ENV=build \
-	DEBIAN_DISTRIBUTION=$(DEBIAN_DISTRIBUTION)
+	MANALA_HOST=build \
+	DISTRIBUTION=$(DISTRIBUTION) \
+	DEBFULLNAME=$(MANALA_CONTACT_NAME) \
+	DEBEMAIL=$(MANALA_CONTACT_MAIL) \
+	DEB_BUILD_OPTIONS=noddebs
 
-##########
-# Manala #
-##########
+######
+# Sh #
+######
 
-MANALA_DIR = $(abspath $(patsubst %/make/Makefile,%,$(firstword $(filter %manala/make/Makefile,$(MAKEFILE_LIST)))))
+MANALA_HELP += $(call host,local,$(SH_HELP)\n)
 
-include \
-	$(MANALA_DIR)/make/Makefile.manala \
-	$(MANALA_DIR)/make/Makefile.docker \
-	$(MANALA_DIR)/make/Makefile.environment
+SH_HELP = \
+	$(call help_section,Build host shell)
 
--include \
-	../Makefile.local \
-	Makefile.local
-
-###############
-# Environment #
-###############
-
-ifndef MANALA_ENV
-
-MANALA_HELP += $(call help_section,Environment)
-
-ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,sh.wheezy,     Shell to build environment - Wheezy)
-endif
-ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,sh.jessie,     Shell to build environment - Jessie)
-endif
-ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,sh.stretch,    Shell to build environment - Stretch)
-endif
-
-MANALA_HELP += $(call help,update-all,    Update all build environments)
-
-ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,update.wheezy, Update build environment - Wheezy)
-endif
-ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,update.jessie, Update build environment - Jessie)
-endif
-ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,update.stretch,Update build environment - Jessie)
-endif
-
-MANALA_HELP += \n
-
-endif
-
-sh.wheezy: @@local
-ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
-	@$(call docker_shell)
-else
-	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
-endif
-
-sh.jessie: @@local
-ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
-	@$(call docker_shell)
-else
-	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
-endif
-
-sh.stretch: @@local
-ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
-	@$(call docker_shell)
-else
-	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
-endif
-
-update-all: @@local
-	$(call loop,$(DEBIAN_DISTRIBUTIONS), \
-		$(MAKE) update.$$(ITEM), \
-		Update debian distribution \"$$(ITEM)\" \
+sh: .host(local) .if(DISTRIBUTION)
+	$(call in,$(DISTRIBUTION),$(PACKAGE_DISTRIBUTIONS), \
+		$(call docker_shell), \
+		$(call log_warning,Distribution \"$(DISTRIBUTION)\" is not enabled) \
 	)
 
-update.wheezy: @@local
-ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
-	@$(call docker_pull)
-else
-	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
-endif
+SH_HELP += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.wheezy, Open shell on build host - Wheezy))
+sh.wheezy: DISTRIBUTION = wheezy
+sh.wheezy: sh
 
-update.jessie: @@local
-ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
-	@$(call docker_pull)
-else
-	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
-endif
+SH_HELP += $(call in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.jessie, Open shell on build host - Jessie))
+sh.jessie: DISTRIBUTION = jessie
+sh.jessie: sh
 
-update.stretch: @@local
-ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
-	@$(call docker_pull)
-else
-	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
-endif
+SH_HELP += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.stretch,Open shell on build host - Stretch))
+sh.stretch: DISTRIBUTION = stretch
+sh.stretch: sh
 
-#########
-# Proxy #
-#########
+##########
+# Update #
+##########
 
-ifeq ($(MANALA_ENV),build)
-@@build: ;
-%@@build: % ;
-else
-@@build:
-	@$(call log_error,Must be run in \"build\" environment)
-	@exit 1
-%@@build:
-	$(call docker_proxy,$(*))
-endif
+MANALA_HELP += $(call host,local,$(UPDATE_HELP)\n)
+
+UPDATE_HELP = \
+	$(call help_section,Build host update) \
+	$(call help,update,        Update build hosts)
+
+update: .host(local)
+	$(call for,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
+		$$(call log,Distribution \"$$(DISTRIBUTION)\"); \
+		$$(call in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
+			$$(call docker_pull), \
+			$$(call log_warning,Distribution \"$$(DISTRIBUTION)\" is not enabled) \
+		) \
+	)
+
+UPDATE_HELP += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,update.wheezy, Update build host - Wheezy))
+update.wheezy: DISTRIBUTIONS = wheezy
+update.wheezy: update
+
+UPDATE_HELP += $(call in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,update.jessie, Update build host - Jessie))
+update.jessie: DISTRIBUTIONS = jessie
+update.jessie: update
+
+UPDATE_HELP += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,update.stretch,Update build host - Stretch))
+update.stretch: DISTRIBUTIONS = stretch
+update.stretch: update
 
 #########
 # Build #
 #########
 
-MANALA_HELP += $(call help_section,Build)
+MANALA_HELP += $(call host,local,$(BUILD_HELP)\n)
 
-ifndef MANALA_ENV
+BUILD_HELP = \
+	$(call help_section,Build) \
+	$(call help,build,        Build packages)
 
-MANALA_HELP += $(call help,build-all,    Build all packages)
-
-ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,build.wheezy, Build package - Wheezy)
-endif
-ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,build.jessie, Build package - Jessie)
-endif
-ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
-MANALA_HELP += $(call help,build.stretch,Build package - Stretch)
-endif
-
-endif
-
-build-all: @@local
-	$(call loop,$(DEBIAN_DISTRIBUTIONS), \
-		$(MAKE) build.$$(ITEM), \
-		Build debian distribution \"$$(ITEM)\" \
+build: .host(local)
+	$(call for,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
+		$$(call log,Distribution \"$$(DISTRIBUTION)\"); \
+		$$(call in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
+			$$(call docker_make,package), \
+			$$(call log_warning,Distribution \"$$(DISTRIBUTION)\" is not enabled) \
+		) \
 	)
 
-build.wheezy: @@local
-ifneq ($(filter wheezy,$(DEBIAN_DISTRIBUTIONS)),)
-build.wheezy: build@@build
-else
-	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
-endif
+BUILD_HELP += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,build.wheezy, Build packages - Wheezy))
+build.wheezy: DISTRIBUTIONS = wheezy
+build.wheezy: build
 
-build.jessie: @@local
-ifneq ($(filter jessie,$(DEBIAN_DISTRIBUTIONS)),)
-build.jessie: build@@build
-else
-	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
-endif
+BUILD_HELP += $(call in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,build.jessie, Build packages - Jessie))
+build.jessie: DISTRIBUTIONS = jessie
+build.jessie: build
 
-build.stretch: @@local
-ifneq ($(filter stretch,$(DEBIAN_DISTRIBUTIONS)),)
-build.stretch: build@@build
-else
-	@$(call log_warning,Debian distribution \"$(DEBIAN_DISTRIBUTION)\" is not enabled.)
-endif
+BUILD_HELP += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,build.stretch,Build packages - Stretch))
+build.stretch: DISTRIBUTIONS = stretch
+build.stretch: build
 
-ifeq ($(MANALA_ENV),build)
+##########
+# System #
+##########
 
-MANALA_HELP += $(call help,build,Build package)
+MANALA_HELP += $(call host,build,$(SYSTEM_HELP)\n)
 
-endif
+SYSTEM_HELP = \
+	$(call help_section,System) \
+	$(call help,update,Update system)
 
-MANALA_HELP += \n
+system.update: DEBIAN_FRONTEND = noninteractive
+system.update: .host(build)
+	$(call log,Update)
+	sudo apt-get update
+	sudo apt-get -y dist-upgrade
 
-define build_clean
-	@$(call log,Clean)
-	@rm -Rf $(PACKAGE_BUILD_DIR)/*
-	@rm -Rf $(PACKAGE_DIST_DIR)/*~$(DEBIAN_DISTRIBUTION)*.deb
-endef
+###########
+# Package #
+###########
 
-define build_dist
-	@$(call log,Dist)
-	@for DEB in $(PACKAGE_BUILD_DIR)/*.deb; do \
+MANALA_HELP += $(call host,build,$(PACKAGE_HELP))
+
+PACKAGE_HELP = \
+	$(call help_section,Package) \
+	$(call help,package,             Build package)
+
+package: .host(build) \
+	system.update \
+	package.clean \
+	package.checkout \
+	package.prepare \
+	package.dependencies \
+	package.build \
+	package.dist
+
+PACKAGE_HELP += $(call help,package.clean,       Build package - Clean)
+package.clean: .host(build)
+	$(call log,Clean)
+	rm -Rf $(PACKAGE_BUILD_DIR)/*
+	rm -Rf $(PACKAGE_DIST_DIR)/*~$(DISTRIBUTION)*.deb
+
+PACKAGE_HELP += $(call help,package.checkout,    Build package - Checkout)
+package.checkout: .host(build)
+
+PACKAGE_HELP += $(call help,package.prepare,     Build package - Prepare)
+package.prepare: .host(build)
+
+PACKAGE_HELP += $(call help,package.dependencies,Build package - Dependencies)
+package.dependencies: .host(build)
+	$(call log,Dependencies)
+	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
+		&& mk-build-deps \
+			--install --remove --root-cmd sudo \
+			--tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" \
+			debian/control
+
+PACKAGE_HELP += $(call help,package.build,       Build package - Build)
+package.build: .host(build)
+
+PACKAGE_HELP += $(call help,package.dist,        Build package - Dist)
+package.dist: .host(build)
+	$(call log,Dist)
+	for DEB in $(PACKAGE_BUILD_DIR)/*.deb; do \
 		basename $$DEB; printf "\n"; \
 		dpkg -I $$DEB; printf "\n"; \
 		dpkg -c $$DEB; printf "\n"; \
 		mv $$DEB $(PACKAGE_DIST_DIR); \
 	done
-endef
 
-build: @@build
+##########
+# Deploy #
+##########
+
+MANALA_APTLY_HOST       = $(DEPLOY_HOST)
+MANALA_APTLY_USER       = $(DEPLOY_USER)
+MANALA_APTLY_PACKAGES   = $(PACKAGE_DIST_DIR)/*~$(DISTRIBUTION)*.deb
+MANALA_APTLY_REPOSITORY = $(DISTRIBUTION)
+
+MANALA_HELP += $(call host,local,$(DEPLOY_HELP))
+
+DEPLOY_HELP = \
+	$(call help_section,Deploy) \
+	$(call help,deploy,        Deploy packages to repository)
+
+deploy: .host(local) .if(DEPLOY_HOST DEPLOY_USER)
+	$(call for,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
+		$$(call log,Distribution \"$$(DISTRIBUTION)\"); \
+		$$(call in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
+			$$(call aptly_deploy), \
+			$$(call log_warning,Distribution \"$$(DISTRIBUTION)\" is not enabled) \
+		) \
+	)
+
+DEPLOY_HELP += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.wheezy, Deploy packages to repository - Wheezy))
+deploy.wheezy: DISTRIBUTIONS = wheezy
+deploy.wheezy: deploy
+
+DEPLOY_HELP += $(call in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.jessie, Deploy packages to repository - Jessie))
+deploy.jessie: DISTRIBUTIONS = jessie
+deploy.jessie: deploy
+
+DEPLOY_HELP += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.stretch,Deploy packages to repository - Stretch))
+deploy.stretch: DISTRIBUTIONS = stretch
+deploy.stretch: deploy

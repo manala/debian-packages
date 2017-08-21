@@ -9,7 +9,7 @@ Provides [Splitsh Lite](https://github.com/splitsh/lite) debian package.
 Build for all enabled debian distributions
 
 ```
-$ make build-all
+$ make build
 ```
 
 Build for a specific enabled debian distribution

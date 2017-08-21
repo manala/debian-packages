@@ -9,7 +9,7 @@ Provides [MailHog](https://github.com/mailhog/MailHog) debian package.
 Build for all enabled debian distributions
 
 ```
-$ make build-all
+$ make build
 ```
 
 Build for a specific enabled debian distribution
