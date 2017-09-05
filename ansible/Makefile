@@ -11,8 +11,8 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE                              = ansible
-PACKAGE_VERSION                      = 2.2.0.0
-PACKAGE_REVISION                     = 4
+PACKAGE_VERSION                      = 2.2.1.0
+PACKAGE_REVISION                     = 2
 PACKAGE_REVISION_MANALA              = 1
 PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
 PACKAGE_DISTRIBUTIONS                = wheezy jessie stretch
