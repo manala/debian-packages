@@ -16,7 +16,7 @@ include \
 ############
 
 PACKAGES_ALL  = $(sort $(notdir $(patsubst %/,%,$(dir $(wildcard $(MANALA_CURRENT_DIR)/*/)))))
-PACKAGES_DIFF = $(filter-out .manala,$(sort $(shell git diff --name-only | grep "/" | cut -d/ -f1)))
+PACKAGES_DIFF = $(filter-out .manala,$(sort $(shell git diff --name-only $(TRAVIS_COMMIT_RANGE)| grep "/" | cut -d/ -f1)))
 
 #########
 # Build #
