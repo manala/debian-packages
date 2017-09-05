@@ -234,6 +234,7 @@ deploy: .host(local) .if(DEPLOY_HOST DEPLOY_USER)
 	$(call for,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
 		$$(call log,Distribution \"$$(DISTRIBUTION)\"); \
 		$$(call in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
+			$$(call confirm,Please confirm deploy on \"$$(DISTRIBUTION)\" distribution) ; \
 			$$(call aptly_deploy), \
 			$$(call log_warning,Distribution \"$$(DISTRIBUTION)\" is not enabled) \
 		) \
