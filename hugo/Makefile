@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = hugo
-PACKAGE_VERSION       = 0.24.1
+PACKAGE_VERSION       = 0.25.1
 PACKAGE_SOURCE        = https://github.com/gohugoio/hugo/releases/download/v$(PACKAGE_VERSION)/hugo_$(PACKAGE_VERSION)_Linux-64bit.tar.gz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
