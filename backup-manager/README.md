@@ -9,7 +9,7 @@ Provides [Backup Manager](https://github.com/sukria/Backup-Manager) debian packa
 Build for all enabled debian distributions
 
 ```
-$ make build-all
+$ make build
 ```
 
 Build for a specific enabled debian distribution

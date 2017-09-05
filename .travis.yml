@@ -10,12 +10,12 @@ services:
   - docker
 
 env:
-  - DEBIAN_DISTRIBUTION=wheezy
-  - DEBIAN_DISTRIBUTION=jessie
-  - DEBIAN_DISTRIBUTION=stretch
+  - DISTRIBUTIONS=wheezy
+  - DISTRIBUTIONS=jessie
+  - DISTRIBUTIONS=stretch
 
 script:
-  - make build-diff.$DEBIAN_DISTRIBUTION
+  - make build.diff
 
 notifications:
   webhooks:

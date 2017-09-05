@@ -2,21 +2,24 @@ language: generic
 
 sudo: required
 
+branches:
+  only:
+    - master
+
 services:
   - docker
 
 env:
-  - DEBIAN_DISTRIBUTION=wheezy
-  - DEBIAN_DISTRIBUTION=jessie
-  - DEBIAN_DISTRIBUTION=stretch
+  - DISTRIBUTIONS=wheezy
+  - DISTRIBUTIONS=jessie
+  - DISTRIBUTIONS=stretch
 
 script:
-  - make build.$DEBIAN_DISTRIBUTION
+  - make build
 
 notifications:
   webhooks:
     urls:
-      - https://galaxy.ansible.com/api/v1/notifications/
       - https://webhooks.gitter.im/e/430e0a92ad6370b7b805
     on_success: change
     on_failure: always

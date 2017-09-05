@@ -9,7 +9,7 @@ Provides [OAuth2 Proxy](https://github.com/bitly/oauth2_proxy) debian package.
 Build for all enabled debian distributions
 
 ```
-$ make build-all
+$ make build
 ```
 
 Build for a specific enabled debian distribution

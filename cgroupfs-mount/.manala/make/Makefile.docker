@@ -26,7 +26,7 @@ define docker_shell
 	$(call docker_run)
 endef
 
-define docker_proxy
+define docker_make
 	$(call docker_run,sh -c "make --silent --directory=$(MANALA_DOCKER_DIR) $(1)")
 endef
 

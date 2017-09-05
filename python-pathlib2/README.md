@@ -9,7 +9,7 @@ Provides [Pathlib2](https://pypi.python.org/pypi/pathlib2/) debian package.
 Build for all enabled debian distributions
 
 ```
-$ make build-all
+$ make build
 ```
 
 Build for a specific enabled debian distribution

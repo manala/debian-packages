@@ -9,7 +9,7 @@ Provides [The Fuck](https://github.com/nvbn/thefuck) debian package.
 Build for all enabled debian distributions
 
 ```
-$ make build-all
+$ make build
 ```
 
 Build for a specific enabled debian distribution
