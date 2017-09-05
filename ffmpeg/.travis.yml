@@ -1,0 +1,26 @@
+language: generic
+
+sudo: required
+
+branches:
+  only:
+    - master
+
+services:
+  - docker
+
+env:
+  - DISTRIBUTIONS=wheezy
+  - DISTRIBUTIONS=jessie
+  - DISTRIBUTIONS=stretch
+
+script:
+  - make build
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/430e0a92ad6370b7b805
+    on_success: change
+    on_failure: always
+    on_start: never
