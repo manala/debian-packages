@@ -28,7 +28,11 @@ package.checkout:
 	# Git2go
 	sudo apt-get install -y --no-install-recommends \
 		cmake pkg-config libssh2-1-dev libssl-dev libcurl4-openssl-dev
-	go get -v -d github.com/libgit2/git2go
+	# Git clone manually as a temporary workaround to libgit2 install issue
+	# See: https://github.com/libgit2/rugged/issues/711
+	mkdir -p $(PACKAGE_BUILD_DIR)/go/src/github.com/libgit2 \
+		&& cd $(PACKAGE_BUILD_DIR)/go/src/github.com/libgit2 \
+		&& git clone https://github.com/libgit2/git2go.git
 	cd $(GOPATH)/src/github.com/libgit2/git2go \
 		&& git checkout next \
 		&& git submodule update --init \
