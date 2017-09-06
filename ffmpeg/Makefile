@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = ffmpeg
-PACKAGE_VERSION       = 2.8.4
+PACKAGE_VERSION       = 3.0.1
 PACKAGE_SOURCE        = file://$(PACKAGE_DIR)/files/ffmpeg-$(PACKAGE_VERSION)-64bit-static.tar.xz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
