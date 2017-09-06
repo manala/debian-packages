@@ -1,0 +1,12 @@
+Source: ffmpeg
+Section: video
+Priority: extra
+Maintainer: Manala <contact@manala.io>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.8
+Homepage: https://www.ffmpeg.org/
+
+Package: ffmpeg
+Architecture: amd64
+Depends: ${misc:Depends}
+Description: A complete, cross-platform solution to record, convert and stream audio and video.
