@@ -1,3 +1,9 @@
+ffmpeg (3.0.1-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Wed, 06 Sep 2017 13:11:21 +0000
+
 ffmpeg (2.8.4-manala1~jessie1) unstable; urgency=low
 
   * Upstream update
