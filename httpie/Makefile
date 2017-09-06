@@ -12,7 +12,7 @@ include .manala/make/Makefile
 
 PACKAGE                              = httpie
 PACKAGE_VERSION                      = 0.9.8
-PACKAGE_REVISION                     = 1
+PACKAGE_REVISION                     = 2
 PACKAGE_REVISION_MANALA              = 1
 PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
 PACKAGE_DISTRIBUTIONS                = jessie stretch
