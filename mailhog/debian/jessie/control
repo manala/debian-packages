@@ -8,7 +8,8 @@ Homepage: https://github.com/mailhog/MailHog
 
 Package: mailhog
 Architecture: amd64
-Depends: ${misc:Depends}
+Depends: ${misc:Depends},
+         lsb-base (>= 3.2-14)
 Description: Web and API based SMTP testing
  MailHog is an email testing tool for developers:
  - Configure your application to use MailHog for SMTP delivery

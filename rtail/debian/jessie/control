@@ -10,6 +10,7 @@ Homepage: http://rtail.org/
 Package: node-rtail
 Architecture: all
 Depends: ${misc:Depends},
+         lsb-base (>= 3.2-14),
          nodejs
 Description: Terminal output to the browser in seconds, using UNIX pipes
  rtail is a command line utility that grabs every line in stdin and broadcasts
