@@ -10,9 +10,9 @@ include .manala/make/Makefile
 # Package #
 ###########
 
-PACKAGE               = node-mongo-express
+PACKAGE               = mongo-express
 PACKAGE_VERSION       = 0.40.0
-PACKAGE_SOURCE        = mongo-express@$(PACKAGE_VERSION)
+PACKAGE_SOURCE        = $(PACKAGE)@$(PACKAGE_VERSION)
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
 package.checkout:
