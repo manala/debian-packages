@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = mongo-express
-PACKAGE_VERSION       = 0.41.0
+PACKAGE_VERSION       = 0.42.2
 PACKAGE_SOURCE        = $(PACKAGE)@$(PACKAGE_VERSION)
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
