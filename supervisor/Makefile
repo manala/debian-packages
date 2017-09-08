@@ -12,7 +12,7 @@ include .manala/make/Makefile
 
 PACKAGE                              = supervisor
 PACKAGE_VERSION                      = 3.3.1
-PACKAGE_REVISION                     = 1
+PACKAGE_REVISION                     = 1.1
 PACKAGE_REVISION_MANALA              = 1
 PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
 PACKAGE_DISTRIBUTIONS                = wheezy jessie stretch
