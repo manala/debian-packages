@@ -1,3 +1,9 @@
+vault (0.8.2-manala1~stretch1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Fri, 08 Sep 2017 14:30:22 +0000
+
 vault (0.7.3-manala1~stretch1) unstable; urgency=low
 
   * Upstream update
