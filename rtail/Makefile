@@ -10,9 +10,9 @@ include .manala/make/Makefile
 # Package #
 ###########
 
-PACKAGE               = node-rtail
+PACKAGE               = rtail
 PACKAGE_VERSION       = 0.2.1
-PACKAGE_SOURCE        = rtail@$(PACKAGE_VERSION)
+PACKAGE_SOURCE        = $(PACKAGE)@$(PACKAGE_VERSION)
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
 package.checkout:
