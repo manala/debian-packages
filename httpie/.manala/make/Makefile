@@ -177,6 +177,7 @@ package: .host(build) \
 	package.clean \
 	package.checkout \
 	package.prepare \
+	package.patch \
 	package.dependencies \
 	package.build \
 	package.dist
@@ -192,6 +193,17 @@ package.checkout: .host(build)
 
 PACKAGE_HELP += $(call help,package.prepare,     Build package - Prepare)
 package.prepare: .host(build)
+
+# Create a patch (in build directory):
+#   $ diff -Naur [file] [file].patch > ../patches/[distribution]/XXX.[name].patch
+PACKAGE_HELP += $(call help,package.patch,     Build package - Patch)
+package.patch: PATCHES = $(sort $(wildcard $(PACKAGE_DIR)/patches/$(DISTRIBUTION)/*.patch))
+package.patch: .host(build)
+	$(call log,Patch)
+	$(foreach PATCH,$(PATCHES), \
+		cd $(PACKAGE_BUILD_DIR) && \
+		patch -p0 < $(PATCH) \
+	)
 
 PACKAGE_HELP += $(call help,package.dependencies,Build package - Dependencies)
 package.dependencies: .host(build)
