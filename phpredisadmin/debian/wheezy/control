@@ -10,4 +10,5 @@ Package: phpredisadmin
 Architecture: all
 Depends: ${misc:Depends},
          libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5
-Description: Simple web interface to manage Redis databases.
+Description: Simple web interface to manage Redis databases
+ phpRedisAdmin is a simple web interface to manage Redis databases.

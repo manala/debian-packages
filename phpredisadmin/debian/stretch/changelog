@@ -1,3 +1,11 @@
+phpredisadmin (1.8.0-manala1~stretch1) unstable; urgency=low
+
+  * Upstream update
+  * Copyright following debian policies
+  * Add extended description
+
+ -- Manala <contact@manala.io>  Fri, 08 Sep 2017 09:18:02 +0000
+
 phpredisadmin (1.7.0-manala1~stretch1) unstable; urgency=low
 
   * Initial release
