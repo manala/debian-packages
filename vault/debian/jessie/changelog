@@ -1,3 +1,9 @@
+vault (0.7.3-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Fri, 08 Sep 2017 14:24:37 +0000
+
 vault (0.7.0-manala1~jessie1) unstable; urgency=low
 
   * Upstream version 0.7.0
