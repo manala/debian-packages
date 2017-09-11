@@ -15,7 +15,6 @@ $ make build
 Build for a specific enabled debian distribution
 
 ```
-$ make build.wheezy
 $ make build.jessie
 $ make build.stretch
 …
