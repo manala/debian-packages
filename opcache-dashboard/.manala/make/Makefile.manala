@@ -77,8 +77,37 @@ define time
 `date -u +%T`
 endef
 
+ifeq ($(shell uname -s),Darwin)
+define date_nano
+`date -u +%s000000000`
+endef
+else
 define date_nano
 `date -u +%s%N`
+endef
+endif
+
+###########
+# Verbose #
+###########
+
+# 0: Nothing
+# 1: Nothing but errors and logs
+# 2: Normal
+# 3: Verbose
+MANALA_VERBOSE ?= 2
+
+# Usage:
+#   [MANALA_VERBOSE = 0]
+#   $(call verbose,foo,bar) = foo
+#   $(call verbose,foo)     = foo
+#   [MANALA_VERBOSE = 1]
+#   $(call verbose,foo,bar) = bar
+#   $(call verbose,foo,)    =
+#   $(call verbose,foo)     = foo
+
+define verbose
+$(call eq,$(MANALA_VERBOSE),0,$(1),$(call eq,$(MANALA_VERBOSE),1,$(if $(2),$(2),$(1)),$(call eq,$(MANALA_VERBOSE),2,$(if $(3),$(3),$(if $(2),$(2),$(1))),$(if $(4),$(4),$(if $(3),$(3),$(if $(2),$(2),$(1)))))))
 endef
 
 #################
@@ -94,27 +123,27 @@ endef
 #   $(call log_error,Foo bar)       = [11:06:20] [target] (╯°□°)╯︵ ┻━┻ Foo bar
 
 define message
-	printf "$(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n"
+	$(call verbose,:,printf "$(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n")
 endef
 
 define message_warning
-	printf "$(MANALA_COLOR_WARNING)¯\_(ツ)_/¯ $(1)$(MANALA_COLOR_RESET)\n\n"
+	$(call verbose,:,printf "$(MANALA_COLOR_WARNING)¯\_(ツ)_/¯ $(1)$(MANALA_COLOR_RESET)\n\n")
 endef
 
 define message_error
-	printf "$(MANALA_COLOR_ERROR)(╯°□°)╯︵ ┻━┻  $(1)$(MANALA_COLOR_RESET)\n\n"
+	$(call verbose,:,printf "$(MANALA_COLOR_ERROR)(╯°□°)╯︵ ┻━┻  $(1)$(MANALA_COLOR_RESET)\n\n")
 endef
 
 define log
-	printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n"
+	$(call verbose,:,printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n")
 endef
 
 define log_warning
-	printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_WARNING)¯\_(ツ)_/¯ $(1)$(MANALA_COLOR_RESET)\n\n"
+	$(call verbose,:,printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_WARNING)¯\_(ツ)_/¯ $(1)$(MANALA_COLOR_RESET)\n\n")
 endef
 
 define log_error
-	printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_ERROR)(╯°□°)╯︵ ┻━┻  $(1)$(MANALA_COLOR_RESET)\n\n"
+	$(call verbose,:,printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_ERROR)(╯°□°)╯︵ ┻━┻  $(1)$(MANALA_COLOR_RESET)\n\n")
 endef
 
 ######
@@ -146,20 +175,20 @@ endef
 #   $(call for,ITEM,foo bar baz,echo $$(ITEM)) = foo\nbar\nbaz\n
 
 MANALA_FOR_ITEM_START_HOOK =
-MANALA_FOR_ITEM_END_HOOK =
+MANALA_FOR_ITEM_END_HOOK   =
 
 define for
-	MANALA_FOR_EXIT=0 ; \
+	( MANALA_FOR_EXIT=0 ; \
 	$(foreach \
-		$(1),\
-		$(2),\
-		  MANALA_FOR_ITEM=$($(1)) ; \
-		  $(eval MANALA_FOR = $(MANALA_FOR_ITEM_START_HOOK)) $(MANALA_FOR) \
-			$(eval MANALA_FOR = $(3)) $(MANALA_FOR) ; \
-			MANALA_FOR_ITEM_EXIT=$$? ; MANALA_FOR_EXIT=$$(($$MANALA_FOR_EXIT || $$MANALA_FOR_ITEM_EXIT)); \
-			$(eval MANALA_FOR = $(MANALA_FOR_ITEM_END_HOOK)) $(MANALA_FOR) \
+		$(1), \
+		$(2), \
+			MANALA_FOR_ITEM=$($(1)) ; \
+			$(eval MANALA_FOR_HOOK = $(value MANALA_FOR_ITEM_START_HOOK)) $(MANALA_FOR_HOOK) \
+			( $(eval MANALA_FOR := $(3)) $(MANALA_FOR) ) ; \
+			MANALA_FOR_ITEM_EXIT=$${?} ; MANALA_FOR_EXIT=$$(($${MANALA_FOR_EXIT} || $${MANALA_FOR_ITEM_EXIT})) ; \
+			$(eval MANALA_FOR_HOOK = $(value MANALA_FOR_ITEM_END_HOOK)) $(MANALA_FOR_HOOK) \
 	) \
-	exit $$MANALA_FOR_EXIT
+	[ $${MANALA_FOR_EXIT} -eq 0 ] )
 endef
 
 ######
