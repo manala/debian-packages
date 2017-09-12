@@ -1,16 +1,17 @@
 MANALA_TRAVIS_FOR_ITEM_START_HOOK = \
-  printf "travis_fold:start:$$$$MANALA_FOR_ITEM\n" ; \
+  MANALA_TRAVIS_FOLD=`echo $$MANALA_FOR_ITEM | sed -E 's/[^-_A-Za-z0-9]+/./g'` ; \
+  printf "travis_fold:start:$$MANALA_TRAVIS_FOLD\n" ; \
   MANALA_TRAVIS_TIME_ID=$(call rand) ; \
   MANALA_TRAVIS_TIME_START=$(call date_nano) ; \
-  printf "travis_time:start:$$$$MANALA_TRAVIS_TIME_ID\n" ;
+  printf "travis_time:start:$$MANALA_TRAVIS_TIME_ID\n" ;
 
 MANALA_FOR_ITEM_START_HOOK += $(if $(TRAVIS),$(MANALA_TRAVIS_FOR_ITEM_START_HOOK))
 
 MANALA_TRAVIS_FOR_ITEM_END_HOOK = \
-	if [ $$$$MANALA_FOR_ITEM_EXIT -eq 0 ]; then \
-		printf "travis_fold:end:$$$$MANALA_FOR_ITEM\n" ; \
+	if [ $$MANALA_FOR_ITEM_EXIT -eq 0 ]; then \
+		printf "travis_fold:end:$$MANALA_TRAVIS_FOLD\n" ; \
 	fi ; \
   MANALA_TRAVIS_TIME_FINISH=$(call date_nano) ; \
-  printf "travis_time:end:$$$$MANALA_TRAVIS_TIME_ID:start=$$$$MANALA_TRAVIS_TIME_START,finish=$$$$MANALA_TRAVIS_TIME_FINISH,duration=$$$$(($$$$MANALA_TRAVIS_TIME_FINISH-$$$$MANALA_TRAVIS_TIME_START))\n" ;
+	printf "travis_time:end:$$MANALA_TRAVIS_TIME_ID:start=$$MANALA_TRAVIS_TIME_START,finish=$$MANALA_TRAVIS_TIME_FINISH,duration=$$(($$MANALA_TRAVIS_TIME_FINISH-$$MANALA_TRAVIS_TIME_START))\n" ;
 
 MANALA_FOR_ITEM_END_HOOK += $(if $(TRAVIS),$(MANALA_TRAVIS_FOR_ITEM_END_HOOK))

@@ -4,12 +4,17 @@
 # Manala #
 ##########
 
-MANALA_DIR = $(abspath $(patsubst %/make/Makefile,%,$(firstword $(filter %manala/make/Makefile,$(MAKEFILE_LIST)))))
+MANALA_DIR = $(abspath $(patsubst %/make/Makefile,%,$(firstword $(filter %.manala/make/Makefile,$(MAKEFILE_LIST)))))
 
 include \
 	$(MANALA_DIR)/make/Makefile.manala \
 	$(MANALA_DIR)/make/Makefile.travis \
 	$(MANALA_DIR)/make/Makefile.gitsplit
+
+-include \
+	$(MANALA_CURRENT_DIR)/.env
+
+MANALA_VERBOSE := $(if $(VERBOSE),$(VERBOSE),$(MANALA_VERBOSE))
 
 ############
 # Packages #
@@ -30,14 +35,14 @@ BUILD_HELP = \
 
 build:
 	$(call for,PACKAGE,$(if $(PACKAGES),$(call uniq,$(PACKAGES)),$(PACKAGES_ALL)), \
-		$$(call log,Package \"$$(PACKAGE)\"); \
+		$$(call log,Package \"$$(PACKAGE)\") ; \
 		$$(call in,$$(PACKAGE),$$(PACKAGES_ALL), \
 			$$(MAKE) --silent --directory=$$(PACKAGE) build, \
 			$$(call log_warning,Package \"$$(PACKAGE)\" is not available) \
 		) \
 	)
 
-BUILD_HELP += $(call help,build.diff,Build diff packages)
+BUILD_HELP += $(call help,build.diff,Build packages - Diff)
 build.diff: PACKAGES = $(PACKAGES_DIFF)
 build.diff: build
 
