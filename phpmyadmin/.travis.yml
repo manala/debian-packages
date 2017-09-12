@@ -10,9 +10,12 @@ services:
   - docker
 
 env:
-  - DISTRIBUTIONS=wheezy
-  - DISTRIBUTIONS=jessie
-  - DISTRIBUTIONS=stretch
+  global:
+    - VERBOSE=1
+  matrix:
+    - DISTRIBUTIONS=wheezy
+    - DISTRIBUTIONS=jessie
+    - DISTRIBUTIONS=stretch
 
 script:
   - make build

@@ -20,7 +20,7 @@ PACKAGE_DISTRIBUTIONS                = jessie stretch
 
 package.checkout:
 	$(call log,Checkout)
-	debsnap --force --verbose --destdir $(PACKAGE_BUILD_DIR) $(PACKAGE) $(call package_debian_version)
+	debsnap $(call verbose, , ,--verbose) --force --destdir $(PACKAGE_BUILD_DIR) $(PACKAGE) $(call package_debian_version)
 	dpkg-source -x $(PACKAGE_BUILD_DIR)/$(PACKAGE)_$(call package_debian_file).dsc $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 
 package.prepare:
@@ -32,4 +32,4 @@ package.prepare:
 package.build:
 	$(call log,Build)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
-		&& debuild -us -uc
+		&& debuild --no-lintian -us -uc $(call verbose,>/dev/null 2>&1,>/dev/null, )

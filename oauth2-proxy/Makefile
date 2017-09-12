@@ -17,17 +17,19 @@ PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
 package.checkout:
 	$(call log,Checkout)
-	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
-	curl -L $(PACKAGE_SOURCE) \
-		| bsdtar -xvf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
+	mkdir $(call verbose, , ,--verbose) $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	curl $(call verbose,--silent,--silent --show-error, ) --location $(PACKAGE_SOURCE) \
+		| bsdtar $(call verbose, , ,-v) -xf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
 
 package.prepare:
 	$(call log,Prepare)
-	mv $(PACKAGE_BUILD_DIR)/$(PACKAGE)/oauth2_proxy $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
-	chmod 755 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
-	cp -R $(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
+	mv $(call verbose, , ,--verbose) \
+		$(PACKAGE_BUILD_DIR)/$(PACKAGE)/oauth2_proxy $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
+	chmod $(call verbose, , ,--verbose) 755 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
+	cp $(call verbose, , ,--verbose) --recursive \
+		$(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 package.build:
 	$(call log,Build)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
-		&& debuild -us -uc -b
+		&& debuild --no-lintian -us -uc -b $(call verbose,>/dev/null 2>&1,>/dev/null, )

@@ -15,14 +15,16 @@ PACKAGE_DISTRIBUTIONS = wheezy
 
 package.checkout:
 	$(call log,Checkout)
-	mkdir $(PACKAGE_BUILD_DIR)/$(PACKAGE)
-	cp -R $(PACKAGE_DIR)/src/* $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	mkdir $(call verbose, , ,--verbose) $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	cp $(call verbose, , ,--verbose) --recursive \
+		$(PACKAGE_DIR)/src/* $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 
 package.prepare:
 	$(call log,Prepare)
-	cp -R $(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
+	cp $(call verbose, , ,--verbose) --recursive \
+		$(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 package.build:
 	$(call log,Build)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
-		&& debuild -us -uc -b
+		&& debuild --no-lintian -us -uc -b $(call verbose,>/dev/null 2>&1,>/dev/null, )

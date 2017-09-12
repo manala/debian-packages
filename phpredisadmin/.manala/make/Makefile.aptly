@@ -8,8 +8,8 @@
 # MANALA_APTLY_REPOSITORY: Aptly repository
 
 define aptly_deploy
-  scp $(MANALA_APTLY_PACKAGES) $(MANALA_APTLY_HOST):/tmp
-  ssh $(MANALA_APTLY_HOST) -- sudo -u $(MANALA_APTLY_USER) aptly repo add $(MANALA_APTLY_REPOSITORY) /tmp/$(notdir $(MANALA_APTLY_PACKAGES))
-  ssh $(MANALA_APTLY_HOST) -- sudo -u $(MANALA_APTLY_USER) aptly publish update $(MANALA_APTLY_REPOSITORY)
+  scp $(MANALA_APTLY_PACKAGES) $(MANALA_APTLY_HOST):/tmp && \
+  ssh $(MANALA_APTLY_HOST) -- sudo -u $(MANALA_APTLY_USER) aptly repo add $(MANALA_APTLY_REPOSITORY) /tmp/$(notdir $(MANALA_APTLY_PACKAGES)) && \
+  ssh $(MANALA_APTLY_HOST) -- sudo -u $(MANALA_APTLY_USER) aptly publish update $(MANALA_APTLY_REPOSITORY) && \
   ssh $(MANALA_APTLY_HOST) -- rm /tmp/$(notdir $(MANALA_APTLY_PACKAGES))
 endef
