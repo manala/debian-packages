@@ -118,6 +118,22 @@ UPDATE_HELP += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,update.str
 update.stretch: DISTRIBUTIONS = stretch
 update.stretch: update
 
+##########
+# System #
+##########
+
+MANALA_HELP += $(call host,build,$(SYSTEM_HELP)\n)
+
+SYSTEM_HELP = \
+	$(call help_section,System) \
+	$(call help,system.update,Update system)
+
+system.update: DEBIAN_FRONTEND = noninteractive
+system.update: .host(build)
+	$(call log,Update)
+	sudo apt-get $(call verbose,-qq,-qq, ) update
+	sudo apt-get $(call verbose,-qq,-q -V,-V) -y dist-upgrade
+
 #########
 # Build #
 #########
@@ -149,7 +165,6 @@ build@build: .host(build) \
 	package.patch \
 	package.dependencies \
 	package.build \
-	package.lint \
 	package.dist
 
 BUILD_HELP_LOCAL += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,build.wheezy, Build package - Wheezy))
@@ -164,21 +179,47 @@ BUILD_HELP_LOCAL += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,build
 build.stretch: DISTRIBUTIONS = stretch
 build.stretch: build@local
 
-##########
-# System #
-##########
+########
+# Lint #
+########
 
-MANALA_HELP += $(call host,build,$(SYSTEM_HELP)\n)
+MANALA_HELP += $(call host,local,$(LINT_HELP_LOCAL)\n,$(LINT_HELP_BUILD)\n)
 
-SYSTEM_HELP = \
-	$(call help_section,System) \
-	$(call help,system.update,Update system)
+LINT_HELP       = $(call help_section,Lint)
+LINT_HELP_LOCAL = $(LINT_HELP) \
+	$(call help,lint,        Lint packages across distributions)
+LINT_HELP_BUILD = $(LINT_HELP) \
+	$(call help,lint,Lint package)
 
-system.update: DEBIAN_FRONTEND = noninteractive
-system.update: .host(build)
-	$(call log,Update)
-	sudo apt-get $(call verbose,-qq,-qq, ) update
-	sudo apt-get $(call verbose,-qq,-q -V,-V) -y dist-upgrade
+lint: .host_switch(lint)
+
+lint@local: .host(local)
+	$(call for,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
+		$$(call log,Distribution \"$$(DISTRIBUTION)\") ; \
+		$$(call in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
+			$$(call docker_make,lint@build), \
+			$$(call log_warning,Distribution \"$$(DISTRIBUTION)\" is not enabled) \
+		) \
+	)
+
+lint@build: .host(build)
+	$(call log,Lint)
+	$(foreach PACKAGE,$(wildcard $(PACKAGE_DIST_DIR)/*~$(DISTRIBUTION)*.deb), \
+		$(call verbose, ,basename $(PACKAGE) ; echo ;) \
+		$(call verbose, ,lintian $(PACKAGE) || true ; ) \
+	)
+
+LINT_HELP_LOCAL += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.wheezy, Lint package - Wheezy))
+lint.wheezy: DISTRIBUTIONS = wheezy
+lint.wheezy: lint@local
+
+LINT_HELP_LOCAL += $(call in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.jessie, Lint package - Jessie))
+lint.jessie: DISTRIBUTIONS = jessie
+lint.jessie: lint@local
+
+LINT_HELP_LOCAL += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.stretch,Lint package - Stretch))
+lint.stretch: DISTRIBUTIONS = stretch
+lint.stretch: lint@local
 
 ###########
 # Package #
@@ -222,14 +263,6 @@ package.dependencies: .host(build)
 
 PACKAGE_HELP += $(call help,package.build,       Package - Build)
 package.build: .host(build)
-
-PACKAGE_HELP += $(call help,package.lint,        Package - Lint)
-package.lint: .host(build)
-	$(call log,Lint)
-	$(foreach PACKAGE,$(wildcard $(PACKAGE_BUILD_DIR)/*~$(DISTRIBUTION)*.deb), \
-		$(call verbose, ,basename $(PACKAGE) ; echo ;) \
-		$(call verbose, ,lintian $(PACKAGE) || true ; ) \
-	)
 
 PACKAGE_HELP += $(call help,package.dist,        Package - Dist)
 package.dist: .host(build)

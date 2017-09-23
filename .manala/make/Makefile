@@ -35,7 +35,7 @@ BUILD_HELP = \
 
 build:
 	$(call for,PACKAGE,$(if $(PACKAGES),$(call uniq,$(PACKAGES)),$(PACKAGES_ALL)), \
-		$$(call log,Package \"$$(PACKAGE)\") ; \
+		$$(call log,Build \"$$(PACKAGE)\") ; \
 		$$(call in,$$(PACKAGE),$$(PACKAGES_ALL), \
 			$$(MAKE) --silent --directory=$$(PACKAGE) build, \
 			$$(call log_warning,Package \"$$(PACKAGE)\" is not available) \
@@ -45,6 +45,29 @@ build:
 BUILD_HELP += $(call help,build.diff,Build packages - Diff)
 build.diff: PACKAGES = $(PACKAGES_DIFF)
 build.diff: build
+
+########
+# Lint #
+########
+
+MANALA_HELP += $(LINT_HELP)\n
+
+LINT_HELP = \
+	$(call help_section,Lint) \
+	$(call help,lint,     Lint packages)
+
+lint:
+	$(call for,PACKAGE,$(if $(PACKAGES),$(call uniq,$(PACKAGES)),$(PACKAGES_ALL)), \
+		$$(call log,Lint \"$$(PACKAGE)\") ; \
+		$$(call in,$$(PACKAGE),$$(PACKAGES_ALL), \
+			$$(MAKE) --silent --directory=$$(PACKAGE) lint, \
+			$$(call log_warning,Package \"$$(PACKAGE)\" is not available) \
+		) \
+	)
+
+LINT_HELP += $(call help,lint.diff,Lint packages - Diff)
+lint.diff: PACKAGES = $(PACKAGES_DIFF)
+lint.diff: lint
 
 #########
 # Split #
