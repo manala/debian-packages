@@ -19,6 +19,7 @@ env:
 
 script:
   - make build.diff
+  - make lint.diff
 
 notifications:
   webhooks:

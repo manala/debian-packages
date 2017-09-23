@@ -19,6 +19,7 @@ env:
 
 script:
   - make build
+  - make lint
 
 notifications:
   webhooks:
