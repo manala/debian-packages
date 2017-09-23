@@ -1,3 +1,9 @@
+vault (0.8.2-manala2~jessie1) unstable; urgency=low
+
+  * Add missing dependencies
+
+ -- Manala <contact@manala.io>  Sat, 23 Sep 2017 21:37:27 +0000
+
 vault (0.8.2-manala1~jessie1) unstable; urgency=low
 
   * Upstream update
@@ -16,7 +22,7 @@ vault (0.7.0-manala1~jessie1) unstable; urgency=low
 
  -- Manala <contact@manala.io>  Wed, 22 Mar 2017 15:47:30 +0000
 
- vault (0.6.3-manala3~jessie1) unstable; urgency=low
+vault (0.6.3-manala3~jessie1) unstable; urgency=low
 
   * Remove vault group creation
   * Run vault server as vault:nogroup

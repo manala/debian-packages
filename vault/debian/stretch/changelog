@@ -1,3 +1,9 @@
+vault (0.8.2-manala2~stretch1) unstable; urgency=low
+
+  * Add missing dependencies
+
+ -- Manala <contact@manala.io>  Sat, 23 Sep 2017 21:37:27 +0000
+
 vault (0.8.2-manala1~stretch1) unstable; urgency=low
 
   * Upstream update

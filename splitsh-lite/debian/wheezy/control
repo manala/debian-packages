@@ -8,7 +8,7 @@ Homepage: https://github.com/splitsh/lite
 
 Package: splitsh-lite
 Architecture: amd64
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Split your monorepo into many repos
  Monolithic Repositories to Many Repositories made easy tl;dr: splitsh-lite
  is a replacement for the subtree split Git built-in command that is much

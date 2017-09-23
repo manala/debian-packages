@@ -8,7 +8,7 @@ Homepage: https://the.exa.website/
 
 Package: exa
 Architecture: amd64
-Depends: ${misc:Depends}, libhttp-parser2.1
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Modern replacement for ls
  Uses colours for information by default, helping you distinguish between many
  types of files, such as whether you are the owner, or in the owning group.
