@@ -1,3 +1,9 @@
+cgroupfs-mount (1.0.1-manala2~wheezy1) unstable; urgency=low
+
+  * Fix dependencies
+
+ -- Manala <contact@manala.io>  Sun, 24 Sep 2017 12:18:39 +0000
+
 cgroupfs-mount (1.0.1-manala1~wheezy1) unstable; urgency=low
 
   * Support wheezy+upstart

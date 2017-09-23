@@ -1,3 +1,9 @@
+splitsh-lite (1.0.1-manala2~stretch1) unstable; urgency=low
+
+  * Add missing dynamic dependencies
+
+ -- Manala <contact@manala.io>  Sat, 23 Sep 2017 21:29:10 +0000
+
 splitsh-lite (1.0.1-manala1~stretch1) unstable; urgency=low
 
   * Initial release

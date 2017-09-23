@@ -10,6 +10,7 @@ Homepage: http://phantomjs.org/
 Package: phantomjs
 Architecture: amd64
 Depends: ${misc:Depends},
+         ${shlibs:Depends},
          lsb-base (>= 3.2-14),
          libfontconfig
 Description: Scriptable Headless WebKit
