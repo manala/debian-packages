@@ -205,8 +205,8 @@ lint@local: .host(local)
 lint@build: .host(build)
 	$(call log,Lint)
 	$(foreach PACKAGE,$(wildcard $(PACKAGE_DIST_DIR)/*~$(DISTRIBUTION)*.deb), \
-		$(call verbose, ,basename $(PACKAGE) ; echo ;) \
-		$(call verbose, ,lintian $(PACKAGE) || true ; ) \
+		$(call verbose, ,basename $(PACKAGE) ; echo ; ) \
+		lintian $(call verbose, , , ,--info) $(PACKAGE) || true ; \
 	)
 
 LINT_HELP_LOCAL += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.wheezy, Lint package - Wheezy))
@@ -249,7 +249,7 @@ package.patch: .host(build)
 	$(call log,Patch)
 	$(foreach PATCH,$(PATCHES), \
 		cd $(PACKAGE_BUILD_DIR) && \
-		patch $(call verbose,--quiet,--quiet,--verbose) --strip=0 < $(PATCH) \
+		patch $(call verbose,--quiet,--quiet,--verbose) --strip=0 < $(PATCH) ; \
 	)
 
 PACKAGE_HELP += $(call help,package.dependencies,Package - Dependencies)
@@ -268,12 +268,12 @@ PACKAGE_HELP += $(call help,package.dist,        Package - Dist)
 package.dist: .host(build)
 	$(call log,Dist)
 	$(foreach PACKAGE,$(wildcard $(PACKAGE_BUILD_DIR)/*~$(DISTRIBUTION)*.deb), \
-		$(call verbose, ,basename $(PACKAGE) ; echo ;) \
+		$(call verbose, ,basename $(PACKAGE) ; echo ; ) \
 		$(call verbose, , , \
 			dpkg --info $(PACKAGE) ; echo ; \
 			dpkg --contents $(PACKAGE) ; echo ; \
 		) \
-		mv $(call verbose, , ,--verbose) $(PACKAGE) $(PACKAGE_DIST_DIR) \
+		mv $(call verbose, , ,--verbose) $(PACKAGE) $(PACKAGE_DIST_DIR) ; \
 	)
 
 ##########
