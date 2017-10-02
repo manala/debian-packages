@@ -19,7 +19,7 @@ package.checkout:
 	$(call log,Checkout)
 
 	# Node
-	$(call eq,wheezy,$(DISTRIBUTION), \
+	$(call if_eq,wheezy,$(DISTRIBUTION), \
 		curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -, \
 		curl -sL https://deb.nodesource.com/setup_8.x | sudo bash - \
 	)

@@ -9,6 +9,13 @@ define docker_run
 		$(if $(MANALA_DOCKER_HOST),--hostname $(MANALA_DOCKER_HOST)) \
 		--env USER_ID=$(shell id -u) \
 		--env GROUP_ID=$(shell id -g) \
+		$(if $(MANALA_DOCKER_VOLUMES), \
+			$(foreach \
+				VOLUME,\
+				$(MANALA_DOCKER_VOLUMES),\
+				--volume $(VOLUME) \
+			) \
+		) \
 		$(if $(MANALA_DOCKER_ENV), \
 			$(foreach \
 				ENV,\

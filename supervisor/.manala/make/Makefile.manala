@@ -1,30 +1,33 @@
 .DEFAULT_GOAL := help
-.PHONY: help confirm manala
+.PHONY: help manala
+
+#############################
+# GNU Make Standard Library #
+#############################
+
+include $(MANALA_DIR)/make/gmsl/gmsl
 
 #############
 # Variables #
 #############
-
-# !!! Please, don't expose MANALA_* variables in your project, !!!
-# !!! use your template Makefile to define custom mapped ones  !!!
 
 # MANALA_CURRENT_DIR [String]  Current directory
 # MANALA_DIR         [String]  Manala base directory
 # MANALA_HELP        [String]  Help content
 # MANALA_INTERACTIVE [Empty]|1 Run in interactive mode
 
-MANALA_CONTACT_NAME = Manala
-MANALA_CONTACT_MAIL = contact@manala.io
+MANALA_CONTACT_NAME := Manala
+MANALA_CONTACT_MAIL := contact@manala.io
 
 # Current dir
-MANALA_CURRENT_DIR = $(CURDIR)
+MANALA_CURRENT_DIR := $(CURDIR)
 
 # Colors
-MANALA_COLOR_RESET   = \033[0m
-MANALA_COLOR_ERROR   = \033[31m
-MANALA_COLOR_INFO    = \033[32m
-MANALA_COLOR_WARNING = \033[33m
-MANALA_COLOR_COMMENT = \033[36m
+MANALA_COLOR_RESET   := \033[0m
+MANALA_COLOR_ERROR   := \033[31m
+MANALA_COLOR_INFO    := \033[32m
+MANALA_COLOR_WARNING := \033[33m
+MANALA_COLOR_COMMENT := \033[36m
 
 ########
 # Help #
@@ -107,7 +110,7 @@ MANALA_VERBOSE ?= 2
 #   $(call verbose,foo)     = foo
 
 define verbose
-$(call eq,$(MANALA_VERBOSE),0,$(1),$(call eq,$(MANALA_VERBOSE),1,$(if $(2),$(2),$(1)),$(call eq,$(MANALA_VERBOSE),2,$(if $(3),$(3),$(if $(2),$(2),$(1))),$(if $(4),$(4),$(if $(3),$(3),$(if $(2),$(2),$(1)))))))
+$(call if_eq,$(MANALA_VERBOSE),0,$(1),$(call if_eq,$(MANALA_VERBOSE),1,$(if $(2),$(2),$(1)),$(call if_eq,$(MANALA_VERBOSE),2,$(if $(3),$(3),$(if $(2),$(2),$(1))),$(if $(4),$(4),$(if $(3),$(3),$(if $(2),$(2),$(1)))))))
 endef
 
 #################
@@ -123,39 +126,49 @@ endef
 #   $(call log_error,Foo bar)       = [11:06:20] [target] (╯°□°)╯︵ ┻━┻ Foo bar
 
 define message
-	$(call verbose,:,printf "$(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n")
+	$(call verbose,:,printf "$(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n")
 endef
 
 define message_warning
-	$(call verbose,:,printf "$(MANALA_COLOR_WARNING)¯\_(ツ)_/¯ $(1)$(MANALA_COLOR_RESET)\n\n")
+	$(call verbose,:,printf "$(MANALA_COLOR_WARNING)¯\_(ツ)_/¯ $(1)$(MANALA_COLOR_RESET)\n")
 endef
 
 define message_error
-	$(call verbose,:,printf "$(MANALA_COLOR_ERROR)(╯°□°)╯︵ ┻━┻  $(1)$(MANALA_COLOR_RESET)\n\n")
+	$(call verbose,:,printf "$(MANALA_COLOR_ERROR)(╯°□°)╯︵ ┻━┻  $(1)$(MANALA_COLOR_RESET)\n")
 endef
 
 define log
-	$(call verbose,:,printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n\n")
+	$(call verbose,:,printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_INFO)$(1)$(MANALA_COLOR_RESET)\n")
 endef
 
 define log_warning
-	$(call verbose,:,printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_WARNING)¯\_(ツ)_/¯ $(1)$(MANALA_COLOR_RESET)\n\n")
+	$(call verbose,:,printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_WARNING)¯\_(ツ)_/¯ $(1)$(MANALA_COLOR_RESET)\n")
 endef
 
 define log_error
-	$(call verbose,:,printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_ERROR)(╯°□°)╯︵ ┻━┻  $(1)$(MANALA_COLOR_RESET)\n\n")
+	$(call verbose,:,printf "[$(MANALA_COLOR_COMMENT)$(call time)$(MANALA_COLOR_RESET)] [$(MANALA_COLOR_COMMENT)$(@)$(MANALA_COLOR_RESET)] $(MANALA_COLOR_ERROR)(╯°□°)╯︵ ┻━┻  $(1)$(MANALA_COLOR_RESET)\n")
 endef
 
-######
-# If #
-######
+######################
+# Special Characters #
+######################
 
-# Usage:
-#   target: .if(FOO BAR)
-#   	# Do something with $(FOO) and $(BAR)...
+# Hide special characters from Make's parser
+# See: http://blog.jgc.org/2007/06/escaping-comma-and-space-in-gnu-make.html
 
-.if(%):
-	$(if $($(*)),,$(call message_error,\"$(*)\" is empty or not set); exit 1)
+, := ,
+space :=
+space +=
+$(space) :=
+$(space) +=
+
+########
+# Fail #
+########
+
+define fail_unless
+	$(if $($(1)),,$(call message_error,\"$(1)\" is empty or not set); exit 1)
+endef
 
 ###########
 # Confirm #
@@ -167,63 +180,108 @@ define confirm
 	printf "\n"
 endef
 
-#######
-# For #
-#######
+######
+# If #
+######
+
+# If element in list list
 
 # Usage:
-#   $(call for,ITEM,foo bar baz,echo $$(ITEM)) = foo\nbar\nbaz\n
+#   $(call if_in,foo,foo bar baz,Yes,No) = Yes
+#   $(call if_in,qux,foo bar baz,Yes,No) = No
 
-MANALA_FOR_ITEM_START_HOOK =
-MANALA_FOR_ITEM_END_HOOK   =
+define if_in
+$(if $(call set_is_member,$(1),$(2)),$(3),$(4))
+endef
 
-define for
-	( MANALA_FOR_EXIT=0 ; \
+# If equal
+
+# Usage:
+#   $(call if_eq,1,1,Yes,No) = Yes
+#   $(call if_eq,1,2,Yes,No) = No
+
+define if_eq
+$(if $(call seq,$(1),$(2)),$(3),$(4))
+endef
+
+# If number greater than or equal
+
+# Usage:
+#   $(call if_gte,1,1,Yes,No) = Yes
+#   $(call if_gte,2,1,Yes,No) = Yes
+#   $(call if_gte,2,1,Yes,No) = No
+
+define if_gte
+$(if $(call gte,$(1),$(2)),$(3),$(4))
+endef
+
+########
+# List #
+########
+
+# Usage:
+#   $(call list_uniq,foo bar bar baz) = foo bar
+
+define list_uniq
+$(call uniq,$(1))
+endef
+
+# Usage:
+#   $(call list_split,:,foo:bar) = foo bar
+
+define list_split
+$(call split,$(1),$(2))
+endef
+
+# Usage:
+#   $(call list_first,foo bar) = foo
+
+define list_first
+$(call first,$(1))
+endef
+
+# Usage:
+#   $(call list_last,foo bar) = bar
+
+define list_last
+$(call last,$(1))
+endef
+
+# Usage:
+#   $(call list_loop,ITEM,foo bar baz,$$(ITEM)) = foo\nbar\nbaz\n
+
+define list_loop
+	( MANALA_LIST_LOOP_EXIT=0 ; \
 	$(foreach \
 		$(1), \
 		$(2), \
-			MANALA_FOR_ITEM=$($(1)) ; \
-			$(eval MANALA_FOR_HOOK = $(value MANALA_FOR_ITEM_START_HOOK)) $(MANALA_FOR_HOOK) \
-			( $(eval MANALA_FOR := $(3)) $(MANALA_FOR) ) ; \
-			MANALA_FOR_ITEM_EXIT=$${?} ; MANALA_FOR_EXIT=$$(($${MANALA_FOR_EXIT} || $${MANALA_FOR_ITEM_EXIT})) ; \
-			$(eval MANALA_FOR_HOOK = $(value MANALA_FOR_ITEM_END_HOOK)) $(MANALA_FOR_HOOK) \
+			MANALA_LIST_LOOP_ITEM=$($(1)) ; \
+			$(foreach MANALA_LIST_LOOP_START_HOOK,$(4),$(eval MANALA_LIST_LOOP_HOOK = $(value MANALA_LIST_LOOP_HOOK_START_$(MANALA_LIST_LOOP_START_HOOK))) $(MANALA_LIST_LOOP_HOOK)) \
+			( $(eval MANALA_LIST_LOOP := $(3)) $(MANALA_LIST_LOOP) ) ; \
+			MANALA_LIST_LOOP_ITEM_EXIT=$${?} ; MANALA_LIST_LOOP_EXIT=$$(($${MANALA_LIST_LOOP_EXIT} || $${MANALA_LIST_LOOP_ITEM_EXIT})) ; \
+			$(foreach MANALA_LIST_LOOP_END_HOOK,$(4),$(eval MANALA_LIST_LOOP_HOOK = $(value MANALA_LIST_LOOP_HOOK_END_$(MANALA_LIST_LOOP_END_HOOK))) $(MANALA_LIST_LOOP_HOOK)) \
 	) \
-	[ $${MANALA_FOR_EXIT} -eq 0 ] )
+	[ $${MANALA_LIST_LOOP_EXIT} -eq 0 ] )
 endef
 
-######
-# In #
-######
+MANALA_LIST_LOOP_HOOK_START_DEBUG = printf "$(MANALA_COLOR_COMMENT)===$(MANALA_COLOR_RESET) Loop start \"$(MANALA_COLOR_INFO)$${MANALA_LIST_LOOP_ITEM}$(MANALA_COLOR_RESET)\" $(MANALA_COLOR_COMMENT)===$(MANALA_COLOR_RESET)\n" ;
+MANALA_LIST_LOOP_HOOK_END_DEBUG   = printf "$(MANALA_COLOR_COMMENT)===$(MANALA_COLOR_RESET) Loop stop \"$(MANALA_COLOR_INFO)$${MANALA_LIST_LOOP_ITEM}$(MANALA_COLOR_RESET)\" $(MANALA_COLOR_COMMENT)===$(MANALA_COLOR_RESET) Exit \"$(MANALA_COLOR_INFO)$${MANALA_LIST_LOOP_ITEM_EXIT}$(MANALA_COLOR_RESET)\" $(MANALA_COLOR_COMMENT)===$(MANALA_COLOR_RESET)\n" ;
 
 # Usage:
-#   $(call in,foo,foo bar baz,Yes,No) = Yes
-#   $(call in,qux,foo bar baz,Yes,No) = No
+#   $(call list_partition,1,3,aaa zzz eee rrr ttt yyy uuu iii ooo ppp) = aaa zzz eee
+#   $(call list_partition,2,3,aaa zzz eee rrr ttt yyy uuu iii ooo ppp) = rrr ttt yyy
+#   $(call list_partition,3,3,aaa zzz eee rrr ttt yyy uuu iii ooo ppp) = uuu iii ooo ppp
 
-define in
-$(if $(filter $(1),$(2)),$(3),$(4))
+define list_partition
+$(wordlist $(call list_partition_index,$(1),$(2),$(words $(3))),$(call plus,$(call list_partition_index,$(1),$(2),$(words $(3))),$(call list_partition_size,$(1),$(2),$(words $(3)))),$(3))
 endef
 
-########
-# Uniq #
-########
-
-# Usage:
-#   $(call uniq,foo bar bar baz) = foo bar baz
-
-define uniq
-$(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
+define list_partition_index
+$(call if_gte,$(3),$(2),$(call plus,$(call multiply,$(call subtract,$(1),1),$(call divide,$(3),$(2))),1),$(1))
 endef
 
-######
-# Eq #
-######
-
-# Usage:
-#   $(call eq,foo,foo,Yes,No) = Yes
-#   $(call eq,foo,bar,Yes,No) = No
-
-define eq
-$(if $(if $(or $(1),$(2)),$(and $(findstring $(1),$(2)),$(findstring $(2),$(1))),1),$(3),$(4))
+define list_partition_size
+$(call if_eq,$(1),$(2),$(3),$(call subtract,$(call if_gte,$(3),$(2),$(call divide,$(3),$(2)),1,),1))
 endef
 
 ########

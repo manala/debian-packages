@@ -1,7 +1,5 @@
 language: generic
 
-sudo: required
-
 branches:
   only:
     - master
@@ -13,9 +11,12 @@ env:
   global:
     - VERBOSE=1
   matrix:
-    - DISTRIBUTIONS=wheezy
-    - DISTRIBUTIONS=jessie
-    - DISTRIBUTIONS=stretch
+    - DISTRIBUTIONS=wheezy  PART=1/2
+    - DISTRIBUTIONS=wheezy  PART=2/2
+    - DISTRIBUTIONS=jessie  PART=1/2
+    - DISTRIBUTIONS=jessie  PART=2/2
+    - DISTRIBUTIONS=stretch PART=1/2
+    - DISTRIBUTIONS=stretch PART=2/2
 
 script:
   - make build.diff
