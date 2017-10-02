@@ -1,10 +1,10 @@
-.PHONY: update build deploy
+.PHONY: sh update build lint deploy
 
 ##########
 # Manala #
 ##########
 
-MANALA_DIR = $(abspath $(patsubst %/make/Makefile,%,$(firstword $(filter %.manala/make/Makefile,$(MAKEFILE_LIST)))))
+MANALA_DIR := $(abspath $(patsubst %/make/Makefile,%,$(firstword $(filter %.manala/make/Makefile,$(MAKEFILE_LIST)))))
 
 include \
 	$(MANALA_DIR)/make/Makefile.manala \
@@ -22,9 +22,9 @@ MANALA_VERBOSE := $(if $(VERBOSE),$(VERBOSE),$(MANALA_VERBOSE))
 # Package #
 ###########
 
-PACKAGE_DIR       = $(MANALA_CURRENT_DIR)
-PACKAGE_BUILD_DIR = $(PACKAGE_DIR)/build
-PACKAGE_DIST_DIR  = $(PACKAGE_DIR)/dist
+PACKAGE_DIR       := $(MANALA_CURRENT_DIR)
+PACKAGE_BUILD_DIR := $(PACKAGE_DIR)/build
+PACKAGE_DIST_DIR  := $(PACKAGE_DIR)/dist
 
 ##########
 # Debian #
@@ -64,26 +64,27 @@ MANALA_DOCKER_ENV       = \
 # Sh #
 ######
 
-MANALA_HELP += $(call host,local,$(SH_HELP)\n)
+MANALA_HELP += $(call if_host,local,$(SH_HELP)\n)
 
 SH_HELP = \
 	$(call help_section,Build host shell)
 
-sh: .host(local) .if(DISTRIBUTION)
-	$(call in,$(DISTRIBUTION),$(PACKAGE_DISTRIBUTIONS), \
+sh: .host_restrict(local)
+	$(call fail_unless,DISTRIBUTION)
+	$(call if_in,$(DISTRIBUTION),$(PACKAGE_DISTRIBUTIONS), \
 		$(call docker_shell), \
-		$(call log_warning,Distribution \"$(DISTRIBUTION)\" is not enabled) \
+		$(call log_warning,Shell on \"$(DISTRIBUTION)\" is not supported) \
 	)
 
-SH_HELP += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.wheezy, Open shell on build host - Wheezy))
+SH_HELP += $(call if_in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.wheezy, Open shell on build host - Wheezy))
 sh.wheezy: DISTRIBUTION = wheezy
 sh.wheezy: sh
 
-SH_HELP += $(call in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.jessie, Open shell on build host - Jessie))
+SH_HELP += $(call if_in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.jessie, Open shell on build host - Jessie))
 sh.jessie: DISTRIBUTION = jessie
 sh.jessie: sh
 
-SH_HELP += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.stretch,Open shell on build host - Stretch))
+SH_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.stretch,Open shell on build host - Stretch))
 sh.stretch: DISTRIBUTION = stretch
 sh.stretch: sh
 
@@ -91,30 +92,30 @@ sh.stretch: sh
 # Update #
 ##########
 
-MANALA_HELP += $(call host,local,$(UPDATE_HELP)\n)
+MANALA_HELP += $(call if_host,local,$(UPDATE_HELP)\n)
 
 UPDATE_HELP = \
 	$(call help_section,Build host update) \
 	$(call help,update,        Update build hosts across distributions)
 
-update: .host(local)
-	$(call for,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
-		$$(call log,Distribution \"$$(DISTRIBUTION)\") ; \
-		$$(call in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
-			$$(call docker_pull), \
-			$$(call log_warning,Distribution \"$$(DISTRIBUTION)\" is not enabled) \
+update: .host_restrict(local)
+	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(DISTRIBUTIONS),$(PACKAGE_DISTRIBUTIONS)), \
+		$$(call if_in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
+			$$(call log,Update \"$$(DISTRIBUTION)\") ; \
+				$$(call docker_pull), \
+			$$(call log_warning,Update \"$$(DISTRIBUTION)\" is not supported) \
 		) \
 	)
 
-UPDATE_HELP += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,update.wheezy, Update build host - Wheezy))
+UPDATE_HELP += $(call if_in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,update.wheezy, Update build host - Wheezy))
 update.wheezy: DISTRIBUTIONS = wheezy
 update.wheezy: update
 
-UPDATE_HELP += $(call in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,update.jessie, Update build host - Jessie))
+UPDATE_HELP += $(call if_in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,update.jessie, Update build host - Jessie))
 update.jessie: DISTRIBUTIONS = jessie
 update.jessie: update
 
-UPDATE_HELP += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,update.stretch,Update build host - Stretch))
+UPDATE_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,update.stretch,Update build host - Stretch))
 update.stretch: DISTRIBUTIONS = stretch
 update.stretch: update
 
@@ -122,14 +123,14 @@ update.stretch: update
 # System #
 ##########
 
-MANALA_HELP += $(call host,build,$(SYSTEM_HELP)\n)
+MANALA_HELP += $(call if_host,build,$(SYSTEM_HELP)\n)
 
 SYSTEM_HELP = \
 	$(call help_section,System) \
 	$(call help,system.update,Update system)
 
 system.update: DEBIAN_FRONTEND = noninteractive
-system.update: .host(build)
+system.update: .host_restrict(build)
 	$(call log,Update)
 	sudo apt-get $(call verbose,-qq,-qq, ) update
 	sudo apt-get $(call verbose,-qq,-q -V,-V) -y dist-upgrade
@@ -138,7 +139,7 @@ system.update: .host(build)
 # Build #
 #########
 
-MANALA_HELP += $(call host,local,$(BUILD_HELP_LOCAL)\n,$(BUILD_HELP_BUILD)\n)
+MANALA_HELP += $(call if_host,local,$(BUILD_HELP_LOCAL)\n,$(BUILD_HELP_BUILD)\n)
 
 BUILD_HELP       = $(call help_section,Build)
 BUILD_HELP_LOCAL = $(BUILD_HELP) \
@@ -148,16 +149,16 @@ BUILD_HELP_BUILD = $(BUILD_HELP) \
 
 build: .host_switch(build)
 
-build@local: .host(local)
-	$(call for,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
-		$$(call log,Distribution \"$$(DISTRIBUTION)\") ; \
-		$$(call in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
-			$$(call docker_make,build@build), \
-			$$(call log_warning,Distribution \"$$(DISTRIBUTION)\" is not enabled) \
+build@local: .host_restrict(local)
+	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
+		$$(call if_in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
+			$$(call log,Build \"$$(PACKAGE)\" on \"$$(DISTRIBUTION)\") ; \
+				$$(call docker_make,build@build), \
+			$$(call log_warning,Build \"$$(PACKAGE)\" on \"$$(DISTRIBUTION)\" is not supported) \
 		) \
 	)
 
-build@build: .host(build) \
+build@build: .host_restrict(build) \
 	system.update \
 	package.clean \
 	package.checkout \
@@ -167,15 +168,15 @@ build@build: .host(build) \
 	package.build \
 	package.dist
 
-BUILD_HELP_LOCAL += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,build.wheezy, Build package - Wheezy))
+BUILD_HELP_LOCAL += $(call if_in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,build.wheezy, Build package - Wheezy))
 build.wheezy: DISTRIBUTIONS = wheezy
 build.wheezy: build@local
 
-BUILD_HELP_LOCAL += $(call in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,build.jessie, Build package - Jessie))
+BUILD_HELP_LOCAL += $(call if_in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,build.jessie, Build package - Jessie))
 build.jessie: DISTRIBUTIONS = jessie
 build.jessie: build@local
 
-BUILD_HELP_LOCAL += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,build.stretch,Build package - Stretch))
+BUILD_HELP_LOCAL += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,build.stretch,Build package - Stretch))
 build.stretch: DISTRIBUTIONS = stretch
 build.stretch: build@local
 
@@ -183,7 +184,7 @@ build.stretch: build@local
 # Lint #
 ########
 
-MANALA_HELP += $(call host,local,$(LINT_HELP_LOCAL)\n,$(LINT_HELP_BUILD)\n)
+MANALA_HELP += $(call if_host,local,$(LINT_HELP_LOCAL)\n,$(LINT_HELP_BUILD)\n)
 
 LINT_HELP       = $(call help_section,Lint)
 LINT_HELP_LOCAL = $(LINT_HELP) \
@@ -193,31 +194,30 @@ LINT_HELP_BUILD = $(LINT_HELP) \
 
 lint: .host_switch(lint)
 
-lint@local: .host(local)
-	$(call for,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
-		$$(call log,Distribution \"$$(DISTRIBUTION)\") ; \
-		$$(call in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
-			$$(call docker_make,lint@build), \
-			$$(call log_warning,Distribution \"$$(DISTRIBUTION)\" is not enabled) \
+lint@local: .host_restrict(local)
+	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
+		$$(call if_in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
+			$$(call log,Lint \"$$(PACKAGE)\" on \"$$(DISTRIBUTION)\") ; \
+				$$(call docker_make,lint@build), \
+			$$(call log_warning,Lint \"$$(PACKAGE)\" on \"$$(DISTRIBUTION)\" is not supported) \
 		) \
 	)
 
-lint@build: .host(build)
-	$(call log,Lint)
+lint@build: .host_restrict(build)
 	$(foreach PACKAGE,$(wildcard $(PACKAGE_DIST_DIR)/*~$(DISTRIBUTION)*.deb), \
 		$(call verbose, ,basename $(PACKAGE) ; echo ; ) \
 		lintian $(call verbose, , , ,--info) $(PACKAGE) || true ; \
 	)
 
-LINT_HELP_LOCAL += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.wheezy, Lint package - Wheezy))
+LINT_HELP_LOCAL += $(call if_in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.wheezy, Lint package - Wheezy))
 lint.wheezy: DISTRIBUTIONS = wheezy
 lint.wheezy: lint@local
 
-LINT_HELP_LOCAL += $(call in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.jessie, Lint package - Jessie))
+LINT_HELP_LOCAL += $(call if_in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.jessie, Lint package - Jessie))
 lint.jessie: DISTRIBUTIONS = jessie
 lint.jessie: lint@local
 
-LINT_HELP_LOCAL += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.stretch,Lint package - Stretch))
+LINT_HELP_LOCAL += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.stretch,Lint package - Stretch))
 lint.stretch: DISTRIBUTIONS = stretch
 lint.stretch: lint@local
 
@@ -225,27 +225,27 @@ lint.stretch: lint@local
 # Package #
 ###########
 
-MANALA_HELP += $(call host,build,$(PACKAGE_HELP))
+MANALA_HELP += $(call if_host,build,$(PACKAGE_HELP))
 
 PACKAGE_HELP = $(call help_section,Package)
 
 PACKAGE_HELP += $(call help,package.clean,       Package - Clean)
-package.clean: .host(build)
+package.clean: .host_restrict(build)
 	$(call log,Clean)
 	rm $(call verbose, , ,--verbose) --recursive --force $(PACKAGE_BUILD_DIR)/*
 	rm $(call verbose, , ,--verbose) --recursive --force $(PACKAGE_DIST_DIR)/*~$(DISTRIBUTION)*.deb
 
 PACKAGE_HELP += $(call help,package.checkout,    Package - Checkout)
-package.checkout: .host(build)
+package.checkout: .host_restrict(build)
 
 PACKAGE_HELP += $(call help,package.prepare,     Package - Prepare)
-package.prepare: .host(build)
+package.prepare: .host_restrict(build)
 
 # Create a patch (in build directory):
 #   $ diff -Naur [file] [file].patch > ../patches/[distribution]/XXX.[name].patch
 PACKAGE_HELP += $(call help,package.patch,       Package - Patch)
 package.patch: PATCHES = $(sort $(wildcard $(PACKAGE_DIR)/patches/$(DISTRIBUTION)/*.patch))
-package.patch: .host(build)
+package.patch: .host_restrict(build)
 	$(call log,Patch)
 	$(foreach PATCH,$(PATCHES), \
 		cd $(PACKAGE_BUILD_DIR) && \
@@ -253,7 +253,7 @@ package.patch: .host(build)
 	)
 
 PACKAGE_HELP += $(call help,package.dependencies,Package - Dependencies)
-package.dependencies: .host(build)
+package.dependencies: .host_restrict(build)
 	$(call log,Dependencies)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& mk-build-deps \
@@ -262,10 +262,10 @@ package.dependencies: .host(build)
 			debian/control $(call verbose,>/dev/null 2>&1,>/dev/null, )
 
 PACKAGE_HELP += $(call help,package.build,       Package - Build)
-package.build: .host(build)
+package.build: .host_restrict(build)
 
 PACKAGE_HELP += $(call help,package.dist,        Package - Dist)
-package.dist: .host(build)
+package.dist: .host_restrict(build)
 	$(call log,Dist)
 	$(foreach PACKAGE,$(wildcard $(PACKAGE_BUILD_DIR)/*~$(DISTRIBUTION)*.deb), \
 		$(call verbose, ,basename $(PACKAGE) ; echo ; ) \
@@ -285,30 +285,32 @@ MANALA_APTLY_USER       = $(DEPLOY_USER)
 MANALA_APTLY_PACKAGES   = $(PACKAGE_DIST_DIR)/*~$(DISTRIBUTION)*.deb
 MANALA_APTLY_REPOSITORY = $(DISTRIBUTION)
 
-MANALA_HELP += $(call host,local,$(DEPLOY_HELP))
+MANALA_HELP += $(call if_host,local,$(DEPLOY_HELP))
 
 DEPLOY_HELP = \
 	$(call help_section,Deploy) \
 	$(call help,deploy,        Deploy packages to repository across distributions)
 
-deploy: .host(local) .if(DEPLOY_HOST DEPLOY_USER)
-	$(call for,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
+deploy: .host_restrict(local)
+	$(call fail_unless,DEPLOY_HOST)
+	$(call fail_unless,DEPLOY_USER)
+	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
 		$$(call log,Distribution \"$$(DISTRIBUTION)\") ; \
-		$$(call in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
+		$$(call if_in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
 			$$(call confirm,Please confirm deploy on \"$$(DISTRIBUTION)\" distribution) ; \
 			$$(call aptly_deploy), \
-			$$(call log_warning,Distribution \"$$(DISTRIBUTION)\" is not enabled) \
+			$$(call log_error,Distribution \"$$(DISTRIBUTION)\" is not available) ; exit 1 \
 		) \
 	)
 
-DEPLOY_HELP += $(call in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.wheezy, Deploy package to repository - Wheezy))
+DEPLOY_HELP += $(call if_in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.wheezy, Deploy package to repository - Wheezy))
 deploy.wheezy: DISTRIBUTIONS = wheezy
 deploy.wheezy: deploy
 
-DEPLOY_HELP += $(call in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.jessie, Deploy package to repository - Jessie))
+DEPLOY_HELP += $(call if_in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.jessie, Deploy package to repository - Jessie))
 deploy.jessie: DISTRIBUTIONS = jessie
 deploy.jessie: deploy
 
-DEPLOY_HELP += $(call in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.stretch,Deploy package to repository - Stretch))
+DEPLOY_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.stretch,Deploy package to repository - Stretch))
 deploy.stretch: DISTRIBUTIONS = stretch
 deploy.stretch: deploy

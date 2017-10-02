@@ -5,17 +5,17 @@
 MANALA_HOST ?= local
 
 # Usage:
-#   target: .host(local)
+#   target: .host_restrict(local)
 #   	# Do something on local host...
 
-.host(%):
-	$(call eq,$(*),$(MANALA_HOST),,$(call message_error,Must be run on \"$(*)\" host); exit 1)
+.host_restrict(%):
+	$(call if_eq,$(*),$(MANALA_HOST),,$(call message_error,Must be run on \"$(*)\" host); exit 1)
 
 # Usage:
-#   $(call host,local,Yes,No) = Yes
+#   $(call if_host,local,Yes,No) = Yes
 
-define host
-$(call eq,$(1),$(MANALA_HOST),$(2),$(3))
+define if_host
+$(call if_eq,$(1),$(MANALA_HOST),$(2),$(3))
 endef
 
 .host_switch(%):

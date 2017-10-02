@@ -19,7 +19,7 @@ package.checkout:
 	$(call log,Checkout)
 
 	# Composer
-	$(call eq,stretch,$(DISTRIBUTION), \
+	$(call if_eq,stretch,$(DISTRIBUTION), \
 		sudo apt-get install -y --no-install-recommends php-cli, \
 		sudo apt-get install -y --no-install-recommends php5-cli \
 	)
