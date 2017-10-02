@@ -1,3 +1,10 @@
+exa (0.8.0-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+  * Remove libhttp-parser2.1 build dependency
+
+ -- Manala <contact@manala.io>  Mon, 02 Oct 2017 20:14:58 +0000
+
 exa (0.7.0-manala2~jessie1) unstable; urgency=low
 
   * Add missing dynamic dependencies
