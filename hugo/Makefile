@@ -26,7 +26,7 @@ package.prepare:
 	cp $(call verbose, , ,--verbose) --recursive \
 		$(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 	mkdir $(call verbose, , ,--verbose) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/man
-	help2man --version-option "version" --help-option "help" --output $(PACKAGE_BUILD_DIR)/$(PACKAGE)/man/$(PACKAGE).1 \
+	help2man --no-info --version-option "version" --help-option "help" --output $(PACKAGE_BUILD_DIR)/$(PACKAGE)/man/$(PACKAGE).1 \
 		$(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
 
 package.build:
