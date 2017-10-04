@@ -1,6 +1,7 @@
 hugo (0.27.1-manala1~wheezy1) unstable; urgency=low
 
   * Upstream update
+  * Add shlibs dependencies
 
  -- Manala <contact@manala.io>  Wed, 04 Oct 2017 07:35:04 +0000
 
