@@ -15,7 +15,7 @@ PACKAGE_DISTRIBUTIONS = wheezy
 
 package.checkout:
 	$(call log,Checkout)
-	mkdir $(call verbose, , ,--verbose) $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 	cp $(call verbose, , ,--verbose) --recursive \
 		$(PACKAGE_DIR)/src/* $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 

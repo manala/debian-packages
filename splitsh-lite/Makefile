@@ -41,7 +41,7 @@ package.checkout:
 	go get $(PACKAGE_SOURCE)
 	cd $(GOPATH)/src/$(PACKAGE_SOURCE) \
 		&& git checkout v$(PACKAGE_VERSION)
-	mkdir $(call verbose, , ,--verbose) $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 	go build -o $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE) $(PACKAGE_SOURCE)
 
 package.prepare:

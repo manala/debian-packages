@@ -26,7 +26,7 @@ package.checkout:
 	echo "Package:      nodejs*\nPin:          origin deb.nodesource.com\nPin-Priority: 900" | sudo tee /etc/apt/preferences.d/nodejs
 	sudo apt-get install -y --no-install-recommends nodejs
 
-	mkdir $(call verbose, , ,--verbose) $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& npm install --legacy-bundling --only=prod $(PACKAGE_SOURCE)
 

@@ -17,7 +17,7 @@ PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
 package.checkout:
 	$(call log,Checkout)
-	mkdir $(call verbose, , ,--verbose) $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 	curl $(call verbose,--silent,--silent --show-error, ) --location $(PACKAGE_SOURCE) \
 		| bsdtar $(call verbose, , ,-v) -xf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
 
