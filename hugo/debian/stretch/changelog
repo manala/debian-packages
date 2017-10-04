@@ -1,3 +1,9 @@
+hugo (0.28-manala1~stretch1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Wed, 04 Oct 2017 10:01:01 +0000
+
 hugo (0.27.1-manala1~stretch1) unstable; urgency=low
 
   * Upstream update
