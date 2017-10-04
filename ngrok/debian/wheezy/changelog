@@ -2,6 +2,7 @@ ngrok (2.2.8-manala1~wheezy1) unstable; urgency=low
 
   * Upstream update
   * Add shlibs dependencies
+  * Copyright following debian policies
 
  -- Manala <contact@manala.io>  Thu, 07 Sep 2017 08:15:18 +0000
 
