@@ -3,6 +3,7 @@ hugo (0.27.1-manala1~jessie1) unstable; urgency=low
   * Upstream update
   * Add shlibs dependencies
   * Copyright following debian policies
+  * Help2man generated manpages
 
  -- Manala <contact@manala.io>  Wed, 04 Oct 2017 07:35:04 +0000
 
