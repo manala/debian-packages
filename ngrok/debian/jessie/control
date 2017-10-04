@@ -8,7 +8,7 @@ Homepage: https://ngrok.com/
 
 Package: ngrok
 Architecture: amd64
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Secure tunnels to localhost
  Expose a local web server to the internet
  ngrok allows you to expose a web server running on your local machine to the
