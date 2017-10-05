@@ -23,8 +23,8 @@ MANALA_VERBOSE := $(if $(VERBOSE),$(VERBOSE),$(MANALA_VERBOSE))
 ###########
 
 PACKAGE_DIR       := $(MANALA_CURRENT_DIR)
-PACKAGE_BUILD_DIR := $(PACKAGE_DIR)/build
-PACKAGE_DIST_DIR  := $(PACKAGE_DIR)/dist
+PACKAGE_BUILD_DIR := $(PACKAGE_DIR)/build/$(DISTRIBUTION)
+PACKAGE_DIST_DIR  := $(PACKAGE_DIR)/dist/$(DISTRIBUTION)
 
 ##########
 # Debian #
@@ -204,7 +204,7 @@ lint@local: .host_restrict(local)
 	)
 
 lint@build: .host_restrict(build)
-	$(foreach PACKAGE,$(wildcard $(PACKAGE_DIST_DIR)/*~$(DISTRIBUTION)*.deb), \
+	$(foreach PACKAGE,$(wildcard $(PACKAGE_DIST_DIR)/*.deb), \
 		$(call verbose, ,basename $(PACKAGE) ; echo ; ) \
 		lintian $(call verbose, , , ,--info) $(PACKAGE) || true ; \
 	)
@@ -232,8 +232,8 @@ PACKAGE_HELP = $(call help_section,Package)
 PACKAGE_HELP += $(call help,package.clean,       Package - Clean)
 package.clean: .host_restrict(build)
 	$(call log,Clean)
-	rm $(call verbose, , ,--verbose) --recursive --force $(PACKAGE_BUILD_DIR)/*
-	rm $(call verbose, , ,--verbose) --recursive --force $(PACKAGE_DIST_DIR)/*~$(DISTRIBUTION)*.deb
+	rm $(call verbose, , ,--verbose) --recursive --force \
+		$(PACKAGE_BUILD_DIR)/* $(PACKAGE_DIST_DIR)/*.deb
 
 PACKAGE_HELP += $(call help,package.checkout,    Package - Checkout)
 package.checkout: .host_restrict(build)
@@ -267,7 +267,8 @@ package.build: .host_restrict(build)
 PACKAGE_HELP += $(call help,package.dist,        Package - Dist)
 package.dist: .host_restrict(build)
 	$(call log,Dist)
-	$(foreach PACKAGE,$(wildcard $(PACKAGE_BUILD_DIR)/*~$(DISTRIBUTION)*.deb), \
+	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_DIST_DIR)
+	$(foreach PACKAGE,$(wildcard $(PACKAGE_BUILD_DIR)/*.deb), \
 		$(call verbose, ,basename $(PACKAGE) ; echo ; ) \
 		$(call verbose, , , \
 			dpkg --info $(PACKAGE) ; echo ; \
@@ -282,7 +283,7 @@ package.dist: .host_restrict(build)
 
 MANALA_APTLY_HOST       = $(DEPLOY_HOST)
 MANALA_APTLY_USER       = $(DEPLOY_USER)
-MANALA_APTLY_PACKAGES   = $(PACKAGE_DIST_DIR)/*~$(DISTRIBUTION)*.deb
+MANALA_APTLY_PACKAGES   = $(PACKAGE_DIST_DIR)/*.deb
 MANALA_APTLY_REPOSITORY = $(DISTRIBUTION)
 
 MANALA_HELP += $(call if_host,local,$(DEPLOY_HELP))

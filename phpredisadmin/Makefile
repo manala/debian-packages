@@ -26,7 +26,7 @@ package.checkout:
 	curl $(call verbose,--silent,--silent --show-error, ) --location https://getcomposer.org/installer \
 		| sudo php -- --install-dir /usr/bin --filename composer
 
-	mkdir $(call verbose, , ,--verbose) $(PACKAGE_BUILD_DIR)/$(PACKAGE)
+	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_BUILD_DIR)/$(PACKAGE)
 	curl $(call verbose,--silent,--silent --show-error, ) --location $(PACKAGE_SOURCE) \
 		| bsdtar $(call verbose, , ,-v) -xf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
 
