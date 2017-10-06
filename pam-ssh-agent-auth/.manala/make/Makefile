@@ -52,6 +52,11 @@ MANALA_DOCKER_IMAGE     = manala/build-debian
 MANALA_DOCKER_IMAGE_TAG = $(if $(DOCKER_TAG),$(DOCKER_TAG)-)$(DISTRIBUTION)
 MANALA_DOCKER_DIR       = /srv/package
 MANALA_DOCKER_HOST      = $(PACKAGE).$(DISTRIBUTION).build
+MANALA_DOCKER_VOLUMES   = \
+	$(if $(CACHE_DIR), \
+		$(CACHE_DIR)/$(DISTRIBUTION)/apt/archives:/var/cache/apt/archives \
+		$(CACHE_DIR)/$(DISTRIBUTION)/apt/lists:/var/lib/apt/lists \
+	)
 MANALA_DOCKER_ENV       = \
 	MANALA_HOST=build \
 	MANALA_VERBOSE=$(MANALA_VERBOSE) \

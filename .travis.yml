@@ -10,6 +10,7 @@ services:
 env:
   global:
     - VERBOSE=1
+    - CACHE_DIR=${TRAVIS_BUILD_DIR}/.cache
   matrix:
     - DISTRIBUTIONS=wheezy  PART=1/2
     - DISTRIBUTIONS=wheezy  PART=2/2
