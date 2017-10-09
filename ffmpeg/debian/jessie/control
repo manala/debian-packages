@@ -9,4 +9,8 @@ Homepage: https://www.ffmpeg.org/
 Package: ffmpeg
 Architecture: amd64
 Depends: ${misc:Depends}
-Description: A complete, cross-platform solution to record, convert and stream audio and video.
+Description: Complete solution to record, convert and stream audio and video
+ FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
+ mux, demux, stream, filter and play pretty much anything that humans and
+ machines have created. It supports the most obscure ancient formats up to the
+ cutting edge.
