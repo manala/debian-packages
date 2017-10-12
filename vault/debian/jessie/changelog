@@ -1,3 +1,11 @@
+vault (0.8.3-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+  * Fix copyright
+  * Fix descriptions
+
+ -- Manala <contact@manala.io>  Thu, 12 Oct 2017 11:58:05 +0000
+
 vault (0.8.2-manala2~jessie1) unstable; urgency=low
 
   * Add missing dependencies
