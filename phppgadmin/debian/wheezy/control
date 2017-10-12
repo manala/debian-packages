@@ -10,4 +10,6 @@ Package: phppgadmin
 Architecture: all
 Depends: ${misc:Depends},
          libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5
-Description: phpPgAdmin is a web-based administration tool for PostgreSQL. It is perfect for PostgreSQL DBAs, newbies, and hosting services.
+Description: Web-based administration tool for PostgreSQL
+ phpPgAdmin is a web-based administration tool for PostgreSQL.
+ It is perfect for PostgreSQL DBAs, newbies, and hosting services.
