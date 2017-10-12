@@ -1,3 +1,9 @@
+phantomjs (2.1.1-manala4~jessie1) unstable; urgency=low
+
+  * Fix copyright
+
+ -- Manala <contact@manala.io>  Thu, 12 Oct 2017 11:44:37 +0000
+
 phantomjs (2.1.1-manala3~jessie1) unstable; urgency=low
 
   * Add missing dynamic dependencies
