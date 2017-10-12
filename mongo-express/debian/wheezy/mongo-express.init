@@ -15,7 +15,7 @@
 # Read configuration variable file if it is present
 [ -r /etc/default/mongo-express ] && . /etc/default/mongo-express
 
-DESC="Web-based MongoDB admin interface, written with Node.js and express"
+DESC="Web-based MongoDB admin interface written with Node.js, Express and Bootstrap3"
 DAEMON=/usr/bin/node
 DAEMON_ARGS="/usr/bin/mongo-express ${DAEMON_ARGS}"
 START_ARGS="--background --make-pidfile"
