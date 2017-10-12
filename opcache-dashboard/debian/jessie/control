@@ -10,4 +10,8 @@ Package: opcache-dashboard
 Architecture: all
 Depends: ${misc:Depends},
          libapache2-mod-php | php-cgi | php-fpm | php | libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5
-Description: Set up properly and monitor your Zend OPcache with this dashboard that will help you checking memory, hits and status, configuring for optimal performance (warning you when cache full, validation, etc.) and reseting one or all scripts with one click.
+Description: Zend OPcache monitoring dashboard
+ Set up properly and monitor your Zend OPcache with this dashboard that will
+ help you checking memory, hits and status, configuring for optimal performance
+ (warning you when cache full, validation, etc.) and resetting one or all
+ scripts with one click

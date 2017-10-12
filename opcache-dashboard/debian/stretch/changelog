@@ -1,3 +1,9 @@
+opcache-dashboard (1.0.0-manala3~stretch1) unstable; urgency=low
+
+  * Fix descriptions
+
+ -- Manala <contact@manala.io>  Thu, 12 Oct 2017 11:38:54 +0000
+
 opcache-dashboard (1.0.0-manala2~stretch1) unstable; urgency=low
 
   * Initial release
