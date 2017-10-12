@@ -11,7 +11,8 @@ Architecture: amd64
 Depends: ${misc:Depends},
          lsb-base (>= 3.2-14),
          adduser
-Description:
- Vault secures, stores, and tightly controls access to tokens, passwords, certificates, API keys, and other secrets in modern computing.
- Vault handles leasing, key revocation, key rolling, and auditing.
- Through a unified API, users can access an encrypted Key/Value store and network encryption-as-a-service, or generate AWS IAM/STS credentials, SQL/NoSQL databases, X.509 certificates, SSH credentials, and more.
+Description: Secrets management, encryption as a service, and privileged access management
+ Vault is a tool for securely accessing secrets. A secret is anything that you
+ want to tightly control access to, such as API keys, passwords, certificates,
+ and more. Vault provides a unified interface to any secret, while providing
+ tight access control and recording a detailed audit log.

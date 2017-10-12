@@ -14,5 +14,6 @@ Depends: ${misc:Depends},
          ${python:Depends},
          git,
          splitsh-lite
-Description: Gitsplit
- Gitsplit
+Description: Automate the management of children git repositories
+ Using splitsh-lite, gitslplit automate the management of children
+ git repositories

@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = gitsplit
-PACKAGE_VERSION       = b524730
+PACKAGE_VERSION       = e55d6c1
 PACKAGE_SOURCE        = https://github.com/jderusse/docker-gitsplit/archive/$(PACKAGE_VERSION).tar.gz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
