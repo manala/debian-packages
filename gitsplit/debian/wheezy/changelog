@@ -1,3 +1,11 @@
+gitsplit (0.0~git20170822.0.e55d6c1-manala1~wheezy1) unstable; urgency=medium
+
+  * Upstream update
+  * Introduce copyright
+  * Fix descriptions
+
+ -- Manala <contact@manala.io>  Thu, 12 Oct 2017 11:10:14 +0000
+
 gitsplit (0.0~git20170529.0.b524730-manala1~wheezy1) unstable; urgency=medium
 
   * Upstream update
