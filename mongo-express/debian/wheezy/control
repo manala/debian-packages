@@ -15,5 +15,6 @@ Architecture: all
 Depends: ${misc:Depends},
          lsb-base (>= 3.2-14),
          nodejs
-Description: Web-based MongoDB admin interface, written with Node.js and express
- Web-based MongoDB admin interface, written with Node.js and express
+Description: Web-based MongoDB admin interface written with Node.js, Express and Bootstrap3
+ Mongo Express is a web-based MongoDB admin interface written with Node.js,
+ Express and Bootstrap3
