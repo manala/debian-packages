@@ -7,6 +7,10 @@
 # MANALA_APTLY_PACKAGES:   Aptly packages
 # MANALA_APTLY_REPOSITORY: Aptly repository
 
+#############
+# Functions #
+#############
+
 define aptly_deploy
   scp $(MANALA_APTLY_PACKAGES) $(MANALA_APTLY_HOST):/tmp && \
   ssh $(MANALA_APTLY_HOST) -- sudo -u $(MANALA_APTLY_USER) aptly repo add $(MANALA_APTLY_REPOSITORY) /tmp/$(notdir $(MANALA_APTLY_PACKAGES)) && \
