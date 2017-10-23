@@ -4,13 +4,13 @@
 # Manala #
 ##########
 
-MANALA_DIR := $(abspath $(patsubst %/make/Makefile,%,$(firstword $(filter %.manala/make/Makefile,$(MAKEFILE_LIST)))))
+MANALA_MAKE_DIR := $(abspath $(patsubst %/Makefile,%,$(lastword $(MAKEFILE_LIST))))
 
 include \
-	$(MANALA_DIR)/make/Makefile.manala \
-	$(MANALA_DIR)/make/Makefile.docker \
-	$(MANALA_DIR)/make/Makefile.host \
-	$(MANALA_DIR)/make/Makefile.aptly
+	$(MANALA_MAKE_DIR)/Makefile.manala \
+	$(MANALA_MAKE_DIR)/Makefile.docker \
+	$(MANALA_MAKE_DIR)/Makefile.host \
+	$(MANALA_MAKE_DIR)/Makefile.aptly
 
 -include \
 	$(MANALA_CURRENT_DIR)/../.env \
@@ -58,6 +58,8 @@ MANALA_DOCKER_VOLUMES   = \
 		$(CACHE_DIR)/$(DISTRIBUTION)/apt/lists:/var/lib/apt/lists \
 	)
 MANALA_DOCKER_ENV       = \
+	USER_ID=$(MANALA_USER_ID) \
+	GROUP_ID=$(MANALA_GROUP_ID) \
 	MANALA_HOST=build \
 	MANALA_VERBOSE=$(MANALA_VERBOSE) \
 	DISTRIBUTION=$(DISTRIBUTION) \
@@ -74,8 +76,8 @@ MANALA_HELP += $(call if_host,local,$(SH_HELP)\n)
 SH_HELP = \
 	$(call help_section,Build host shell)
 
-sh: .host_restrict(local)
-	$(call fail_unless,DISTRIBUTION)
+sh: .fail_if_host_not(local)
+	$(call fail_if_not,$(DISTRIBUTION),DISTRIBUTION is empty or not set)
 	$(call if_in,$(DISTRIBUTION),$(PACKAGE_DISTRIBUTIONS), \
 		$(call docker_shell), \
 		$(call log_warning,Shell on \"$(DISTRIBUTION)\" is not supported) \
@@ -103,7 +105,7 @@ UPDATE_HELP = \
 	$(call help_section,Build host update) \
 	$(call help,update,        Update build hosts across distributions)
 
-update: .host_restrict(local)
+update: .fail_if_host_not(local)
 	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(DISTRIBUTIONS),$(PACKAGE_DISTRIBUTIONS)), \
 		$$(call if_in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
 			$$(call log,Update \"$$(DISTRIBUTION)\") ; \
@@ -135,7 +137,7 @@ SYSTEM_HELP = \
 	$(call help,system.update,Update system)
 
 system.update: DEBIAN_FRONTEND = noninteractive
-system.update: .host_restrict(build)
+system.update: .fail_if_host_not(build)
 	$(call log,Update)
 	sudo apt-get $(call verbose,-qq,-qq, ) update
 	sudo apt-get $(call verbose,-qq,-q -V,-V) -y dist-upgrade
@@ -154,8 +156,8 @@ BUILD_HELP_BUILD = $(BUILD_HELP) \
 
 build: .host_switch(build)
 
-build@local: .host_restrict(local)
-	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
+build@local: .fail_if_host_not(local)
+	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(DISTRIBUTIONS),$(PACKAGE_DISTRIBUTIONS)), \
 		$$(call if_in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
 			$$(call log,Build \"$$(PACKAGE)\" on \"$$(DISTRIBUTION)\") ; \
 				$$(call docker_make,build@build), \
@@ -163,7 +165,7 @@ build@local: .host_restrict(local)
 		) \
 	)
 
-build@build: .host_restrict(build) \
+build@build: .fail_if_host_not(build) \
 	system.update \
 	package.clean \
 	package.checkout \
@@ -199,8 +201,8 @@ LINT_HELP_BUILD = $(LINT_HELP) \
 
 lint: .host_switch(lint)
 
-lint@local: .host_restrict(local)
-	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
+lint@local: .fail_if_host_not(local)
+	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(DISTRIBUTIONS),$(PACKAGE_DISTRIBUTIONS)), \
 		$$(call if_in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
 			$$(call log,Lint \"$$(PACKAGE)\" on \"$$(DISTRIBUTION)\") ; \
 				$$(call docker_make,lint@build), \
@@ -208,7 +210,7 @@ lint@local: .host_restrict(local)
 		) \
 	)
 
-lint@build: .host_restrict(build)
+lint@build: .fail_if_host_not(build)
 	$(foreach PACKAGE,$(wildcard $(PACKAGE_DIST_DIR)/*.deb), \
 		$(call verbose, ,basename $(PACKAGE) ; echo ; ) \
 		lintian $(call verbose, , , ,--info) $(PACKAGE) || true ; \
@@ -235,22 +237,22 @@ MANALA_HELP += $(call if_host,build,$(PACKAGE_HELP))
 PACKAGE_HELP = $(call help_section,Package)
 
 PACKAGE_HELP += $(call help,package.clean,       Package - Clean)
-package.clean: .host_restrict(build)
+package.clean: .fail_if_host_not(build)
 	$(call log,Clean)
 	rm $(call verbose, , ,--verbose) --recursive --force \
 		$(PACKAGE_BUILD_DIR)/* $(PACKAGE_DIST_DIR)/*.deb
 
 PACKAGE_HELP += $(call help,package.checkout,    Package - Checkout)
-package.checkout: .host_restrict(build)
+package.checkout: .fail_if_host_not(build)
 
 PACKAGE_HELP += $(call help,package.prepare,     Package - Prepare)
-package.prepare: .host_restrict(build)
+package.prepare: .fail_if_host_not(build)
 
 # Create a patch (in build directory):
 #   $ diff -Naur [file] [file].patch > ../patches/[distribution]/XXX.[name].patch
 PACKAGE_HELP += $(call help,package.patch,       Package - Patch)
 package.patch: PATCHES = $(sort $(wildcard $(PACKAGE_DIR)/patches/$(DISTRIBUTION)/*.patch))
-package.patch: .host_restrict(build)
+package.patch: .fail_if_host_not(build)
 	$(call log,Patch)
 	$(foreach PATCH,$(PATCHES), \
 		cd $(PACKAGE_BUILD_DIR) && \
@@ -258,7 +260,7 @@ package.patch: .host_restrict(build)
 	)
 
 PACKAGE_HELP += $(call help,package.dependencies,Package - Dependencies)
-package.dependencies: .host_restrict(build)
+package.dependencies: .fail_if_host_not(build)
 	$(call log,Dependencies)
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& mk-build-deps \
@@ -267,10 +269,10 @@ package.dependencies: .host_restrict(build)
 			debian/control $(call verbose,>/dev/null 2>&1,>/dev/null, )
 
 PACKAGE_HELP += $(call help,package.build,       Package - Build)
-package.build: .host_restrict(build)
+package.build: .fail_if_host_not(build)
 
 PACKAGE_HELP += $(call help,package.dist,        Package - Dist)
-package.dist: .host_restrict(build)
+package.dist: .fail_if_host_not(build)
 	$(call log,Dist)
 	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_DIST_DIR)
 	$(foreach PACKAGE,$(wildcard $(PACKAGE_BUILD_DIR)/*.deb), \
@@ -297,10 +299,10 @@ DEPLOY_HELP = \
 	$(call help_section,Deploy) \
 	$(call help,deploy,        Deploy packages to repository across distributions)
 
-deploy: .host_restrict(local)
-	$(call fail_unless,DEPLOY_HOST)
-	$(call fail_unless,DEPLOY_USER)
-	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(call uniq,$(DISTRIBUTIONS)),$(PACKAGE_DISTRIBUTIONS)), \
+deploy: .fail_if_host_not(local)
+	$(call fail_if_not,$(DEPLOY_HOST),DEPLOY_HOST is empty or not set)
+	$(call fail_if_not,$(DEPLOY_USER),DEPLOY_USER is empty or not set)
+	$(call list_loop,DISTRIBUTION,$(if $(DISTRIBUTIONS),$(DISTRIBUTIONS),$(PACKAGE_DISTRIBUTIONS)), \
 		$$(call log,Distribution \"$$(DISTRIBUTION)\") ; \
 		$$(call if_in,$$(DISTRIBUTION),$$(PACKAGE_DISTRIBUTIONS), \
 			$$(call confirm,Please confirm deploy on \"$$(DISTRIBUTION)\" distribution) ; \
