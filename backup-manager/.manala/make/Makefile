@@ -50,7 +50,7 @@ endef
 
 MANALA_DOCKER_IMAGE     = manala/build-debian
 MANALA_DOCKER_IMAGE_TAG = $(if $(DOCKER_TAG),$(DOCKER_TAG)-)$(DISTRIBUTION)
-MANALA_DOCKER_DIR       = /srv/package
+MANALA_DOCKER_MOUNT_DIR = /srv/package
 MANALA_DOCKER_HOST      = $(PACKAGE).$(DISTRIBUTION).build
 MANALA_DOCKER_VOLUMES   = \
 	$(if $(CACHE_DIR), \
