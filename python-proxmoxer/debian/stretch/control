@@ -1,0 +1,32 @@
+Source: python-proxmoxer
+Section: python
+Maintainer: Manala <contact@manala.io>
+Priority: optional
+Build-Depends: dh-python, python-setuptools (>= 0.6b3), python-all (>= 2.6.6-3), debhelper (>= 9)
+Standards-Version: 3.9.6
+Homepage: https://github.com/swayf/proxmoxer
+
+Package: python-proxmoxer
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}
+Description: Python Wrapper for the Proxmox 2.x API (HTTP and SSH)
+ =========================================
+ Proxmoxer: A wrapper for Proxmox REST API
+ =========================================
+ .
+ master branch:  |master_build_status| |master_coverage_status| |pypi_version| |pypi_downloads|
+ .
+ develop branch: |develop_build_status| |develop_coverage_status|
+ .
+ .
+ What does it do and what's different?
+ -------------------------------------
+ .
+ Proxmoxer is a wrapper around the `Proxmox REST API v2 <https://pve.proxmox.com/wiki/Proxmox_VE_API>`_.
+ .
+ It was inspired by slumber, but it dedicated only to Proxmox. It allows to use not only REST API over HTTPS, but
+ the same api over ssh and pvesh utility.
+ .
+ Like `Proxmoxia <https://github.com/baseblack/Proxmoxia>`_ it dynamically creates attributes which responds to the
+ attributes you've attempted to reach.
+ .
