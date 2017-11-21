@@ -47,6 +47,8 @@ splits:
     target: git@github.com:manala/debian-package-jinja2.git
   - prefix: python-pathlib2
     target: git@github.com:manala/debian-package-python-pathlib2.git
+  - prefix: python-proxmoxer
+    target: git@github.com:manala/debian-package-python-proxmoxer.git
   - prefix: rtail
     target: git@github.com:manala/debian-package-rtail.git
   - prefix: splitsh-lite
