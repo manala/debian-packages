@@ -13,6 +13,7 @@ env:
   global:
     - VERBOSE=1
   matrix:
+    - DISTRIBUTIONS=jessie
     - DISTRIBUTIONS=stretch
 
 script:
