@@ -26,7 +26,7 @@ package.prepare:
 	mv $(call verbose, , ,--verbose) \
 		$(PACKAGE_BUILD_DIR)/$(PACKAGE)/oauth2_proxy $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
 	chmod $(call verbose, , ,--verbose) 755 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
-	cp $(call verbose, , ,--verbose) --recursive \
+	cp $(call verbose, , ,--verbose) --no-target-directory --recursive \
 		$(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 package.build:

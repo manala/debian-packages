@@ -25,7 +25,7 @@ package.prepare:
 	$(call log,Prepare)
 	mv $(call verbose, , ,--verbose) \
 		$(PACKAGE_BUILD_DIR)/$(PACKAGE)/exa-linux-x86_64 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/exa
-	cp $(call verbose, , ,--verbose) --recursive \
+	cp $(call verbose, , ,--verbose) --no-target-directory --recursive \
 		$(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 package.build:
