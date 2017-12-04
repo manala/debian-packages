@@ -23,7 +23,7 @@ package.checkout:
 
 package.prepare:
 	$(call log,Prepare)
-	cp $(call verbose, , ,--verbose) --recursive \
+	cp $(call verbose, , ,--verbose) --no-target-directory --recursive \
 		$(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
 package.build:

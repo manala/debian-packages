@@ -23,7 +23,7 @@ package.checkout:
 
 package.prepare:
 	$(call log,Prepare)
-	cp $(call verbose, , ,--verbose) --recursive \
+	cp $(call verbose, , ,--verbose) --no-target-directory --recursive \
 		$(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_BUILD_DIR)/$(PACKAGE)/man
 	help2man --no-info --version-option "version" --help-option "help" --output $(PACKAGE_BUILD_DIR)/$(PACKAGE)/man/$(PACKAGE).1 \
