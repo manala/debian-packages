@@ -6,3 +6,5 @@ export DH_VERBOSE = 1
 %:
 	dh $@
 
+override_dh_fixperms:
+	dh_fixperms --exclude rtail/cli/rtail-client.js --exclude rtail/cli/rtail-server.js

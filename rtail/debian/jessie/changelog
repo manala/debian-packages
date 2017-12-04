@@ -1,3 +1,9 @@
+rtail (0.2.1-manala2~jessie1) unstable; urgency=low
+
+  * Fix execution flag issue
+
+ -- Manala <contact@manala.io>  Mon, 04 Dec 2017 12:36:57 +0000
+
 rtail (0.2.1-manala1~jessie1) unstable; urgency=low
 
   * Rename to "rtail"
