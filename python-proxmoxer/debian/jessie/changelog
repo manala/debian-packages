@@ -1,6 +1,7 @@
 python-proxmoxer (1.0.2-manala1~jessie1) unstable; urgency=low
 
   * Upstream update
+  * Add copyright
 
  -- Manala <contact@manala.io>  Tue, 02 Jan 2018 11:51:34 +0000
 
