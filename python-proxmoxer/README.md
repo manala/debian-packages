@@ -22,5 +22,6 @@ $ make build.stretch
 
 ## Update
 
-* Check for new versions on http://snapshot.debian.org/package/python-pathlib2/
+* Check for new versions on https://pypi.python.org/pypi/proxmoxer/
 * Update "PACKAGE_*" variables accordingly in Makefile
+* Add an entry to debian/[distribution]/changelog (use "date --rfc-2822 -u" command to specify date)
