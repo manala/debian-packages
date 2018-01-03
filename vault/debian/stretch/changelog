@@ -1,3 +1,9 @@
+vault (0.9.1-manala2~stretch1) unstable; urgency=low
+
+  * Give the Vault executable the ability to use the mlock syscall without running the process as root
+
+ -- Manala <contact@manala.io>  Wed, 03 Jan 2018 12:39:42 +0000
+
 vault (0.9.1-manala1~stretch1) unstable; urgency=low
 
   * Upstream update
