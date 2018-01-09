@@ -8,6 +8,7 @@ PIDFile=/var/run/vault.pid
 ExecStart=/usr/bin/vault server -config=/etc/vault/config.hcl
 User=vault
 Group=nogroup
+LimitMEMLOCK=infinity
 
 [Install]
 WantedBy=multi-user.target
