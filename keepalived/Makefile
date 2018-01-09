@@ -16,7 +16,7 @@ PACKAGE_EPOCH                        = 1
 PACKAGE_REVISION                     = 1
 PACKAGE_REVISION_MANALA              = 1
 PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
-PACKAGE_DISTRIBUTIONS                = jessie stretch
+PACKAGE_DISTRIBUTIONS                = jessie
 
 package.checkout:
 	$(call log,Checkout)
