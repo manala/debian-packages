@@ -1,3 +1,9 @@
+mongo-express (0.43.1-manala1~wheezy1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Tue, 02 Jan 2018 10:14:35 +0000
+
 mongo-express (0.42.3-manala1~wheezy1) unstable; urgency=low
 
   * Upstream update
