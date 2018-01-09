@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = phpredisadmin
-PACKAGE_VERSION       = 1.8.0
+PACKAGE_VERSION       = 1.9.0
 PACKAGE_SOURCE        = https://github.com/erikdubbelboer/phpRedisAdmin/archive/v$(PACKAGE_VERSION).tar.gz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
