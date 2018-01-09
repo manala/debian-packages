@@ -21,6 +21,8 @@ splits:
     target: git@github.com:manala/debian-package-httpie.git
   - prefix: hugo
     target: git@github.com:manala/debian-package-hugo.git
+  - prefix: jinja2
+    target: git@github.com:manala/debian-package-jinja2.git
   - prefix: keepalived
     target: git@github.com:manala/debian-package-keepalived.git
   - prefix: mailhog
@@ -43,8 +45,6 @@ splits:
     target: git@github.com:manala/debian-package-phppgadmin.git
   - prefix: phpredisadmin
     target: git@github.com:manala/debian-package-phpredisadmin.git
-  - prefix: jinja2
-    target: git@github.com:manala/debian-package-jinja2.git
   - prefix: python-pathlib2
     target: git@github.com:manala/debian-package-python-pathlib2.git
   - prefix: python-proxmoxer
