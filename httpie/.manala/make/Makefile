@@ -248,8 +248,8 @@ package.checkout: .fail_if_host_not(build)
 PACKAGE_HELP += $(call help,package.prepare,     Package - Prepare)
 package.prepare: .fail_if_host_not(build)
 
-# Create a patch (in build directory):
-#   $ diff -Naur [file] [file].patch > ../patches/[distribution]/XXX.[name].patch
+# Create a patch (in build/[distribution] directory):
+#   $ diff -Naur [file] [file].patch > ../../patches/[distribution]/XXX.[name].patch
 PACKAGE_HELP += $(call help,package.patch,       Package - Patch)
 package.patch: PATCHES = $(sort $(wildcard $(PACKAGE_DIR)/patches/$(DISTRIBUTION)/*.patch))
 package.patch: .fail_if_host_not(build)
