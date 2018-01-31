@@ -45,6 +45,8 @@ splits:
     target: git@github.com:manala/debian-package-phppgadmin.git
   - prefix: phpredisadmin
     target: git@github.com:manala/debian-package-phpredisadmin.git
+  - prefix: python-cryptography
+    target: git@github.com:manala/debian-package-python-cryptography.git
   - prefix: python-pathlib2
     target: git@github.com:manala/debian-package-python-pathlib2.git
   - prefix: python-proxmoxer

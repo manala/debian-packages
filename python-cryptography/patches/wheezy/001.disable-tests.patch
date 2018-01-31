@@ -1,0 +1,73 @@
+diff -Naur python-cryptography/debian/control python-cryptography/debian.patch/control
+--- python-cryptography/debian/control	2017-01-01 20:19:17.000000000 +0000
++++ python-cryptography/debian.patch/control	2018-02-01 09:00:38.000000000 +0000
+@@ -14,25 +14,12 @@
+  python-six (>= 1.4.1),
+  python3-six (>= 1.4.1),
+  libssl-dev,
+- python-cryptography-vectors (>= 0.6.1),
+- python-cryptography-vectors (<< 0.6.2~),
+- python3-cryptography-vectors (>= 0.6.1),
+- python3-cryptography-vectors (<< 0.6.2~),
+- python-iso8601,
+- python3-iso8601,
+- python-pytest,
+- python3-pytest,
+- python-pretend,
+- python3-pretend,
+- python-pyasn1,
+- python3-pyasn1,
+ Standards-Version: 3.9.6
+ Homepage: https://cryptography.io/
+ Vcs-Svn: svn://anonscm.debian.org/python-modules/packages/python-cryptography/trunk/
+ Vcs-Browser: http://anonscm.debian.org/viewvc/python-modules/packages/python-cryptography/trunk/
+ XS-Python-Version: >= 2.6
+ X-Python3-Version: >= 3.2
+-XS-Testsuite: autopkgtest
+ 
+ Package: python-cryptography
+ Architecture: any
+diff -Naur python-cryptography/debian/rules python-cryptography/debian.patch/rules
+--- python-cryptography/debian/rules	2017-01-01 20:19:17.000000000 +0000
++++ python-cryptography/debian.patch/rules	2018-02-01 09:00:38.000000000 +0000
+@@ -1,9 +1,7 @@
+ #!/usr/bin/make -f
+ 
+ export PYBUILD_NAME=cryptography
+-export PYBUILD_TEST_PYTEST=1
+-export PYBUILD_TEST_ARGS={dir}/tests/
+-export PYBUILD_BEFORE_TEST=cp -R {dir}/${PYBUILD_NAME}.egg-info {build_dir}
++export PYBUILD_DISABLE=test
+ 
+ 
+ %:
+diff -Naur python-cryptography/debian/tests/control python-cryptography/debian.patch/tests/control
+--- python-cryptography/debian/tests/control	2017-01-01 20:19:17.000000000 +0000
++++ python-cryptography/debian.patch/tests/control	1970-01-01 00:00:00.000000000 +0000
+@@ -1,2 +0,0 @@
+-Tests: python2 python3
+-Depends: @, @builddeps@
+diff -Naur python-cryptography/debian/tests/python2 python-cryptography/debian.patch/tests/python2
+--- python-cryptography/debian/tests/python2	2017-01-01 20:19:17.000000000 +0000
++++ python-cryptography/debian.patch/tests/python2	1970-01-01 00:00:00.000000000 +0000
+@@ -1,8 +0,0 @@
+-#!/bin/bash
+-set -e
+-SRC="${PWD}"
+-
+-cd "${ADTTMP}"
+-for py in $(pyversions -vi) ; do
+-  python$py -m pytest ${SRC}/tests
+-done
+diff -Naur python-cryptography/debian/tests/python3 python-cryptography/debian.patch/tests/python3
+--- python-cryptography/debian/tests/python3	2017-01-01 20:19:17.000000000 +0000
++++ python-cryptography/debian.patch/tests/python3	1970-01-01 00:00:00.000000000 +0000
+@@ -1,8 +0,0 @@
+-#!/bin/bash
+-set -e
+-SRC="${PWD}"
+-
+-cd "${ADTTMP}"
+-for py in $(py3versions -vi) ; do
+-  python$py -m pytest ${SRC}/tests
+-done
