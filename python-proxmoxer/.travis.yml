@@ -13,6 +13,7 @@ env:
   global:
     - VERBOSE=1
   matrix:
+    - DISTRIBUTIONS=wheezy
     - DISTRIBUTIONS=jessie
     - DISTRIBUTIONS=stretch
 
