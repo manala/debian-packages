@@ -13,7 +13,7 @@ include .manala/make/Makefile
 PACKAGE               = exa
 PACKAGE_VERSION       = 0.8.0
 PACKAGE_SOURCE        = https://github.com/ogham/exa/releases/download/v$(PACKAGE_VERSION)/exa-linux-x86_64-$(PACKAGE_VERSION).zip
-PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
+PACKAGE_DISTRIBUTIONS = jessie stretch
 
 package.checkout:
 	$(call log,Checkout)
