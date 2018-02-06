@@ -15,7 +15,7 @@ PACKAGE_VERSION                      = 3.11
 PACKAGE_REVISION                     = 2
 PACKAGE_REVISION_MANALA              = 2
 PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
-PACKAGE_DISTRIBUTIONS                = wheezy jessie stretch
+PACKAGE_DISTRIBUTIONS                = jessie stretch
 
 package.checkout:
 	$(call log,Checkout)
