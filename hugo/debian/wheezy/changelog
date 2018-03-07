@@ -1,3 +1,9 @@
+hugo (0.37-manala1~wheezy1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Wed, 28 Feb 2018 08:21:19 +0000
+
 hugo (0.36.1-manala1~wheezy1) unstable; urgency=low
 
   * Upstream update
