@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = alt-galaxy
-PACKAGE_VERSION       = 1.3.3
+PACKAGE_VERSION       = 1.4.0
 PACKAGE_SOURCE        = https://github.com/gantsign/alt-galaxy/releases/download/$(PACKAGE_VERSION)/alt-galaxy_linux_amd64.tar.xz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
