@@ -1,17 +1,19 @@
+DCO					usr/share/phpmyadmin
+LICENSE			usr/share/phpmyadmin
 README			usr/share/phpmyadmin
-RELEASE-DATE-*	usr/share/phpmyadmin
-robots.txt		usr/share/phpmyadmin
+ChangeLog		usr/share/phpmyadmin
+robots.txt	usr/share/phpmyadmin
 *.php			usr/share/phpmyadmin
 *.ico			usr/share/phpmyadmin
 *.css			usr/share/phpmyadmin
 
-doc			usr/share/phpmyadmin
+doc				usr/share/phpmyadmin
 examples	usr/share/phpmyadmin
-js			usr/share/phpmyadmin
+js				usr/share/phpmyadmin
 libraries	usr/share/phpmyadmin
 locale		usr/share/phpmyadmin
-setup		usr/share/phpmyadmin
-sql			usr/share/phpmyadmin
+setup			usr/share/phpmyadmin
+sql				usr/share/phpmyadmin
 templates	usr/share/phpmyadmin
 themes		usr/share/phpmyadmin
 vendor		usr/share/phpmyadmin
