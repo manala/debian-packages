@@ -1,7 +1,5 @@
 DCO					usr/share/phpmyadmin
-LICENSE			usr/share/phpmyadmin
 README			usr/share/phpmyadmin
-ChangeLog		usr/share/phpmyadmin
 robots.txt	usr/share/phpmyadmin
 *.php			usr/share/phpmyadmin
 *.ico			usr/share/phpmyadmin
