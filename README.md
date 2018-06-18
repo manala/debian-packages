@@ -1,5 +1,19 @@
 # Debian Packages
 
+## Instructions
+
+Add apt key
+```
+apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 1394DEA3
+```
+
+Add apt source
+```
+deb [arch=amd64] http://debian.manala.io [wheezy|jessie|stretch] main
+```
+
+## Details
+
 | Package | Description | Build Status |
 | :---    | :---        |    :---:     |
 | [alt-galaxy](https://github.com/manala/debian-package-alt-galaxy) | Provides [Alt Galaxy](https://github.com/gantsign/alt-galaxy) debian package. | [![Build Status](https://travis-ci.org/manala/debian-package-alt-galaxy.svg?branch=master)](https://travis-ci.org/manala/debian-package-alt-galaxy) |
