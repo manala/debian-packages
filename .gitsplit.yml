@@ -25,6 +25,8 @@ splits:
     target: git@github.com:manala/debian-package-jinja2.git
   - prefix: keepalived
     target: git@github.com:manala/debian-package-keepalived.git
+  - prefix: libthumbor
+    target: git@github.com:manala/debian-package-libthumbor.git
   - prefix: mailhog
     target: git@github.com:manala/debian-package-mailhog.git
   - prefix: mongo-express
