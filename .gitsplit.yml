@@ -61,6 +61,8 @@ splits:
     target: git@github.com:manala/debian-package-supervisor.git
   - prefix: thefuck
     target: git@github.com:manala/debian-package-thefuck.git
+  - prefix: thumbor
+    target: git@github.com:manala/debian-package-thumbor.git
   - prefix: vault
     target: git@github.com:manala/debian-package-vault.git
 
