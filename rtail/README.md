@@ -1,6 +1,6 @@
 # Debian Package - RTail [![Build Status](https://travis-ci.org/manala/debian-package-rtail.svg?branch=master)](https://travis-ci.org/manala/debian-package-rtail)
 
-:exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
+:exclamation: **This package is deprecated** :exclamation:
 
 Provides [RTail](http://rtail.org/) debian package.
 

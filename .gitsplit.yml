@@ -9,8 +9,9 @@ splits:
     target: git@github.com:manala/debian-package-ansible.git
   - prefix: backup-manager
     target: git@github.com:manala/debian-package-backup-manager.git
-  - prefix: cgroupfs-mount
-    target: git@github.com:manala/debian-package-cgroupfs-mount.git
+  # Deprecated
+  #- prefix: cgroupfs-mount
+  #  target: git@github.com:manala/debian-package-cgroupfs-mount.git
   - prefix: exa
     target: git@github.com:manala/debian-package-exa.git
   - prefix: ffmpeg
@@ -53,8 +54,9 @@ splits:
     target: git@github.com:manala/debian-package-python-pathlib2.git
   - prefix: python-proxmoxer
     target: git@github.com:manala/debian-package-python-proxmoxer.git
-  - prefix: rtail
-    target: git@github.com:manala/debian-package-rtail.git
+  # Deprecated
+  #- prefix: rtail
+  #  target: git@github.com:manala/debian-package-rtail.git
   - prefix: splitsh-lite
     target: git@github.com:manala/debian-package-splitsh-lite.git
   - prefix: supervisor

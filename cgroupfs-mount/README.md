@@ -1,6 +1,6 @@
 # Debian Package - Cgroupfs Mount [![Build Status](https://travis-ci.org/manala/debian-package-cgroupfs-mount.svg?branch=master)](https://travis-ci.org/manala/debian-package-cgroupfs-mount)
 
-:exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
+:exclamation: **This package is deprecated** :exclamation:
 
 Package to set up cgroupfs mounts on debian wheezy and specific to proxmox cgroup hierarchy :
 ```
