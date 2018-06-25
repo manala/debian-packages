@@ -20,8 +20,8 @@ MANALA_VERBOSE := $(if $(VERBOSE),$(VERBOSE),$(MANALA_VERBOSE))
 # Packages #
 ############
 
-PACKAGES_ALL  := $(sort $(patsubst %/,%,$(wildcard */)))
-PACKAGES_DIFF := $(filter-out .manala,$(sort $(shell git diff --name-only $(TRAVIS_COMMIT_RANGE)| grep "/" | cut -d/ -f1)))
+PACKAGES_ALL  = $(filter-out $(PACKAGES_DEPRECATED),$(sort $(patsubst %/,%,$(wildcard */))))
+PACKAGES_DIFF = $(filter-out $(PACKAGES_DEPRECATED) .manala,$(sort $(shell git diff --name-only $(TRAVIS_COMMIT_RANGE)| grep "/" | cut -d/ -f1)))
 
 #############
 # Partition #
