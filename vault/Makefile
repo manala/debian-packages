@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = vault
-PACKAGE_VERSION       = 0.9.3
+PACKAGE_VERSION       = 0.9.4
 PACKAGE_SOURCE        = https://releases.hashicorp.com/vault/$(PACKAGE_VERSION)/vault_$(PACKAGE_VERSION)_linux_amd64.zip
 PACKAGE_DISTRIBUTIONS = jessie stretch
 
