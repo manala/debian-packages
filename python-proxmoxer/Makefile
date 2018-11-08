@@ -11,8 +11,8 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = python-proxmoxer
-PACKAGE_VERSION       = 1.0.2
-PACKAGE_SOURCE        = https://pypi.python.org/packages/a2/66/e42223312d24ba9c41b3865a92dacc89515607a952385134fe62284f6399/proxmoxer-$(PACKAGE_VERSION).tar.gz
+PACKAGE_VERSION       = 1.0.3
+PACKAGE_SOURCE        = https://files.pythonhosted.org/packages/33/92/0319a36acc8eab45fe0ed20bb19b567ed8fa50b635f5ca2b2098fd531312/proxmoxer-$(PACKAGE_VERSION).tar.gz
 PACKAGE_DISTRIBUTIONS = jessie stretch
 
 package.checkout:
