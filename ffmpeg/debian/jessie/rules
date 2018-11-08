@@ -5,3 +5,6 @@ export DH_VERBOSE = 1
 
 %:
 	dh $@
+
+# Work around /usr/local debian package policy
+override_dh_usrlocal:

@@ -1,3 +1,10 @@
+ffmpeg (4.0.3-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+  * Add vmaf filter models in /usr/local/share/model
+
+ -- Manala <contact@manala.io>  Thu, 08 Nov 2018 12:19:18 +0000
+
 ffmpeg (3.4.2-manala1~jessie1) unstable; urgency=low
 
   * Upstream update
