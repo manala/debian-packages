@@ -1,3 +1,9 @@
+phpredisadmin (1.11.0-manala1~stretch1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Thu, 08 Nov 2018 15:25:25 +0000
+
 phpredisadmin (1.9.0-manala1~stretch1) unstable; urgency=low
 
   * Upstream update
