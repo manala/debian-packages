@@ -11,11 +11,11 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE                              = backup-manager
-PACKAGE_VERSION                      = 0.7.12
-PACKAGE_REVISION                     = 4
+PACKAGE_VERSION                      = 0.7.14
+PACKAGE_REVISION                     = 1
 PACKAGE_REVISION_MANALA              = 1
 PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
-PACKAGE_DISTRIBUTIONS                = wheezy jessie stretch
+PACKAGE_DISTRIBUTIONS                = jessie stretch
 
 package.checkout:
 	$(call log,Checkout)
