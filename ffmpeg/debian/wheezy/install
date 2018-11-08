@@ -1,5 +1,4 @@
 ffmpeg				usr/bin
 ffmpeg-10bit	usr/bin
 ffprobe				usr/bin
-ffserver			usr/bin
 qt-faststart	usr/bin

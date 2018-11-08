@@ -1,3 +1,9 @@
+ffmpeg (3.4.2-manala1~wheezy1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Thu, 08 Nov 2018 10:52:53 +0000
+
 ffmpeg (3.4.1-manala1~wheezy1) unstable; urgency=low
 
   * Upstream update

@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = ffmpeg
-PACKAGE_VERSION       = 3.4.1
+PACKAGE_VERSION       = 3.4.2
 PACKAGE_SOURCE        = file://$(PACKAGE_DIR)/files/ffmpeg-$(PACKAGE_VERSION)-64bit-static.tar.xz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
@@ -32,8 +32,6 @@ package.prepare:
 		$(PACKAGE_BUILD_DIR)/$(PACKAGE)/ffmpeg-10bit
 	help2man --no-info --version-option "-version" --output $(PACKAGE_BUILD_DIR)/$(PACKAGE)/man/ffprobe.1 \
 		$(PACKAGE_BUILD_DIR)/$(PACKAGE)/ffprobe
-	help2man --no-info --version-option "-version" --output $(PACKAGE_BUILD_DIR)/$(PACKAGE)/man/ffserver.1 \
-		$(PACKAGE_BUILD_DIR)/$(PACKAGE)/ffserver
 	help2man --no-info --version-option "-version" --output $(PACKAGE_BUILD_DIR)/$(PACKAGE)/man/qt-faststart.1 \
 		$(PACKAGE_BUILD_DIR)/$(PACKAGE)/qt-faststart
 

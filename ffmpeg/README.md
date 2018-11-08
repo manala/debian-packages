@@ -23,6 +23,7 @@ $ make build.stretch
 
 ## Update
 
-* Check for new versions on https://www.ffmpeg.org/index.html#news
+* Check for new versions on https://www.johnvansickle.com/ffmpeg/old-releases/
+* Download "ffmpeg-x.x.x-64bit-static.tar.xz" file in files directory
 * Update "PACKAGE_VERSION" accordingly in Makefile
 * Add an entry to debian/[distribution]/changelog (use "date --rfc-2822 -u" command to specify date)
