@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = mongo-express
-PACKAGE_VERSION       = 0.44.0
+PACKAGE_VERSION       = 0.49.0
 PACKAGE_SOURCE        = $(PACKAGE)@$(PACKAGE_VERSION)
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
@@ -21,7 +21,7 @@ package.checkout:
 	# Node
 	$(call if_eq,wheezy,$(DISTRIBUTION), \
 		curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -, \
-		curl -sL https://deb.nodesource.com/setup_8.x | sudo bash - \
+		curl -sL https://deb.nodesource.com/setup_10.x | sudo bash - \
 	)
 	echo "Package:      nodejs*\nPin:          origin deb.nodesource.com\nPin-Priority: 900" | sudo tee /etc/apt/preferences.d/nodejs
 	sudo apt-get install -y --no-install-recommends nodejs
