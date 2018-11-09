@@ -1,3 +1,9 @@
+splitsh-lite (1.0.1-manala3~jessie1) unstable; urgency=low
+
+  * Update go 1.11.2
+
+ -- Manala <contact@manala.io>  Fri, 09 Nov 2018 08:32:55 +0000
+
 splitsh-lite (1.0.1-manala2~jessie1) unstable; urgency=low
 
   * Add missing dynamic dependencies

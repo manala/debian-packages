@@ -12,7 +12,7 @@ include .manala/make/Makefile
 
 PACKAGE               = splitsh-lite
 PACKAGE_VERSION       = 1.0.1
-PACKAGE_SOURCE        = github.com/splitsh/lite
+PACKAGE_GO            = github.com/splitsh/lite
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
 export GOPATH = $(PACKAGE_BUILD_DIR)/go
@@ -22,31 +22,27 @@ package.checkout:
 	$(call log,Checkout)
 
 	# Go
-	curl $(call verbose,--silent,--silent --show-error, ) --location https://storage.googleapis.com/golang/go1.9.linux-amd64.tar.gz \
+	curl $(call verbose,--silent,--silent --show-error, ) --location https://dl.google.com/go/go1.11.2.linux-amd64.tar.gz \
 		| sudo bsdtar $(call verbose, , ,-v) -xf - -C /usr/local
 
 	# Git2go
 	sudo apt-get install -y --no-install-recommends \
 		cmake pkg-config libssh2-1-dev libssl-dev libcurl4-openssl-dev
-	# Git clone manually as a temporary workaround to libgit2 install issue
-	# See: https://github.com/libgit2/rugged/issues/711
-	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_BUILD_DIR)/go/src/github.com/libgit2 \
-		&& cd $(PACKAGE_BUILD_DIR)/go/src/github.com/libgit2 \
-		&& git clone https://github.com/libgit2/git2go.git
+	go get -d github.com/libgit2/git2go
 	cd $(GOPATH)/src/github.com/libgit2/git2go \
 		&& git checkout next \
 		&& git submodule update --init \
 		&& $(MAKE) install
 
-	go get $(PACKAGE_SOURCE)
-	cd $(GOPATH)/src/$(PACKAGE_SOURCE) \
-		&& git checkout v$(PACKAGE_VERSION)
+	go get $(PACKAGE_GO)
+	cd $(GOPATH)/src/$(PACKAGE_GO) \
+		&& git checkout tags/v$(PACKAGE_VERSION) -b v$(PACKAGE_VERSION)
 	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_BUILD_DIR)/$(PACKAGE)
-	go build -o $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE) $(PACKAGE_SOURCE)
+	go build -o $(PACKAGE_BUILD_DIR)/$(PACKAGE)/bin/$(PACKAGE) $(PACKAGE_GO)
 
 package.prepare:
 	$(call log,Prepare)
-	chmod $(call verbose, , ,--verbose) 755 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
+	chmod $(call verbose, , ,--verbose) 755 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/bin/$(PACKAGE)
 	cp $(call verbose, , ,--verbose) --no-target-directory --recursive \
 		$(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian
 
