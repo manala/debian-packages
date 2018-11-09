@@ -23,6 +23,6 @@ $ make build.stretch
 
 ## Update
 
-* Check for new versions on https://sourceforge.net/projects/pamsshagentauth/
+* Check for new versions on https://snapshot.debian.org/package/pam-ssh-agent-auth/
 * Update "PACKAGE_VERSION" accordingly in Makefile
 * Add an entry to debian/[distribution]/changelog (use "date --rfc-2822 -u" command to specify date)
