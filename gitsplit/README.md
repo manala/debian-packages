@@ -23,6 +23,6 @@ $ make build.stretch
 
 ## Update
 
-* Check for new commits on https://github.com/jderusse/docker-gitsplit/commits/master
+* Check for new versions on https://github.com/jderusse/docker-gitsplit/releases
 * Update "PACKAGE_VERSION" accordingly in Makefile
 * Add an entry to debian/[distribution]/changelog (use "date --rfc-2822 -u" command to specify date)

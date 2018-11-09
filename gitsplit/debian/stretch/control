@@ -2,18 +2,12 @@ Source: gitsplit
 Section: vcs
 Priority: optional
 Maintainer: Manala <contact@manala.io>
-Build-Depends: debhelper (>= 9),
-               python,
-               dh-python
+Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.8
 Homepage: https://github.com/jderusse/docker-gitsplit
 
 Package: gitsplit
 Architecture: all
-Depends: ${misc:Depends},
-         ${python:Depends},
-         git,
-         splitsh-lite
+Depends: ${misc:Depends}
 Description: Automate the management of children git repositories
- Using splitsh-lite, gitslplit automate the management of children
- git repositories
+ Gitsplit automate the management of children git repositories
