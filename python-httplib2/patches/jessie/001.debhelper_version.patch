@@ -1,0 +1,11 @@
+--- python-httplib2/debian/control	2018-11-16 15:38:32.000000000 +0000
++++ python-httplib2/debian/control.patch	2018-11-16 15:38:16.000000000 +0000
+@@ -3,7 +3,7 @@
+ Priority: optional
+ Maintainer: Andrea Colangelo <warp10@debian.org>
+ Uploaders: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
+-Build-Depends: debhelper (>= 11~),
++Build-Depends: debhelper (>= 10~),
+                dh-python,
+                python3-all (>= 3.1.2-10),
+                python3-setuptools,
