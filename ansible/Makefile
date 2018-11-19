@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE                              = ansible
-PACKAGE_VERSION                      = 2.5.5+dfsg
+PACKAGE_VERSION                      = 2.6.5+dfsg
 PACKAGE_REVISION                     = 1
 PACKAGE_REVISION_MANALA              = 1
 PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
