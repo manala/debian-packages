@@ -11,8 +11,8 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = oauth2-proxy
-PACKAGE_VERSION       = 2.2.0
-PACKAGE_SOURCE        = https://github.com/bitly/oauth2_proxy/releases/download/v2.2/oauth2_proxy-$(PACKAGE_VERSION).linux-amd64.go1.8.1.tar.gz
+PACKAGE_VERSION       = 3.0.0
+PACKAGE_SOURCE        = https://github.com/pusher/oauth2_proxy/releases/download/v$(PACKAGE_VERSION)/oauth2_proxy-v$(PACKAGE_VERSION)-0-g7887272.linux-amd64.go1.11.tar.gz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
 package.checkout:
@@ -24,7 +24,7 @@ package.checkout:
 package.prepare:
 	$(call log,Prepare)
 	mv $(call verbose, , ,--verbose) \
-		$(PACKAGE_BUILD_DIR)/$(PACKAGE)/oauth2_proxy $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
+		$(PACKAGE_BUILD_DIR)/$(PACKAGE)/oauth2_proxy-linux-amd64 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
 	chmod $(call verbose, , ,--verbose) 755 $(PACKAGE_BUILD_DIR)/$(PACKAGE)/$(PACKAGE)
 	cp $(call verbose, , ,--verbose) --no-target-directory --recursive \
 		$(PACKAGE_DIR)/debian/$(DISTRIBUTION) $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian

@@ -23,6 +23,6 @@ $ make build.stretch
 
 ## Update
 
-* Check for new versions on https://github.com/bitly/oauth2_proxy/releases
+* Check for new versions on https://github.com/pusher/oauth2_proxy/releases
 * Update "PACKAGE_VERSION" and "PACKAGE_SOURCE" accordingly in Makefile
 * Add an entry to debian/[distribution]/changelog (use "date --rfc-2822 -u" command to specify date)

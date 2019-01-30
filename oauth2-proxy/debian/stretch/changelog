@@ -1,3 +1,9 @@
+oauth2-proxy (3.0.0-manala1~stretch1) unstable; urgency=low
+
+  * Switch to pusher github repository
+
+ -- Manala <contact@manala.io>  Wed, 30 Jan 2019 13:43:18 +0000
+
 oauth2-proxy (2.2.0-manala2~stretch1) unstable; urgency=low
 
   * Fix copyright
