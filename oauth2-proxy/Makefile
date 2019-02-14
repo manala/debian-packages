@@ -11,8 +11,8 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = oauth2-proxy
-PACKAGE_VERSION       = 3.0.0
-PACKAGE_SOURCE        = https://github.com/pusher/oauth2_proxy/releases/download/v$(PACKAGE_VERSION)/oauth2_proxy-v$(PACKAGE_VERSION)-0-g7887272.linux-amd64.go1.11.tar.gz
+PACKAGE_VERSION       = 3.1.0
+PACKAGE_SOURCE        = https://github.com/pusher/oauth2_proxy/releases/download/v$(PACKAGE_VERSION)/oauth2_proxy-v$(PACKAGE_VERSION).linux-amd64.go1.11.tar.gz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
 package.checkout:
