@@ -1,3 +1,9 @@
+phpmyadmin (4.8.5-manala1~stretch1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Mon, 01 Apr 2019 08:27:12 +0000
+
 phpmyadmin (4.8.3-manala1~stretch1) unstable; urgency=low
 
   * Upstream update
