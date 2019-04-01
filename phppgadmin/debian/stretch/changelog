@@ -1,3 +1,9 @@
+phppgadmin (5.6.0-manala1~stretch1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Mon, 01 Apr 2019 08:43:52 +0000
+
 phppgadmin (5.1.0-manala3~stretch1) unstable; urgency=low
 
   * Fix copyright

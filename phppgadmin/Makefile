@@ -11,8 +11,8 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = phppgadmin
-PACKAGE_VERSION       = 5.1.0
-PACKAGE_SOURCE        = https://github.com/phppgadmin/phppgadmin/archive/c7c6beb.tar.gz
+PACKAGE_VERSION       = 5.6.0
+PACKAGE_SOURCE        = https://github.com/phppgadmin/phppgadmin/releases/download/REL_$(subst .,-,$(PACKAGE_VERSION))/phpPgAdmin-$(PACKAGE_VERSION).tar.bz2
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
 package.checkout:
