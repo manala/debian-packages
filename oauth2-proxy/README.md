@@ -2,7 +2,7 @@
 
 :exclamation: [Report issues](https://github.com/manala/debian-packages/issues) and [send Pull Requests](https://github.com/manala/debian-packages/pulls) in the [main Debian Packages repository](https://github.com/manala/debian-packages) :exclamation:
 
-Provides [OAuth2 Proxy](https://github.com/bitly/oauth2_proxy) debian package.
+Provides [OAuth2 Proxy](https://github.com/pusher/oauth2_proxy) debian package.
 
 ## Build
 
