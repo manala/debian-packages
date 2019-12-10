@@ -1,0 +1,5 @@
+etc/sensu
+var/cache/sensu/sensu-agent
+var/lib/sensu/sensu-agent
+var/log/sensu
+var/run/sensu

@@ -1,0 +1,5 @@
+etc/sensu
+var/cache/sensu/sensu-backend
+var/lib/sensu/sensu-backend
+var/log/sensu
+var/run/sensu

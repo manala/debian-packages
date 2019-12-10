@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# user_missing will return 0 if the user exists, non-zero if it does not
+user_missing()
+{
+    set +e
+   	getent passwd sensu > /dev/null
+	missing=$?
+    set -e
+    echo $missing
+}
+
+create_user()
+{
+    missing=`user_missing`
+    if [ $missing != "0" ]; then
+	useradd -r -g sensu -d /opt/sensu -s /bin/false -c "Sensu Monitoring Framework" sensu
+    fi
+}
+# group_missing will return 0 if the group exists, non-zero if it does not
+group_missing()
+{
+    set +e
+    getent group sensu > /dev/null
+	missing=$?
+    set -e
+    echo $missing
+}
+
+create_group()
+{
+    missing=`group_missing`
+    if [ $missing != "0" ]; then
+	groupadd -r sensu
+    fi
+}
+
+service=sensu-backend
+
+case "$1" in
+    configure)
+	create_group
+	create_user
+	# fix_backend_owner
+	chown sensu:sensu /var/cache/sensu/sensu-backend
+    chown sensu:sensu /var/lib/sensu/sensu-backend
+    chown sensu:sensu /var/log/sensu
+    chown sensu:sensu /var/run/sensu
+	;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+	;;
+
+    *)
+	echo "postinst called with unknown argument \`$1'" >&2
+	exit 1
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0

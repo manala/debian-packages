@@ -1,0 +1,5 @@
+sensu-go-backend (5.15.0-manala1~jessie1) unstable; urgency=low
+
+  * Initial release
+
+ -- Manala <contact@manala.io>  Fri, 06 Dec 2019 09:52:01 +0000

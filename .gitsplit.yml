@@ -59,6 +59,12 @@ splits:
   # Deprecated
   #- prefix: rtail
   #  target: git@github.com:manala/debian-package-rtail.git
+  - prefix: sensu-go-agent
+    target: git@github.com:manala/debian-package-sensu-go-agent.git
+  - prefix: sensu-go-backend
+    target: git@github.com:manala/debian-package-sensu-go-backend.git
+  - prefix: sensu-go-cli
+    target: git@github.com:manala/debian-package-sensu-go-cli.git
   - prefix: splitsh-lite
     target: git@github.com:manala/debian-package-splitsh-lite.git
   - prefix: supervisor
