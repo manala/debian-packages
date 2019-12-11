@@ -1,5 +1,5 @@
 Source: sensu-go-backend
-Section: Network
+Section: utils
 Priority: optional
 Maintainer: Manala <contact@manala.io>
 Build-Depends: debhelper (>= 9), dh-systemd (>= 1.5)
@@ -10,8 +10,9 @@ Package: sensu-go-backend
 Architecture: amd64
 Depends: ${misc:Depends},
          lsb-base (>= 3.2-14),
-         adduser
-Description: Sensu Go backend
+         adduser,
+         libc6
+Description: Sensu Go backend For Debian
  Sensu is an open source monitoring tool for ephemeral infrastructure and
  distributed applications. It is an agent based monitoring system with built-in
  auto-discovery, making it very well-suited for cloud environments. Sensu uses
