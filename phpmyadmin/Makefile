@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = phpmyadmin
-PACKAGE_VERSION       = 4.9.0.1
+PACKAGE_VERSION       = 4.9.1
 PACKAGE_SOURCE        = https://files.phpmyadmin.net/phpMyAdmin/$(PACKAGE_VERSION)/phpMyAdmin-$(PACKAGE_VERSION)-all-languages.tar.gz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
