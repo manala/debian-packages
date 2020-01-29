@@ -11,8 +11,8 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = ngrok
-PACKAGE_VERSION       = 2.3.25
-PACKAGE_SOURCE        = https://bin.equinox.io/a/HesUWAXMRj/ngrok-$(PACKAGE_VERSION)-linux-amd64.tar.gz
+PACKAGE_VERSION       = 2.3.35
+PACKAGE_SOURCE        = https://bin.equinox.io/a/jAq5uX8wfS8/ngrok-$(PACKAGE_VERSION)-linux-amd64.tar.gz
 PACKAGE_DISTRIBUTIONS = wheezy jessie stretch
 
 package.checkout:
