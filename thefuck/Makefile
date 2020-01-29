@@ -11,9 +11,9 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE                              = thefuck
-PACKAGE_VERSION                      = 3.11
-PACKAGE_REVISION                     = 2.1
-PACKAGE_REVISION_MANALA              = 2
+PACKAGE_VERSION                      = 3.29
+PACKAGE_REVISION                     = 0.1
+PACKAGE_REVISION_MANALA              = 1
 PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
 PACKAGE_DISTRIBUTIONS                = jessie stretch
 
