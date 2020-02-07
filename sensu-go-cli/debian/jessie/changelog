@@ -1,4 +1,10 @@
-sensu-go-cli (5.15.0-manala2~jessie1) unstable; urgency=lo
+sensu-go-cli (5.17.0-manala1~jessie1) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Thu, 06 Feb 2020 15:00:36 +0000
+
+sensu-go-cli (5.15.0-manala2~jessie1) unstable; urgency=low
 
   * Initial release
 

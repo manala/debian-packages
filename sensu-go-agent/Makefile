@@ -11,9 +11,9 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = sensu-go-agent
-PACKAGE_VERSION       = 5.15.0
+PACKAGE_VERSION       = 5.17.0
 PACKAGE_SOURCE        = https://github.com/sensu/sensu-go/archive/v$(PACKAGE_VERSION).tar.gz
-PACKAGE_DISTRIBUTIONS = jessie stretch
+PACKAGE_DISTRIBUTIONS = jessie stretch buster
 
 export PATH  := $(PATH):/usr/local/go/bin
 export LANG   = C.UTF-8

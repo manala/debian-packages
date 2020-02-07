@@ -95,6 +95,10 @@ SH_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.stretch,
 sh.stretch: DISTRIBUTION = stretch
 sh.stretch: sh
 
+SH_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.buster,Open shell on build host - buster))
+sh.buster: DISTRIBUTION = buster
+sh.buster: sh
+
 ##########
 # Update #
 ##########
@@ -125,6 +129,10 @@ update.jessie: update
 UPDATE_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,update.stretch,Update build host - Stretch))
 update.stretch: DISTRIBUTIONS = stretch
 update.stretch: update
+
+UPDATE_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,update.buster,Update build host - buster))
+update.buster: DISTRIBUTIONS = buster
+update.buster: update
 
 ##########
 # System #
@@ -187,6 +195,10 @@ BUILD_HELP_LOCAL += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,bu
 build.stretch: DISTRIBUTIONS = stretch
 build.stretch: build@local
 
+BUILD_HELP_LOCAL += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,build.buster,Build package - buster))
+build.buster: DISTRIBUTIONS = buster
+build.buster: build@local
+
 ########
 # Lint #
 ########
@@ -227,6 +239,10 @@ lint.jessie: lint@local
 LINT_HELP_LOCAL += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.stretch,Lint package - Stretch))
 lint.stretch: DISTRIBUTIONS = stretch
 lint.stretch: lint@local
+
+LINT_HELP_LOCAL += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.buster,Lint package - buster))
+lint.buster: DISTRIBUTIONS = buster
+lint.buster: lint@local
 
 ###########
 # Package #
@@ -322,3 +338,7 @@ deploy.jessie: deploy
 DEPLOY_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.stretch,Deploy package to repository - Stretch))
 deploy.stretch: DISTRIBUTIONS = stretch
 deploy.stretch: deploy
+
+DEPLOY_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.buster,Deploy package to repository - buster))
+deploy.buster: DISTRIBUTIONS = buster
+deploy.buster: deploy
