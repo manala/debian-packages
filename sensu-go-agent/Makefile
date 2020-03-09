@@ -11,7 +11,7 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = sensu-go-agent
-PACKAGE_VERSION       = 5.17.0
+PACKAGE_VERSION       = 5.18.0
 PACKAGE_SOURCE        = https://github.com/sensu/sensu-go/archive/v$(PACKAGE_VERSION).tar.gz
 PACKAGE_DISTRIBUTIONS = jessie stretch buster
 
@@ -25,7 +25,7 @@ package.checkout:
 		| bsdtar $(call verbose, , ,-v) -xf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
 
 	#Go
-	curl $(call verbose,--silent,--silent --show-error, ) --location https://dl.google.com/go/go1.13.5.linux-amd64.tar.gz \
+	curl $(call verbose,--silent,--silent --show-error, ) --location https://dl.google.com/go/go1.13.7.linux-amd64.tar.gz \
 		| sudo bsdtar $(call verbose, , ,-v) -xf - -C /usr/local
 
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
