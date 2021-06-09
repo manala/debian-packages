@@ -1,3 +1,9 @@
+sensu-go-cli (6.2.7-manala1~jessie2) unstable; urgency=low
+
+  * Upstream update
+
+ -- Manala <contact@manala.io>  Mon, 12 Apr 2021 12:00:00 +0000
+
 sensu-go-cli (5.18.0-manala1~jessie1) unstable; urgency=low
 
   * Upstream update
