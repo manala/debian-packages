@@ -11,9 +11,9 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = sensu-go-backend
-PACKAGE_VERSION       = 6.2.7
+PACKAGE_VERSION       = 6.5.1
 PACKAGE_SOURCE        = https://github.com/sensu/sensu-go/archive/v$(PACKAGE_VERSION).tar.gz
-PACKAGE_DISTRIBUTIONS = jessie stretch buster
+PACKAGE_DISTRIBUTIONS = stretch buster bullseye
 
 export PATH  := $(PATH):/usr/local/go/bin
 export LANG   = C.UTF-8
@@ -25,7 +25,7 @@ package.checkout:
 		| bsdtar $(call verbose, , ,-v) -xf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) --strip-components=1
 
 	#Go
-	curl $(call verbose,--silent,--silent --show-error, ) --location https://dl.google.com/go/go1.16.3.linux-amd64.tar.gz \
+	curl $(call verbose,--silent,--silent --show-error, ) --location https://dl.google.com/go/go1.17.2.linux-amd64.tar.gz \
 		| sudo bsdtar $(call verbose, , ,-v) -xf - -C /usr/local
 
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \

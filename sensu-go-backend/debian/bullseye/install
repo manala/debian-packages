@@ -1,0 +1,2 @@
+bin/sensu-backend	usr/sbin
+debian/doc/backend.yml.example usr/share/doc/sensu-go-backend
