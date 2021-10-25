@@ -165,12 +165,12 @@ endef
 
 # Hide special characters from Make's parser
 # See: http://blog.jgc.org/2007/06/escaping-comma-and-space-in-gnu-make.html
+# See: https://blog.jgc.org/2007/06/escaping-comma-and-space-in-gnu-make.html?showComment=1584360719530#c2382417787686555419
 
 , := ,
-space :=
-space +=
-$(space) :=
-$(space) +=
+space := $(null) $(null)
+$(space) := $(null) $(null)
+
 
 # Usage:
 #   $(call escape_spaces,foo bar)    = foo\ bar
@@ -183,7 +183,7 @@ $(subst $( ),\ ,$(1))
 endef
 
 define unescape_spaces
-$(subst \ ,$( ),$(1))
+$(subst \ $( ),$(1))
 endef
 
 define encode_spaces
