@@ -83,14 +83,6 @@ sh: .fail_if_host_not(local)
 		$(call log_warning,Shell on \"$(DISTRIBUTION)\" is not supported) \
 	)
 
-SH_HELP += $(call if_in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.wheezy, Open shell on build host - Wheezy))
-sh.wheezy: DISTRIBUTION = wheezy
-sh.wheezy: sh
-
-SH_HELP += $(call if_in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.jessie, Open shell on build host - Jessie))
-sh.jessie: DISTRIBUTION = jessie
-sh.jessie: sh
-
 SH_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.stretch,Open shell on build host - Stretch))
 sh.stretch: DISTRIBUTION = stretch
 sh.stretch: sh
@@ -121,14 +113,6 @@ update: .fail_if_host_not(local)
 			$$(call log_warning,Update \"$$(DISTRIBUTION)\" is not supported) \
 		) \
 	)
-
-UPDATE_HELP += $(call if_in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,update.wheezy, Update build host - Wheezy))
-update.wheezy: DISTRIBUTIONS = wheezy
-update.wheezy: update
-
-UPDATE_HELP += $(call if_in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,update.jessie, Update build host - Jessie))
-update.jessie: DISTRIBUTIONS = jessie
-update.jessie: update
 
 UPDATE_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,update.stretch,Update build host - Stretch))
 update.stretch: DISTRIBUTIONS = stretch
@@ -191,14 +175,6 @@ build@build: .fail_if_host_not(build) \
 	package.build \
 	package.dist
 
-BUILD_HELP_LOCAL += $(call if_in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,build.wheezy, Build package - Wheezy))
-build.wheezy: DISTRIBUTIONS = wheezy
-build.wheezy: build@local
-
-BUILD_HELP_LOCAL += $(call if_in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,build.jessie, Build package - Jessie))
-build.jessie: DISTRIBUTIONS = jessie
-build.jessie: build@local
-
 BUILD_HELP_LOCAL += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,build.stretch,Build package - Stretch))
 build.stretch: DISTRIBUTIONS = stretch
 build.stretch: build@local
@@ -239,14 +215,6 @@ lint@build: .fail_if_host_not(build)
 		$(call verbose, ,basename $(PACKAGE) ; echo ; ) \
 		lintian $(call verbose, , , ,--info) $(PACKAGE) || true ; \
 	)
-
-LINT_HELP_LOCAL += $(call if_in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.wheezy, Lint package - Wheezy))
-lint.wheezy: DISTRIBUTIONS = wheezy
-lint.wheezy: lint@local
-
-LINT_HELP_LOCAL += $(call if_in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.jessie, Lint package - Jessie))
-lint.jessie: DISTRIBUTIONS = jessie
-lint.jessie: lint@local
 
 LINT_HELP_LOCAL += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.stretch,Lint package - Stretch))
 lint.stretch: DISTRIBUTIONS = stretch
@@ -342,14 +310,6 @@ deploy: .fail_if_host_not(local)
 			$$(call log_error,Distribution \"$$(DISTRIBUTION)\" is not available) ; exit 1 \
 		) \
 	)
-
-DEPLOY_HELP += $(call if_in,wheezy,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.wheezy, Deploy package to repository - Wheezy))
-deploy.wheezy: DISTRIBUTIONS = wheezy
-deploy.wheezy: deploy
-
-DEPLOY_HELP += $(call if_in,jessie,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.jessie, Deploy package to repository - Jessie))
-deploy.jessie: DISTRIBUTIONS = jessie
-deploy.jessie: deploy
 
 DEPLOY_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.stretch,Deploy package to repository - Stretch))
 deploy.stretch: DISTRIBUTIONS = stretch

@@ -11,9 +11,9 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = audiowaveform
-PACKAGE_VERSION       = 1.4.1
+PACKAGE_VERSION       = 1.5.1
 PACKAGE_SOURCE        = https://github.com/bbc/audiowaveform.git
-PACKAGE_DISTRIBUTIONS = jessie stretch buster
+PACKAGE_DISTRIBUTIONS = stretch buster bullseye
 
 export LANG   = C.UTF-8
 
@@ -23,10 +23,10 @@ package.checkout:
 	git clone $(PACKAGE_SOURCE) $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 
 	#Googletest framework
-	curl $(call verbose,--silent,--silent --show-error, ) --location https://github.com/google/googletest/archive/release-1.10.0.tar.gz \
+	curl $(call verbose,--silent,--silent --show-error, ) --location https://github.com/google/googletest/archive/release-1.11.0.tar.gz \
 		| sudo bsdtar $(call verbose, , ,-v) -xf - -C $(PACKAGE_BUILD_DIR)/$(PACKAGE) && \
-	ln -s $(PACKAGE_BUILD_DIR)/$(PACKAGE)/googletest-release-1.10.0/googletest $(PACKAGE_BUILD_DIR)/$(PACKAGE)/googletest && \
-	ln -s $(PACKAGE_BUILD_DIR)/$(PACKAGE)/googletest-release-1.10.0/googlemock $(PACKAGE_BUILD_DIR)/$(PACKAGE)/googlemock #&& \
+	ln -s $(PACKAGE_BUILD_DIR)/$(PACKAGE)/googletest-release-1.11.0/googletest $(PACKAGE_BUILD_DIR)/$(PACKAGE)/googletest && \
+	ln -s $(PACKAGE_BUILD_DIR)/$(PACKAGE)/googletest-release-1.11.0/googlemock $(PACKAGE_BUILD_DIR)/$(PACKAGE)/googlemock #&& \
 	#cp ./debian/$(DISTRIBUTION)/control $(PACKAGE_BUILD_DIR)/$(PACKAGE)/debian/control
 
 package.prepare:

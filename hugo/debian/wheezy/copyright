@@ -1,6 +1,0 @@
-Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-
-Files: *
-Copyright: 2013–2016 Steve Francia <spf@spf13.com>
-           2015–2017 The Hugo Authors
-License: Apache-2.0
