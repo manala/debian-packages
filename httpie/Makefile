@@ -11,11 +11,11 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE                              = httpie
-PACKAGE_VERSION                      = 1.0.3
-PACKAGE_REVISION                     = 2
+PACKAGE_VERSION                      = 2.4.0
+PACKAGE_REVISION                     = 1
 PACKAGE_REVISION_MANALA              = 1
 PACKAGE_REVISION_MANALA_DISTRIBUTION = 1
-PACKAGE_DISTRIBUTIONS                = stretch
+PACKAGE_DISTRIBUTIONS                = buster bullseye
 
 package.checkout:
 	$(call log,Checkout)
@@ -24,6 +24,14 @@ package.checkout:
 
 package.prepare:
 	$(call log,Prepare)
+	sudo apt update && sudo apt install -y \
+	dh-python \
+	python3-setuptools \
+	python3-pygments \
+	python3-requests \
+	python3-pkg-resources \
+	python3-all \
+	python3-docutils
 	cd $(PACKAGE_BUILD_DIR)/$(PACKAGE) \
 		&& dch --newversion $(call package_manala_version,$(DISTRIBUTION)) "Backport" \
 		&& dch --release ""
