@@ -62,6 +62,16 @@ command:
     stdout:
       - goss version v{{ .Env.GOSS_VERSION }}
   # Custom
+{{ if eq .Env.DEBIAN_DISTRIBUTION "buster" }}
+  dpkg -s libcurl3-gnutls:
+    exit-status: 0
+    stdout:
+      - /.*7\.64\.0-4\+deb10u2.*/
+  apt-mark showhold:
+    exit-status: 0
+    stdout:
+      - libcurl3-gnutls
+{{ end }}
 
 ##########
 # Groups #

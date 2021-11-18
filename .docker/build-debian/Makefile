@@ -112,6 +112,11 @@ push.image:
 		$(DOCKER_IMAGE):$(DOCKER_TAG)-$(lastword ${DEBIAN_DISTRIBUTION})
 	docker image tag \
 		$(IMAGE) \
+		$(DOCKER_IMAGE):$(lastword ${DEBIAN_DISTRIBUTION})
+	docker push \
+		$(DOCKER_IMAGE):$(lastword ${DEBIAN_DISTRIBUTION})
+	docker image tag \
+		$(IMAGE) \
 		$(DOCKER_IMAGE):$(VERSION)-$(lastword ${DEBIAN_DISTRIBUTION})
 	docker push \
 		$(DOCKER_IMAGE):$(VERSION)-$(lastword ${DEBIAN_DISTRIBUTION})

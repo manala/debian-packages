@@ -18,8 +18,14 @@ RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 1394DEA3 &
       sudo ca-certificates \
 # Shell
       bash bash-completion \
+# Bug with backports, setting older version so git works
+# See https://superuser.com/questions/1642858/git-on-debian-10-backports-throws-fatal-unable-to-access-https-github-com-us
+      libcurl3-gnutls=7.64.0-4+deb10u2 \
 # Tools
       procps less vim wget curl make git
+# Bug with backports, holding version so git works
+# See https://superuser.com/questions/1642858/git-on-debian-10-backports-throws-fatal-unable-to-access-https-github-com-us
+RUN apt-mark hold libcurl3-gnutls
 
 # Su exec
 ENV SU_EXEC_VERSION="0.2"
