@@ -1,2 +1,0 @@
-bin/sensu-agent	usr/sbin
-debian/doc/agent.yml.example usr/share/doc/sensu-go-agent

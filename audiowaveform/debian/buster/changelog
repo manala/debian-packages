@@ -1,4 +1,10 @@
-audiowaveform (1.4.1-manala1~buster1) unstable; urgency=low
+audiowaveform (1.5.1-manala1~buster1) unstable; urgency=low
+
+  * Package for debian
+
+ -- Manala <contact@manala.io>  Thu, 12 Nov 2021 15:00:00 +0000
+
+ audiowaveform (1.4.1-manala1~buster1) unstable; urgency=low
 
   * Package for debian
 

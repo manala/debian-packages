@@ -18,6 +18,7 @@ PACKAGE_DISTRIBUTIONS = stretch buster bullseye
 export PATH  := $(PATH):/usr/local/go/bin
 export LANG   = C.UTF-8
 
+## Sensu Go Backend - package checkout
 package.checkout:
 	$(call log,Checkout)
 	mkdir $(call verbose, , ,--verbose) --parents $(PACKAGE_BUILD_DIR)/$(PACKAGE)

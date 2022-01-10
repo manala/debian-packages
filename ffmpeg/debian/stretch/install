@@ -1,6 +1,0 @@
-ffmpeg				usr/bin
-ffmpeg-10bit	usr/bin
-ffprobe				usr/bin
-qt-faststart	usr/bin
-model/*.pkl		usr/local/share/model
-model/*.model	usr/local/share/model

@@ -5,11 +5,10 @@
 ##########
 
 include .manala/make/Makefile
+include .docker/build-debian/Makefile
 
 ############
 # Packages #
 ############
 
-PACKAGES_DEPRECATED = \
-	cgroupfs-mount \
-	rtail
+PACKAGES_DEPRECATED =
