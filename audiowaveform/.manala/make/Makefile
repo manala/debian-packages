@@ -83,17 +83,35 @@ sh: .fail_if_host_not(local)
 		$(call log_warning,Shell on \"$(DISTRIBUTION)\" is not supported) \
 	)
 
-SH_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.stretch,Open shell on build host - Stretch))
-sh.stretch: DISTRIBUTION = stretch
-sh.stretch: sh
+SH_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.stretch.amd64,Open shell on build host - Stretch))
+sh.stretch.amd64: DISTRIBUTION = stretch
+sh.stretch.amd64: ARCHITECTURE = linux/amd64
+sh.stretch.amd64: sh
 
-SH_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.buster,Open shell on build host - buster))
-sh.buster: DISTRIBUTION = buster
-sh.buster: sh
+SH_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.buster.amd64,Open shell on build host - buster))
+sh.buster.amd64: DISTRIBUTION = buster
+sh.buster.amd64: ARCHITECTURE = linux/amd64
+sh.buster.amd64: sh
 
-SH_HELP += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.bullseye,Open shell on build host - bullseye))
-sh.bullseye: DISTRIBUTION = bullseye
-sh.bullseye: sh
+SH_HELP += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.bullseye.amd64,Open shell on build host - bullseye))
+sh.bullseye.amd64: DISTRIBUTION = bullseye
+sh.bullseye.amd64: ARCHITECTURE = linux/amd64
+sh.bullseye.amd64: sh
+
+SH_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.stretch.arm64,Open shell on build host - Stretch))
+sh.stretch.arm64: DISTRIBUTION = stretch
+sh.stretch.arm64: ARCHITECTURE = linux/arm64
+sh.stretch.arm64: sh
+
+SH_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.buster.arm64,Open shell on build host - buster))
+sh.buster.arm64: DISTRIBUTION = buster
+sh.buster.arm64: ARCHITECTURE = linux/arm64
+sh.buster.arm64: sh
+
+SH_HELP += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.bullseye.arm64,Open shell on build host - bullseye))
+sh.bullseye.arm64: DISTRIBUTION = bullseye
+sh.bullseye.arm64: ARCHITECTURE = linux/arm64
+sh.bullseye.arm64: sh
 
 ##########
 # Update #

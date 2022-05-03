@@ -12,6 +12,7 @@ DOCKER_IMAGE = manala/build-debian
 DOCKER_TAG  ?= edge
 IMAGE = ${DOCKER_IMAGE}:${DOCKER_TAG}-$(lastword ${DEBIAN_DISTRIBUTION})
 VERSION := $(shell cat .docker/build-debian/VERSION)
+ARCHITECTURE ?= linux/amd64 linux/arm64
 
 # Debian
 DEBIAN_DISTRIBUTION ?= stretch buster bullseye
@@ -24,41 +25,77 @@ DEBIAN_DISTRIBUTION ?= stretch buster bullseye
 run.image:
 	docker run \
 		--rm \
+		--platform ${ARCHITECTURE} \
 		--volume `pwd`:/srv \
 		--tty --interactive \
 		--env USER_ID=`id -u` \
 		--env GROUP_ID=`id -g` \
 		${DOCKER_IMAGE}:$(if ${DOCKER_TAG},${DOCKER_TAG}-)$(lastword ${DEBIAN_DISTRIBUTION})
 
-## Run image - Run Stretch image
-run.image@stretch: DEBIAN_DISTRIBUTION = stretch
-run.image@stretch: run.image
+## Run image - Run Stretch image amd64
+run.image@stretch.amd64: DEBIAN_DISTRIBUTION = stretch
+run.image@stretch.amd64: ARCHITECTURE = linux/amd64
+run.image@stretch.amd64: run.image
 
-## Run image - Run Buster image
-run.image@buster: DEBIAN_DISTRIBUTION = buster
-run.image@buster: run.image
+## Run image - Run Buster image amd64
+run.image@buster.amd64: DEBIAN_DISTRIBUTION = buster
+run.image@buster.amd64: ARCHITECTURE = linux/amd64
+run.image@buster.amd64: run.image
 
-## Run image - Run Bullseye image
-run.image@bullseye: DEBIAN_DISTRIBUTION = bullseye
-run.image@bullseye: run.image
+## Run image - Run Bullseye image amd64
+run.image@bullseye.amd64: DEBIAN_DISTRIBUTION = bullseye
+run.image@bullseye.amd64: ARCHITECTURE = linux/amd64
+run.image@bullseye.amd64: run.image
+
+## Run image - Run Stretch image arm64
+run.image@stretch.arm64: DEBIAN_DISTRIBUTION = stretch
+run.image@stretch.arm64: ARCHITECTURE = linux/arm64
+run.image@stretch.arm64: run.image
+
+## Run image - Run Buster image arm64
+run.image@buster.arm64: DEBIAN_DISTRIBUTION = buster
+run.image@buster.arm64: ARCHITECTURE = linux/arm64
+run.image@buster.arm64: run.image
+
+## Run image - Run Bullseye image arm64
+run.image@bullseye.arm64: DEBIAN_DISTRIBUTION = bullseye
+run.image@bullseye.arm64: ARCHITECTURE = linux/arm64
+run.image@bullseye.arm64: run.image
 
 ###############
 # Build Image #
 ###############
 
+set_docker_builder:
+	printf "\n${COLOR_INFO}Creating and setting docker builder ${COLOR_COMMENT}"cross_build"${COLOR_RESET}\n\n" && \
+	docker buildx create --name cross_build --use
+
+unset_docker_builder:
+	printf "\n${COLOR_INFO}Removing docker builder ${COLOR_COMMENT}"cross_build"${COLOR_RESET}\n\n" && \
+	docker buildx rm cross_build
+
 ## Build image
+build.image: set_docker_builder
 build.image:
 	EXIT=0 ; ${foreach \
 		distribution,\
 		${DEBIAN_DISTRIBUTION},\
 		printf "\n${COLOR_INFO}Build ${COLOR_COMMENT}${distribution}${COLOR_RESET}\n\n" && \
-			docker build \
+			docker buildx build \
+				--platform linux/amd64,linux/arm64 \
+				--push \
 				--pull \
+				--tag $(DOCKER_IMAGE):$(DOCKER_TAG)-$(lastword ${DEBIAN_DISTRIBUTION}) \
+				--tag $(DOCKER_IMAGE):$(lastword ${DEBIAN_DISTRIBUTION}) \
+				--tag $(DOCKER_IMAGE):$(VERSION)-$(lastword ${DEBIAN_DISTRIBUTION}) \
+				--tag $(DOCKER_IMAGE):$(call semver_major_minor,$(VERSION))-$(lastword ${DEBIAN_DISTRIBUTION}) \
+				--tag $(DOCKER_IMAGE):$(call semver_major,$(VERSION))-$(lastword ${DEBIAN_DISTRIBUTION}) \
 				--tag ${DOCKER_IMAGE}:$(if ${DOCKER_TAG},${DOCKER_TAG}-)${distribution} \
 				--file .docker/build-debian/Dockerfile.${distribution} \
 				. \
 		|| EXIT=$$? ;\
 	} exit $$EXIT
+	$(MAKE) unset_docker_builder
 
 ## Build image - Build Stretch Image
 build.image@stretch: DEBIAN_DISTRIBUTION = stretch
@@ -81,15 +118,19 @@ test.image:
 	EXIT=0 ; ${foreach \
 		distribution,\
 		${DEBIAN_DISTRIBUTION},\
-		printf "\n${COLOR_INFO}Test ${COLOR_COMMENT}${distribution}${COLOR_RESET}\n\n" && \
-			docker run \
-				--rm \
-				--volume `pwd`:/srv \
-				--env DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}\
-				${DOCKER_IMAGE}:$(if ${DOCKER_TAG},${DOCKER_TAG}-)${distribution} \
-				goss --gossfile /srv/.docker/build-debian/goss.yaml validate \
-		|| EXIT=$$? ;\
-	} exit $$EXIT
+			${foreach \
+			architecture,\
+			${ARCHITECTURE},\
+				printf "\n${COLOR_INFO}Test ${COLOR_COMMENT}${distribution}-${architecture}${COLOR_RESET}\n\n" && \
+					docker run \
+						--rm \
+						--platform ${architecture} \
+						--volume `pwd`:/srv \
+						--env DEBIAN_DISTRIBUTION=${DEBIAN_DISTRIBUTION}\
+						${DOCKER_IMAGE}:$(if ${DOCKER_TAG},${DOCKER_TAG}-)${distribution} \
+						goss --gossfile /srv/.docker/build-debian/goss.yaml validate \
+			|| EXIT=$$? ;\
+		}} exit $$EXIT
 
 
 ## Test image - Test Stretch image
@@ -103,42 +144,3 @@ test.image@buster: test.image
 ## Test image - Test Bullseye image
 test.image@bullseye: DEBIAN_DISTRIBUTION = bullseye
 test.image@bullseye: test.image
-
-
-## Push image tag into repository (VERSION)
-push.image:
-	$(call confirm, Confirm pushing of image $(COLOR_COMMENT)$(DOCKER_IMAGE):${DEBIAN_DISTRIBUTION})
-	docker push \
-		$(DOCKER_IMAGE):$(DOCKER_TAG)-$(lastword ${DEBIAN_DISTRIBUTION})
-	docker image tag \
-		$(IMAGE) \
-		$(DOCKER_IMAGE):$(lastword ${DEBIAN_DISTRIBUTION})
-	docker push \
-		$(DOCKER_IMAGE):$(lastword ${DEBIAN_DISTRIBUTION})
-	docker image tag \
-		$(IMAGE) \
-		$(DOCKER_IMAGE):$(VERSION)-$(lastword ${DEBIAN_DISTRIBUTION})
-	docker push \
-		$(DOCKER_IMAGE):$(VERSION)-$(lastword ${DEBIAN_DISTRIBUTION})
-	docker image tag \
-		$(IMAGE) \
-		$(DOCKER_IMAGE):$(call semver_major_minor,$(VERSION))-$(lastword ${DEBIAN_DISTRIBUTION})
-	docker push \
-		$(DOCKER_IMAGE):$(call semver_major_minor,$(VERSION))-$(lastword ${DEBIAN_DISTRIBUTION})
-	docker image tag \
-		$(IMAGE) \
-		$(DOCKER_IMAGE):$(call semver_major,$(VERSION))-$(lastword ${DEBIAN_DISTRIBUTION})
-	docker push \
-		$(DOCKER_IMAGE):$(call semver_major,$(VERSION))-$(lastword ${DEBIAN_DISTRIBUTION})
-
-## Push image - Push Stretch image
-push.image@stretch: DEBIAN_DISTRIBUTION = stretch
-push.image@stretch: push.image
-
-## Push image - Push Buster image
-push.image@buster: DEBIAN_DISTRIBUTION = buster
-push.image@buster: push.image
-
-## Push image - Push Bullseye image
-push.image@bullseye: DEBIAN_DISTRIBUTION = bullseye
-push.image@bullseye: push.image

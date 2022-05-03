@@ -5,6 +5,7 @@
 define docker_run
 	docker run \
 		--rm \
+		--platform $(ARCHITECTURE)\
 		$(if $(MANALA_DOCKER_DIR), \
 			--volume $(MANALA_CURRENT_DIR):$(MANALA_DOCKER_DIR) \
 			--workdir $(MANALA_DOCKER_DIR) \

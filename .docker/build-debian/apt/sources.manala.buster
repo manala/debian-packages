@@ -1,1 +1,1 @@
-deb [arch=amd64] http://debian.manala.io buster main
+deb http://debian.manala.io buster main
