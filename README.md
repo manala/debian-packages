@@ -16,11 +16,8 @@ deb [arch=amd64] http://debian.manala.io [stretch|buster|bullseye] main
 
 | Package | Description |
 | :---    | :---        |
-| [ansible] | Provides [Ansible](https://www.ansible.com/) debian package.
 | [audiowaveform] | Provides [Audiwavefom](https://github.com/bbc/audiowaveform) debian package.
 | [backup-manager] | Provides [Backup Manager](https://github.com/sukria/Backup-Manager) debian package.
-| [httpie] | Provides [HTTPie](https://httpie.org/) debian package.
-| [ngrok]| Provides [Ngrok](https://ngrok.com/) debian package.
 | [sensu-go-agent] | Provides [Sensu-go-agent](https://www.sensu.io) debian package.
 | [sensu-go-backend] | Provides [Sensu-go-backend](https://www.sensu.io) debian package.
 | [sensu-go-cli] | Provides [Sensu-go-cli](https://www.sensu.io) debian package.
