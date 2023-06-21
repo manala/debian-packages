@@ -13,7 +13,7 @@ include .manala/make/Makefile
 PACKAGE               = audiowaveform
 PACKAGE_VERSION       = 1.5.1
 PACKAGE_SOURCE        = https://github.com/bbc/audiowaveform.git
-PACKAGE_DISTRIBUTIONS = stretch buster bullseye
+PACKAGE_DISTRIBUTIONS = buster bullseye bookworm
 
 export LANG   = C.UTF-8
 

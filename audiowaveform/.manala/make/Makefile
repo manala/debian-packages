@@ -83,11 +83,6 @@ sh: .fail_if_host_not(local)
 		$(call log_warning,Shell on \"$(DISTRIBUTION)\" is not supported) \
 	)
 
-SH_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.stretch.amd64,Open shell on build host - Stretch))
-sh.stretch.amd64: DISTRIBUTION = stretch
-sh.stretch.amd64: ARCHITECTURE = linux/amd64
-sh.stretch.amd64: sh
-
 SH_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.buster.amd64,Open shell on build host - buster))
 sh.buster.amd64: DISTRIBUTION = buster
 sh.buster.amd64: ARCHITECTURE = linux/amd64
@@ -98,10 +93,10 @@ sh.bullseye.amd64: DISTRIBUTION = bullseye
 sh.bullseye.amd64: ARCHITECTURE = linux/amd64
 sh.bullseye.amd64: sh
 
-SH_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.stretch.arm64,Open shell on build host - Stretch))
-sh.stretch.arm64: DISTRIBUTION = stretch
-sh.stretch.arm64: ARCHITECTURE = linux/arm64
-sh.stretch.arm64: sh
+SH_HELP += $(call if_in,bookworm,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.bookworm.arm64,Open shell on build host - bookworm))
+sh.bookworm.amd64: DISTRIBUTION = bookworm
+sh.bookworm.amd64: ARCHITECTURE = linux/amd64
+sh.bookworm.amd64: sh
 
 SH_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.buster.arm64,Open shell on build host - buster))
 sh.buster.arm64: DISTRIBUTION = buster
@@ -112,6 +107,11 @@ SH_HELP += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.bullsey
 sh.bullseye.arm64: DISTRIBUTION = bullseye
 sh.bullseye.arm64: ARCHITECTURE = linux/arm64
 sh.bullseye.arm64: sh
+
+SH_HELP += $(call if_in,bookworm,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.bookworm.arm64,Open shell on build host - bookworm))
+sh.bookworm.arm64: DISTRIBUTION = bookworm
+sh.bookworm.arm64: ARCHITECTURE = linux/arm64
+sh.bookworm.arm64: sh
 
 ##########
 # Update #
@@ -132,10 +132,6 @@ update: .fail_if_host_not(local)
 		) \
 	)
 
-UPDATE_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,update.stretch,Update build host - Stretch))
-update.stretch: DISTRIBUTIONS = stretch
-update.stretch: update
-
 UPDATE_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,update.buster,Update build host - buster))
 update.buster: DISTRIBUTIONS = buster
 update.buster: update
@@ -143,6 +139,10 @@ update.buster: update
 UPDATE_HELP += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,update.bullseye,Update build host - bullseye))
 update.bullseye: DISTRIBUTIONS = bullseye
 update.bullseye: update
+
+UPDATE_HELP += $(call if_in,bookworm,$(PACKAGE_DISTRIBUTIONS),$(call help,update.bookworm,Update build host - Stretch))
+update.bookworm: DISTRIBUTIONS = bookworm
+update.bookworm: update
 
 ##########
 # System #
@@ -193,10 +193,6 @@ build@build: .fail_if_host_not(build) \
 	package.build \
 	package.dist
 
-BUILD_HELP_LOCAL += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,build.stretch,Build package - Stretch))
-build.stretch: DISTRIBUTIONS = stretch
-build.stretch: build@local
-
 BUILD_HELP_LOCAL += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,build.buster,Build package - buster))
 build.buster: DISTRIBUTIONS = buster
 build.buster: build@local
@@ -204,6 +200,10 @@ build.buster: build@local
 BUILD_HELP_LOCAL += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,build.bullseye,Build package - bullseye))
 build.bullseye: DISTRIBUTIONS = bullseye
 build.bullseye: build@local
+
+BUILD_HELP_LOCAL += $(call if_in,bookworm,$(PACKAGE_DISTRIBUTIONS),$(call help,build.bookworm,Build package - Stretch))
+build.bookworm: DISTRIBUTIONS = bookworm
+build.bookworm: build@local
 
 ########
 # Lint #
@@ -234,10 +234,6 @@ lint@build: .fail_if_host_not(build)
 		lintian $(call verbose, , , ,--info) $(PACKAGE) || true ; \
 	)
 
-LINT_HELP_LOCAL += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.stretch,Lint package - Stretch))
-lint.stretch: DISTRIBUTIONS = stretch
-lint.stretch: lint@local
-
 LINT_HELP_LOCAL += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.buster,Lint package - buster))
 lint.buster: DISTRIBUTIONS = buster
 lint.buster: lint@local
@@ -245,6 +241,10 @@ lint.buster: lint@local
 LINT_HELP_LOCAL += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.bullseye,Lint package - bullseye))
 lint.bullseye: DISTRIBUTIONS = bullseye
 lint.bullseye: lint@local
+
+LINT_HELP_LOCAL += $(call if_in,bookworm,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.bookworm,Lint package - Stretch))
+lint.bookworm: DISTRIBUTIONS = bookworm
+lint.bookworm: lint@local
 
 ###########
 # Package #
@@ -329,10 +329,6 @@ deploy: .fail_if_host_not(local)
 		) \
 	)
 
-DEPLOY_HELP += $(call if_in,stretch,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.stretch,Deploy package to repository - Stretch))
-deploy.stretch: DISTRIBUTIONS = stretch
-deploy.stretch: deploy
-
 DEPLOY_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.buster,Deploy package to repository - buster))
 deploy.buster: DISTRIBUTIONS = buster
 deploy.buster: deploy
@@ -340,3 +336,7 @@ deploy.buster: deploy
 DEPLOY_HELP += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.bullseye,Deploy package to repository - bullseye))
 deploy.bullseye: DISTRIBUTIONS = bullseye
 deploy.bullseye: deploy
+
+DEPLOY_HELP += $(call if_in,bookworm,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.bookworm,Deploy package to repository - Stretch))
+deploy.bookworm: DISTRIBUTIONS = bookworm
+deploy.bookworm: deploy
