@@ -11,9 +11,9 @@ include .manala/make/Makefile
 ###########
 
 PACKAGE               = sensu-go-backend
-PACKAGE_VERSION       = 6.8.1
+PACKAGE_VERSION       = 6.10.0
 PACKAGE_SOURCE        = https://github.com/sensu/sensu-go/archive/v$(PACKAGE_VERSION).tar.gz
-PACKAGE_DISTRIBUTIONS = stretch buster bullseye
+PACKAGE_DISTRIBUTIONS = buster bullseye bookworm
 
 export PATH  := $(PATH):/usr/local/go/bin
 export LANG   = C.UTF-8

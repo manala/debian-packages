@@ -47,6 +47,11 @@ run.image@bullseye.amd64: DEBIAN_DISTRIBUTION = bullseye
 run.image@bullseye.amd64: ARCHITECTURE = linux/amd64
 run.image@bullseye.amd64: run.image
 
+## Run image - Run Bookworm image amd64
+run.image@bookworm.amd64: DEBIAN_DISTRIBUTION = bookworm
+run.image@bookworm.amd64: ARCHITECTURE = linux/amd64
+run.image@bookworm.amd64: run.image
+
 ## Run image - Run Stretch image arm64
 run.image@stretch.arm64: DEBIAN_DISTRIBUTION = stretch
 run.image@stretch.arm64: ARCHITECTURE = linux/arm64
@@ -61,6 +66,11 @@ run.image@buster.arm64: run.image
 run.image@bullseye.arm64: DEBIAN_DISTRIBUTION = bullseye
 run.image@bullseye.arm64: ARCHITECTURE = linux/arm64
 run.image@bullseye.arm64: run.image
+
+## Run image - Run Bookworm image arm64
+run.image@bookworm.arm64: DEBIAN_DISTRIBUTION = bookworm
+run.image@bookworm.arm64: ARCHITECTURE = linux/arm64
+run.image@bookworm.arm64: run.image
 
 ###############
 # Build Image #
@@ -109,6 +119,10 @@ build.image@buster: build.image
 build.image@bullseye: DEBIAN_DISTRIBUTION = bullseye
 build.image@bullseye: build.image
 
+## Build image - Build Bookworm Image
+build.image@bookworm: DEBIAN_DISTRIBUTION = bookworm
+build.image@bookworm: build.image
+
 ##############
 # Test image #
 ##############
@@ -144,3 +158,7 @@ test.image@buster: test.image
 ## Test image - Test Bullseye image
 test.image@bullseye: DEBIAN_DISTRIBUTION = bullseye
 test.image@bullseye: test.image
+
+## Test image - Test Bookworm image
+test.image@bookworm: DEBIAN_DISTRIBUTION = bookworm
+test.image@bookworm: test.image

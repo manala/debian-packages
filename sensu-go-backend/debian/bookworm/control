@@ -3,6 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Manala <contact@manala.io>
 Build-Depends: debhelper (>= 10)
+Standards-Version: 3.9.8
 Homepage: https://sensu.io
 
 Package: sensu-go-backend
