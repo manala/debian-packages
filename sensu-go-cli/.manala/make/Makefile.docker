@@ -27,7 +27,7 @@ define docker_run
 		) \
 		$(MANALA_DOCKER_OPTIONS) \
 		$(MANALA_DOCKER_RUN_OPTIONS) \
-		--platform linux/x86_64 \
+		--platform linux/amd64 \
 		$(MANALA_DOCKER_IMAGE):$(if $(MANALA_DOCKER_IMAGE_TAG),$(MANALA_DOCKER_IMAGE_TAG),latest) \
 		$(1)
 endef

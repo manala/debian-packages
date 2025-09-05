@@ -1,6 +1,6 @@
 FROM debian:bullseye
 
-MAINTAINER Manala <contact@manala.io>
+LABEL Maintainer="Manala <contact@manala.io>"
 
 USER root
 
@@ -10,9 +10,7 @@ COPY .docker/build-debian/apt/preferences.bullseye /etc/apt/preferences.d/prefer
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
       apt-utils apt-transport-https gnupg dirmngr
-COPY .docker/build-debian/apt/sources.manala.bullseye /etc/apt/sources.list.d/manala.list
-RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 1394DEA3 && \
-    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade && \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade && \
     DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
 # System
       sudo ca-certificates \
@@ -22,22 +20,19 @@ RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 1394DEA3 &
       procps less vim wget curl make git
 
 # Su exec
-ENV SU_EXEC_VERSION="0.2"
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install build-essential && \
-    curl -L https://github.com/ncopa/su-exec/archive/v${SU_EXEC_VERSION}.tar.gz \
-      | tar zxfv - -C /tmp --strip-components=1 && \
-    make --directory /tmp  && \
-    mv /tmp/su-exec /usr/local/bin && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y purge build-essential
+ENV GOSU_VERSION="1.18"
+RUN curl -sSLf "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-amd64" \
+        --output /usr/local/bin/gosu \
+    && chmod +x /usr/local/bin/gosu
 
 # Dumb init
 ENV DUMB_INIT_VERSION="1.2.2"
 RUN curl -L https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_amd64 -o /usr/local/bin/dumb-init && \
     chmod +x /usr/local/bin/dumb-init
 
-# Goss
-ENV GOSS_VERSION="0.3.18"
-RUN curl -fsSL https://goss.rocks/install | GOSS_VER=v${GOSS_VERSION} sh
+# # Goss
+# ENV GOSS_VERSION="0.3.18"
+# RUN curl -fsSL https://goss.rocks/install | GOSS_VER=v${GOSS_VERSION} sh
 
 # Entrypoint
 COPY .docker/build-debian/entrypoint.sh /usr/local/bin/

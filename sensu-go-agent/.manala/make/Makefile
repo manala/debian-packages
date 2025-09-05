@@ -83,9 +83,9 @@ sh: .fail_if_host_not(local)
 		$(call log_warning,Shell on \"$(DISTRIBUTION)\" is not supported) \
 	)
 
-SH_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.buster,Open shell on build host - buster))
-sh.buster: DISTRIBUTION = buster
-sh.buster: sh
+SH_HELP += $(call if_in,trixie,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.trixie,Open shell on build host - trixie))
+sh.trixie: DISTRIBUTION = trixie
+sh.trixie: sh
 
 SH_HELP += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,sh.bullseye,Open shell on build host - bullseye))
 sh.bullseye: DISTRIBUTION = bullseye
@@ -114,9 +114,9 @@ update: .fail_if_host_not(local)
 		) \
 	)
 
-UPDATE_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,update.buster,Update build host - buster))
-update.buster: DISTRIBUTIONS = buster
-update.buster: update
+UPDATE_HELP += $(call if_in,trixie,$(PACKAGE_DISTRIBUTIONS),$(call help,update.trixie,Update build host - trixie))
+update.trixie: DISTRIBUTIONS = trixie
+update.trixie: update
 
 UPDATE_HELP += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,update.bullseye,Update build host - bullseye))
 update.bullseye: DISTRIBUTIONS = bullseye
@@ -175,9 +175,9 @@ build@build: .fail_if_host_not(build) \
 	package.build \
 	package.dist
 
-BUILD_HELP_LOCAL += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,build.buster,Build package - buster))
-build.buster: DISTRIBUTIONS = buster
-build.buster: build@local
+BUILD_HELP_LOCAL += $(call if_in,trixie,$(PACKAGE_DISTRIBUTIONS),$(call help,build.trixie,Build package - trixie))
+build.trixie: DISTRIBUTIONS = trixie
+build.trixie: build@local
 
 BUILD_HELP_LOCAL += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,build.bullseye,Build package - bullseye))
 build.bullseye: DISTRIBUTIONS = bullseye
@@ -216,9 +216,9 @@ lint@build: .fail_if_host_not(build)
 		lintian $(call verbose, , , ,--info) $(PACKAGE) || true ; \
 	)
 
-LINT_HELP_LOCAL += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.buster,Lint package - buster))
-lint.buster: DISTRIBUTIONS = buster
-lint.buster: lint@local
+LINT_HELP_LOCAL += $(call if_in,trixie,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.trixie,Lint package - trixie))
+lint.trixie: DISTRIBUTIONS = trixie
+lint.trixie: lint@local
 
 LINT_HELP_LOCAL += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,lint.bullseye,Lint package - bullseye))
 lint.bullseye: DISTRIBUTIONS = bullseye
@@ -311,9 +311,9 @@ deploy: .fail_if_host_not(local)
 		) \
 	)
 
-DEPLOY_HELP += $(call if_in,buster,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.buster,Deploy package to repository - buster))
-deploy.buster: DISTRIBUTIONS = buster
-deploy.buster: deploy
+DEPLOY_HELP += $(call if_in,trixie,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.trixie,Deploy package to repository - trixie))
+deploy.trixie: DISTRIBUTIONS = trixie
+deploy.trixie: deploy
 
 DEPLOY_HELP += $(call if_in,bullseye,$(PACKAGE_DISTRIBUTIONS),$(call help,deploy.bullseye,Deploy package to repository - bullseye))
 deploy.bullseye: DISTRIBUTIONS = bullseye

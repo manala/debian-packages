@@ -52,6 +52,11 @@ run.image@bookworm.amd64: DEBIAN_DISTRIBUTION = bookworm
 run.image@bookworm.amd64: ARCHITECTURE = linux/amd64
 run.image@bookworm.amd64: run.image
 
+## Run image - Run Trixie image amd64
+run.image@trixie.amd64: DEBIAN_DISTRIBUTION = trixie
+run.image@trixie.amd64: ARCHITECTURE = linux/amd64
+run.image@trixie.amd64: run.image
+
 ## Run image - Run Stretch image arm64
 run.image@stretch.arm64: DEBIAN_DISTRIBUTION = stretch
 run.image@stretch.arm64: ARCHITECTURE = linux/arm64
@@ -71,6 +76,11 @@ run.image@bullseye.arm64: run.image
 run.image@bookworm.arm64: DEBIAN_DISTRIBUTION = bookworm
 run.image@bookworm.arm64: ARCHITECTURE = linux/arm64
 run.image@bookworm.arm64: run.image
+
+## Run image - Run Trixie image arm64
+run.image@trixie.arm64: DEBIAN_DISTRIBUTION = trixie
+run.image@trixie.arm64: ARCHITECTURE = linux/arm64
+run.image@trixie.arm64: run.image
 
 ###############
 # Build Image #
@@ -123,6 +133,10 @@ build.image@bullseye: build.image
 build.image@bookworm: DEBIAN_DISTRIBUTION = bookworm
 build.image@bookworm: build.image
 
+## Build image - Build Trixie Image
+build.image@trixie: DEBIAN_DISTRIBUTION = trixie
+build.image@trixie: build.image
+
 ##############
 # Test image #
 ##############
@@ -162,3 +176,7 @@ test.image@bullseye: test.image
 ## Test image - Test Bookworm image
 test.image@bookworm: DEBIAN_DISTRIBUTION = bookworm
 test.image@bookworm: test.image
+
+## Test image - Test Trixie image
+test.image@trixie: DEBIAN_DISTRIBUTION = trixie
+test.image@trixie: test.image
